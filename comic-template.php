@@ -11,7 +11,7 @@
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width" />
 <title><?php wp_title( '|', true, 'right' ); ?></title>
-<?php wp_head(); ?>
+<?php do_action( 'comic_glot_head' ); ?>
 </head>
 <body <?php body_class(); ?>>
 
@@ -42,7 +42,15 @@ if ( have_posts() ) {
 
 </div>
 
-<p><?php the_title(); ?></p>
+<p>
+	<script>
+	var appCache = window.applicationCache;
+	if(2==appCache.status){
+		document.write('<?php _e( 'Served from che cache', 'comic-glot' ); ?>: ');
+	}
+	</script>
+	<?php the_title(); ?>
+</p>
 
 <?php
 
@@ -54,7 +62,7 @@ else {
 }
 
 
-wp_footer();
+do_action( 'comic_glot_footer' );
 
 ?>
 </body>

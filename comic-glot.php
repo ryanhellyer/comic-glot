@@ -1,4 +1,28 @@
 <?php
+/*
+Plugin Name: Comic Glot
+Plugin URI: http://geek.ryanhellyer.net/products/comic-glot/
+Description: Comic Glot
+Author: Ryan Hellyer
+Version: 1.0
+Author URI: http://geek.ryanhellyer.net/
+
+Copyright (c) 2014 Ryan Hellyer
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+license.txt file included with this plugin for more information.
+
+*/
+
+
+
 
 /**
  * Primary class used to load the theme
@@ -57,47 +81,57 @@ class Comic_Glot_Setup {
 		// Add script URL's
 		$this->script_urls = array(
 			includes_url( '/js/jquery/jquery.js' ),
-			get_stylesheet_directory_uri() . '/scripts/swipe.js',
-			get_stylesheet_directory_uri() . '/scripts/swipe-init.js',
+			plugin_dir_url( __FILE__ ) . 'scripts/swipe.js',
+			plugin_dir_url( __FILE__ ) . 'scripts/swipe-init.js',
 		);
 
 		// Add CSS URL's
 		$this->css_urls = array(
-			get_stylesheet_directory_uri() . '/style.css',
+			plugin_dir_url( __FILE__ ) . 'style.css',
 		);
 
 		if ( isset( $_GET['manifest'] ) ) {
-			$this->manifest();
+//			$this->manifest();
 		}
+		add_action( 'template_redirect',  array( $this, 'manifest' ) );
 
 		add_action( 'after_setup_theme',  array( $this, 'theme_setup' ) );
-		add_action( 'wp_head',            array( $this, 'stylesheet' ) );
-		add_action( 'wp_footer',          array( $this, 'scripts' ) );
+		add_action( 'comic_glot_head',    array( $this, 'stylesheet' ) );
+		add_action( 'comic_glot_footer',  array( $this, 'scripts' ) );
 		add_action( 'the_content',        array( $this, 'override_content' ) );
 		add_action( 'init',               array( $this, 'register_post_type' ) );
 		add_filter( 'cmb2_meta_boxes',    array( $this, 'meta_boxes' ) );
 		add_action( 'init',               array( $this, 'rewrites' ) );
-//		add_filter( 'generate_rewrite_rules', array( $this, 'modify_existing_rewrites' ) );
-
-//		add_action( 'template_redirect',  array( $this, 'bla' ) );
 		add_action('query_vars',          array( $this, 'rewrite_query_vars' ) );
+		add_action( 'template_redirect',  array( $this, 'comic_template' ) );
 	}
 
-	public function rewrite_query_vars( $query_vars ) {
+	/**
+	 * Load the comic template
+	 */
+	public function comic_template() {
 
-		$query_vars['bla'] = 'bla';
-		$query_vars['lang'] = 'lang';
-		return $query_vars;
-	//print_r( $wp_query );die;
-	}
-
-	public function bla() {
-
-		if ( '' != get_query_var( 'lang' ) ) {
-			echo ' ... ' . get_query_var( 'lang' );
-			die;
+		// If a password is required, then serve regular template
+		if ( post_password_required() ) {
+			return;
 		}
 
+		// Only load if on comic template
+		if ( 'comic' == get_post_type() ) {
+			require( 'comic-template.php' );
+			exit;
+		}
+	}
+
+	/**
+	 * Rewrite the query variable global
+	 * 
+	 * @param  array  $query_vars  The query vars
+	 * @return array  The modified query vars
+	 */
+	public function rewrite_query_vars( $query_vars ) {
+		$query_vars['lang'] = 'lang';
+		return $query_vars;
 	}
 
 	/**
@@ -135,6 +169,17 @@ class Comic_Glot_Setup {
 	 * @return string   The modified post content
 	 */
 	public function override_content( $content ) {
+
+		// If not on comic, then bail out now
+		if ( 'comic' != get_post_type() ) {
+			return $content;
+		}
+
+		// If password required, then bail out now so that regular theme template is used
+		if ( post_password_required() ) {
+			return $content;
+		}
+
 		$content = '';
 		$frames = get_post_meta( get_the_ID(), '_frames', true );
 
@@ -142,6 +187,7 @@ class Comic_Glot_Setup {
 		$slugs = get_query_var( 'lang' );
 		$slugs = explode( '-', $slugs );
 		if ( is_array( $slugs ) && '' == $slugs[0] ) {
+			$slugs = array();
 			foreach( $this->langs as $lang => $lang_info ) {
 				$slugs[] = $this->get_slug_from_lang( $lang );
 			}
@@ -160,12 +206,15 @@ class Comic_Glot_Setup {
 			// Load the frame for each language
 			foreach( $slugs as $key => $slug ) {
 				$lang = $this->get_lang_from_slug( $slug );
-				$attachment_id = absint( $frame[$lang . '_id'] );
-				if ( is_int( $attachment_id ) ) {
-					$url = wp_get_attachment_image_src( $attachment_id, 'full' )[0];
-					$content .= '<span lang="' . esc_attr( $lang )  . '">';
-					$content .= '<img src="' . esc_url( $url ) . '" /><br />';
-					$content .= '</span>';
+
+				if ( isset( $frame[$lang . '_id'] ) ) {
+					$attachment_id = absint( $frame[$lang . '_id'] );
+					if ( is_int( $attachment_id ) ) {
+						$url = wp_get_attachment_image_src( $attachment_id, 'full' )[0];
+						$content .= '<span lang="' . esc_attr( $lang )  . '">';
+						$content .= '<img src="' . esc_url( $url ) . '" /><br />';
+						$content .= '</span>';
+					}
 				}
 			}
 
@@ -208,30 +257,15 @@ class Comic_Glot_Setup {
 	}
 
 	/**
-	 * Get the posts attached images
-	 * 
-	 * @param    int  $post_id   The post ID
-	 * @return   array  The array of URLs
-	 */
-	static public function get_attached_images( $post_id ) {
-
-		// Add images
-		$images = get_attached_media( 'image', $post_id );
-		foreach( $images as $key => $image ) {
-			$attachment_id = $image->ID;
-			$url = wp_get_attachment_image_src( $attachment_id, 'full' );
-			$url = $url[0];
-			$url = self::convert_url_to_https( $url );
-			$urls[] = $url;
-		}
-
-		return $urls;
-	}
-
-	/**
 	 * Add the manifest file
 	 */
 	public function manifest() {
+
+		// Bail out if not loading manifest file
+		if ( ! isset( $_GET['manifest'] ) ) {
+			return;
+		}
+
 		$post_id = absint( $_GET['manifest'] );
 
 		// Add the page header
@@ -240,11 +274,14 @@ class Comic_Glot_Setup {
 		// Declare this is a cache manifest
 		echo "CACHE MANIFEST\n";
 
-		$urls = self:: get_attached_images( $post_id );
+		$urls = $this->get_comic_images( $post_id );
 
 		// Add script and CSS URLs in
 		$urls = array_merge( $this->script_urls, $urls );
 		$urls = array_merge( $this->css_urls, $urls );
+
+		// Output the current page URL
+		$urls[] = get_permalink( $post_id );
 
 		// Output each URL
 		foreach( $urls as $url ) {
@@ -252,13 +289,37 @@ class Comic_Glot_Setup {
 			echo esc_url( $url ) . "\n";
 		}
 
-		// Output the current page URL
-		echo get_permalink( $post_id ) . "\n";
-
 		// Add string
 		$time = absint( time() / 30 );
 		echo '#' . $time;
 		exit;
+	}
+
+	/**
+	 * Get the comic images
+	 * 
+	 * @return [type] [description]
+	 */
+	public function get_comic_images( $post_id ) {
+		$frames = get_post_meta( $post_id, '_frames', true );
+
+		// Loop through each frame
+		foreach( $frames as $frame ) {
+
+			// Load the frame for each language
+			foreach( $this->langs as $lang => $lang_info ) {
+				if ( isset( $frame[$lang . '_id'] ) ) {
+					$attachment_id = absint( $frame[$lang . '_id'] );
+					if ( is_int( $attachment_id ) && 0 != $attachment_id ) {
+						$url = wp_get_attachment_image_src( $attachment_id, 'full' )[0];
+						$urls [] = esc_url( $url );
+					}
+				}
+			}
+
+		}
+
+		return $urls;
 	}
 
 	/**
