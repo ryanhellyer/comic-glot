@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Sortable - Portlets</title>
+
+
+	<style>
+.column {
+	border: 1px solid #ccc;
+	width: 100%;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+li {
+	font-family: sans-serif;
+	cursor: pointer;
+	background: #f5f5f5;
+	border: 1px solid #ddd;
+	margin: 1%;
+	padding: 0.5%;
+	list-style: none;
+}
+.frame-header {
+	font-weight: bold;
+	padding: 0.5% 1%;
+	position: relative;
+}
+.close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #aaa;
+	width: 20px;
+	height: 20px;
+}
+.edit {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: red;
+	width: 10px;
+	height: 10px;
+}
+.frame-placeholder {
+	border: 1px dotted black;
+	margin: 0 1em 1em 0;
+	height: 50px;
+}
+.frame {
+	display: none;
+}
+
+
+
+
+
+
+@font-face{
+	font-family:'action-man';
+	src:url(fonts/action-man/Action_Man.ttf) format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+.frame {
+	border: 1px solid #aaa;
+	position: relative;
+	overflow: hidden;
+}
+img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+textarea.bubble {
+	background: rgba(255,255,255,0.3);
+}
+
+.bubble {
+	font-family: 'action-man';
+	font-size: 100%;
+	position: absolute;
+	top: 0.5%;
+	left: 0%;
+	width: 15.5%;
+	line-height: 103%;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	overflow: hidden;
+}
+.bubble:hover {
+	background: rgba(0,0,0,0.03);
+}
+.bubble:hover .ui-resizable-handle {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background: url(images/resize.gif);
+	width: 12px;
+	height: 12px;
+	cursor: se-resize;
+}
+
+
+
+
+</style>
+
+</head>
+<body>
+ 
+<form id="upload" action="upload.php" method="POST" enctype="multipart/form-data">
+<ul class="column">
+
+	<li>
+		<div class="frame-header">Feeds</div>
+
+			<div class="frame">
+				<img src="images/frame.png" />
+				<blockquote class="bubble">
+					The time has<br />
+					come for me<br />
+					to have my dose<br />
+					of potion ...
+				</blockquote>
+			</div>
+	</li>
+
+	<li>
+		<div class="frame-header">News</div>
+		<div class="frame">
+
+			<input style="display:none;" type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+			<div id="filedrag">Drop files here</div>
+
+		</div>
+	</li>
+
+	<li>
+		<div class="frame-header">Shopping</div>
+		<div class="frame">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+	</li>
+
+</ul>
+ 
+<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
+<input type="button" value="Add some sortable items and rebuild it" onclick="reBuildIt()">
+</form>
+
+	<script type='text/javascript' src='https://geek.hellyer.kiwi/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+	<script src="scripts/jquery-ui.js"></script>
+	<script src="scripts/file-drag.js"></script>
+
+ <script>
+jQuery(function($){ 
+
+	$( ".bubble" ).draggable();
+	$( ".bubble" ).resizable();
+
+	/**
+	 * Resize the speech bubbles based on the frame size.
+	 */
+	function comic_resize() {
+
+		// Get frame width
+		var width = $('.column li').width();
+
+		// Set font size
+		var fontsize = width/60+'px';
+		$('.column .bubble').css( "font-size", fontsize );
+	}
+	comic_resize();
+	window.onresize = comic_resize; // Resize on changing window size
+
+
+	/**
+	 * Allow for adding new items
+	 * this function will destroy, add your new items, then rebuild it
+	 */
+	window.reBuildIt=function() {
+		var selection = ['number'];
+		var component = $('.column');
+		component.sortable('destroy');
+
+		for (var i = 0; i < selection.length; i++) {
+			component.append('<li><div class="frame-header">New frame</div><div class="frame">New frame goes here.</div></li>');
+		}
+
+		comic_sortable();
+	}
+
+
+	/**
+	 * Main sortables function.
+	 */
+	function comic_sortable() {
+		$( ".column" ).sortable({
+			handle: ".frame-header",
+			cancel: ".close",
+			axis: 'y',
+			placeholder: ""
+		});
+
+		/**
+		 * Right click to edit.
+		 */
+		$(".bubble").dblclick(function() {
+			if ( 'BLOCKQUOTE' == $(this).prop("tagName") ) {
+				$(this).replaceWith( "<textarea class='bubble'>" + $( this ).text() + "</textarea>" );
+			}
+		});
+		$("textarea").dblclick(function() {
+			alert($(this).prop("tagName"));
+		});
+
+		/**
+		 * Close button.
+		 */
+		$( ".column li" ).find( ".frame-header" ).prepend( "<span class='close'></span>");
+		$( ".close" ).click(function() {
+			var icon = $( this );
+			icon.closest( ".column li" ).find( ".frame" ).toggle();
+		});
+
+	}
+
+	comic_sortable();
+
+});
+
+</script>
+
+</body>
+</html>
