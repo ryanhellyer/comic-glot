@@ -1,5 +1,9 @@
 <?php
 
+if ( ! isset( $_GET['comic'] ) ) {
+	return;
+}
+
 define( 'COMIC_VIEWS_URL', 'http://local.wordpress-trunk.dev/wp-content/mu-plugins/comic/views/' );
 
 

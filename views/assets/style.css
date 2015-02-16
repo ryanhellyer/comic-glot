@@ -1,0 +1,62 @@
+/* =Reset
+-------------------------------------------------------------- */
+body, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, a, img, dl, dt, dd, ol, ul, li, fieldset, form, legend, table, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	list-style: none;
+}
+
+/* =Force HTML5 elements block
+-------------------------------------------------------------- */
+header,
+nav,
+article,
+footer,
+address {
+	display: block;
+}
+
+/* =Links
+-------------------------------------------------------------- */
+a {
+	text-decoration: none;
+	color: #d90000;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* =Wrapper
+-------------------------------------------------------------- */
+form {
+	margin: 0 auto;
+	width: 80%;
+}
+
+/* =List
+-------------------------------------------------------------- */
+ul {
+	border: 1px solid #ededed;
+	border-top: none;
+	font-size: 8px;
+	font-size: 0.8em;
+	line-height: 17px;
+	line-height: 1.7em;
+	margin: 20px 0;
+	margin: 2rem 0;
+	width: 100%;
+}
+
+li {
+	font-weight: normal;
+	text-align: left;
+	font-family: sans-serif;
+	border-top: 1px solid #ededed;
+	padding: 10px;
+	padding: 1rem;
+	font-size: 10px;
+	font-size: 1rem;
+}

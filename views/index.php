@@ -26,20 +26,16 @@ function comic_get_row( $value = '' ) {
 	// Create the required HTML
 	$row_html = '
 
-				<tr class="sortable inactive">
-					<th>
-						<label>' . __( 'Enter your input string.', 'plugin-slug' ) . '</label>
-					</th>
-					<td>
-						<input type="text" name="' . esc_attr( COMIC_OPTION ) . '[][title]" value="' . esc_attr( $value['title'] ) . '" />
-						<span class="read-more-text"><br />some text goes here</span>
-					</td>
-					<td>
-						<input class="file-upload" type="file" name="' . esc_attr( COMIC_OPTION ) . '[][file]" />
-						<div class="box-with-content">...</div>
+				<li>
 
-					</td>
-				</tr>';
+						<label>' . __( 'Enter your input string.', 'plugin-slug' ) . '</label>
+
+						<input type="text" name="' . COMIC_OPTION . '[][title]" value="' . esc_attr( $value['title'] ) . '" />
+						<span class="read-more-text"><br />some text goes here</span>
+
+						<input class="file-upload" type="file" name="' . COMIC_OPTION . '[][file]" />
+						<div class="box-with-content">...</div>
+				</li>';
 
 	// Strip out white space (need on line line to keep JS happy)
 	$row_html = str_replace( '	', '', $row_html );
@@ -56,85 +52,39 @@ function comic_get_row( $value = '' ) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<title>Comic thingy</title>
-	<link rel="stylesheet" href="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/style.css' ); ?>" type="text/css" media="all" />
+	<title>Comic Glot</title>
+	<link rel="stylesheet" href="<?php echo COMIC_ASSETS_URL . 'style.css'; ?>" type="text/css" media="all" />
 
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/jquery.js' ); ?>"></script>
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/jquery-ui.js' ); ?>"></script>
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/jquery-migrate.min.js' ); ?>"></script>
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/file-upload.js' ); ?>"></script>
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/jquery.ajaxfileupload.js' ); ?>"></script>
-	<script type="text/javascript" src="<?php echo esc_url( COMIC_VIEWS_URL . 'assets/sortable.min.js' ); ?>"></script>
+	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery-ui.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'file-upload.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery.ajaxfileupload.js'; ?>"></script>
+	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'sortable.min.js'; ?>"></script>
 
 </head>
 <body>
 
-<!--[if lt IE 9]>
+<!--[if lt IE 10]>
 Sorry, but you are need a modern browser to use this website.
 <![endif]-->
 
-Hello World!
-
 <form method="post" action="" enctype="multipart/form-data">
 
-	<table class="wp-list-table widefat plugins">
-		<thead>
-			<tr>
-				<th class='check-column'>
-					<label class="screen-reader-text" for="cb-select-all-1">Alle auswählen</label>
-					<input id="cb-select-all-1" type="checkbox" />
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-			</tr>
-		</thead>
+	<ul class="sortable"><?php
 
-		<tfoot>
-			<tr>
-				<th class='check-column'>
-					<label class="screen-reader-text" for="cb-select-all-1">Alle auswählen</label>
-					<input id="cb-select-all-1" type="checkbox" />
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-				<th class='column-author'>
-					Autor
-				</th>
-			</tr>
-		</tfoot>
-
-		<tbody id="add-rows"><?php
-
-		// Grab options array and output a new row for each setting
-		$options = get_option( COMIC_OPTION );
-		if ( is_array( $options ) ) {
-			foreach( $options as $key => $value ) {
-				echo comic_get_row( $value );
+			// Grab options array and output a new row for each setting
+			$options = get_option( COMIC_OPTION );
+			if ( is_array( $options ) ) {
+				foreach( $options as $key => $value ) {
+					echo comic_get_row( $value );
+				}
 			}
-		}
 
-		// Add a new row by default
-		echo comic_get_row();
+			// Add a new row by default
+			echo comic_get_row();
 		?>
-		</tbody>
-	</table>
+
+	</ul>
 
 	<input type="button" id="add-new-row" value="<?php _e( 'Add new row', 'plugin-slug' ); ?>" />
 
@@ -148,14 +98,14 @@ Hello World!
 .read-more-text {
 	display: none;
 }
-.sortable .toggle {
+.sortable li .toggle {
 	display: inline !important;
 }
 </style>
 
 <script type='text/javascript'>
 /* <![CDATA[ */
-var test_url_submit = "http:\/\/local.wordpress-trunk.dev\/unique-headers\/?ajax_file_upload=true";
+var test_url_submit = "<?php echo str_replace( '/', "\/", home_url( '/' ) ); ?>?ajax_file_upload=true";
 /* ]]> */
 </script>
 
@@ -163,13 +113,11 @@ var test_url_submit = "http:\/\/local.wordpress-trunk.dev\/unique-headers\/?ajax
 
 jQuery(function($){ 
 
-	/**
-	 * Adding some buttons
-	 */
+	// Adding some buttons
 	function add_buttons() {
 
 		// Loop through each row
-		$( ".sortable" ).each(function() {
+		$( ".sortable li" ).each(function() {
 
 			// If no input field found with class .remove-setting, then add buttons to the row
 			if(!$(this).find('input').hasClass('remove-setting')) {
@@ -205,19 +153,18 @@ jQuery(function($){
 
 	// Add a fresh row on clicking the add row button
 	$( "#add-new-row" ).click(function() {
-		$( "#add-rows" ).append( html ); // Add the new row
+		$( ".sortable" ).append( html ); // Add the new row
 		add_buttons(); // Add buttons tot he new row
 	});
 
 	// Allow for resorting rows
-	$('#add-rows').sortable({
+	$('.sortable').sortable({
 		axis: "y", // Limit to only moving on the Y-axis
 	});
 
 });
 
 </script>
-
 
 
 </body>

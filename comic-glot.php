@@ -21,7 +21,24 @@ license.txt file included with this plugin for more information.
 
 */
 
-require( 'inc/meta-boxes/init.php' );
-require( 'inc/class-comic-glot-core.php' );
-require( 'inc/class-comic-glot-setup.php' );
-require( 'inc/class-comic-glot-meta-boxes.php' );
+if ( ! isset( $_GET['comic'] ) ) {
+	return;
+}
+
+
+define( 'COMIC_VIEWS_URL', content_url() . '/plugins/comic-glot/views/' );
+define( 'COMIC_ASSETS_URL', COMIC_VIEWS_URL . 'assets/' );
+
+
+class Comic_Setup {
+
+	public function __construct() {
+
+		// Load views
+		require( 'views/index.php' );
+		exit;
+
+	}
+
+}
+new Comic_Setup();
