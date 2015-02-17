@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
 	$(".file-upload").ajaxfileupload({
 		'action': test_url_submit,
 		'onComplete': function(response) {
+			console.log(response);
 			var json_obj = $.parseJSON(response);
 			console.log(json_obj);
 
