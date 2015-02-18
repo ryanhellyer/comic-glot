@@ -60,3 +60,23 @@ li {
 	font-size: 10px;
 	font-size: 1rem;
 }
+
+
+
+
+input[type=file] {
+	width: 100%;
+	border: 3px dashed #ccc;
+}
+input[type=file]::-webkit-file-upload-button {
+	visibility: hidden;
+}
+
+input[type=file]::before {
+	content: ' ';
+	display: block;
+	width: 100%;
+	height: 5rem;
+}
+input[type=file]::after {
+}
