@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 
 			var url = json_obj['url'];
 
-			$(this).next('.box-with-content').html('<img src="'+url+'" />');
+			$(this).parent().parent().next('.box-with-content').html('<img src="'+url+'" />');
 		},
 
 	});
