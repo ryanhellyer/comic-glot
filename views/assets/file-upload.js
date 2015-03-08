@@ -1,7 +1,5 @@
 jQuery(document).ready(function($) {
 
-	$('.the-image').css('background-color','green');
-
 	$(".file-upload").ajaxfileupload({
 		'action': test_url_submit,
 		'onComplete': function(response) {
@@ -11,6 +9,7 @@ jQuery(document).ready(function($) {
 			var url = json_obj['url'];
 
 			$(this).parent().parent().next('.box-with-content').html('<img src="'+url+'" />');
+			$(this).parent().parent().css('display','none'); // Hide the uploader once image in place
 		},
 
 	});

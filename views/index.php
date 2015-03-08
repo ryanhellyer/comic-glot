@@ -1,337 +1,128 @@
 <?php
 
-define( 'COMIC_OPTION', 'example-option' );
-define( 'COMIC_GROUP', 'example-group' );
 
-
-/**
- * Get a single speech bubble field.
- * 
- * @param  string  $value  Option value
- * @return string  The table row HTML
- */
-function comic_get_bubble_field( $value = '' ) {
-
-	// Set values if they don't exist
-	$options = array(
-		'title',
-		'width',
-		'height',
-		'x-position',
-		'y-position',
-		'font-family',
-		'font-size',
-		'text-colour',
-	);
-	foreach( $options as $option ) {
-		if ( ! isset( $value[$option] ) ) {
-			$value[$option] = '';
-		}
-
-	}
-
-	$bubble_html = '
-	<div class="bubble">
-		<p>
-			<label>' . __( 'Text', 'plugin-slug' ) . '</label>
-			<input type="text" name="' . COMIC_OPTION . '[][title]" value="' . esc_attr( $value['title'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'Width', 'plugin-slug' ) . '</label>
-			<div class="slider"></div>
-			<input class="slider-input" type="text" name="' . COMIC_OPTION . '[][width]" value="' . esc_attr( $value['width'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'Height', 'plugin-slug' ) . '</label>
-			<div class="slider"></div>
-			<input class="slider-input" type="text" name="' . COMIC_OPTION . '[][height]" value="' . esc_attr( $value['height'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'X position', 'plugin-slug' ) . '</label>
-			<div class="slider"></div>
-			<input class="slider-input" type="text" name="' . COMIC_OPTION . '[][x-position]" value="' . esc_attr( $value['x-position'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'Y position', 'plugin-slug' ) . '</label>
-			<div class="slider"></div>
-			<input class="slider-input" type="text" name="' . COMIC_OPTION . '[][y-position]" value="' . esc_attr( $value['y-position'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'Font family', 'plugin-slug' ) . '</label>
-			<select name="' . COMIC_OPTION . '[][font-family]">
-				<option value="sans-serif">Sans serif</option>
-				<option value="serif">Serif</option>
-			</select>
-		</p>
-		<p>
-			<label>' . __( 'Font-size', 'plugin-slug' ) . '</label>
-			<div class="slider"></div>
-			<input class="slider-input" type="text" name="' . COMIC_OPTION . '[][font-size]" value="' . esc_attr( $value['font-size'] ) . '" />
-		</p>
-		<p>
-			<label>' . __( 'Text color', 'plugin-slug' ) . '</label>
-			<input class="text-colour" type="text" name="' . COMIC_OPTION . '[][text-colour]" value="' . esc_attr( $value['text-colour'] ) . '" />
-		</p>
-	</div>';
-
-
-	// Strip out white space (need on line line to keep JS happy)
-	$bubble_html = str_replace( '	', '', $bubble_html );
-	$bubble_html = str_replace( "\n", '', $bubble_html );
-
-	// Return the final HTML
-	return $bubble_html;
-}
-
-/**
- * Get a single table row.
- * 
- * @param  string  $value  Option value
- * @return string  The table row HTML
- */
-function comic_get_row( $value = '' ) {
-
-	if ( ! is_array( $value ) ) {
-		$value = array();
-	}
-
-	if ( ! isset( $value['title'] ) ) {
-		$value['title'] = '';
-	}
-
-	if ( ! isset( $value['file'] ) ) {
-		$value['file'] = '';
-	}
-
-	// Create the required HTML
-	$row_html = '
-
-				<li>
-					<div class="file-upload-wrapper">
-						<div class="file-upload-inner">
-							<input class="file-upload" type="file" name="' . COMIC_OPTION . '[][file]" />
-						</div>
-					</div>
-
-					<div class="box-with-content"></div>
-
-					<h3>English</h3>
-					<span class="button add-new-bubble">' . __( 'Add new speech bubble', 'plugin-slug' ) . '</span>
-
-					<h3>Deutsch</h3>
-					<span class="button add-new-bubble">' . __( 'Add new speech bubble', 'plugin-slug' ) . '</span>
-
-				</li>';
-
-	// Strip out white space (need on line line to keep JS happy)
-	$row_html = str_replace( '	', '', $row_html );
-	$row_html = str_replace( "\n", '', $row_html );
-
-	// Return the final HTML
-	return $row_html;
-}
-
-
-?><!DOCTYPE html>
+echo '<!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<title>Comic Glot</title>
-	<link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.2-alpha-31205' type='text/css' media='all' />
-	<link rel="stylesheet" href="<?php echo COMIC_ASSETS_URL . 'style.css'; ?>" type="text/css" media="all" />
 
-	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery.js'; ?>"></script>
-	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery-ui.js'; ?>"></script>
-	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'file-upload.js'; ?>"></script>
-	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'jquery.ajaxfileupload.js'; ?>"></script>
-	<script type="text/javascript" src="<?php echo COMIC_ASSETS_URL . 'sortable.min.js'; ?>"></script>
+	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
 
-
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
+	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
+	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
+	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'sortable.min.js"></script>
 
 </head>
 <body>
 
-
-<!--[if lt IE 10]>
-Sorry, but you are need a modern browser to use this website.
-<![endif]-->
-
-<div style="display:none;">
-	<div class="new">NEW</div>
-	<div class="container">
-	</div>
-
-	<hr />
-	<div class="new">NEW</div>
-	<div class="container">
-	</div>
-</div>
-
 <form method="post" action="" enctype="multipart/form-data">
 
-	<ul class="sortable"><?php
+	<img src="' . htmlspecialchars( $this->current_image, ENT_QUOTES ) . '" />
 
-			// Grab options array and output a new row for each setting
-			$options = get_option( COMIC_OPTION );
-			if ( is_array( $options ) ) {
-				foreach( $options as $key => $value ) {
-					echo comic_get_row( $value );
+	<div class="controls">';
+
+		// Error messages
+		if ( ! empty( $this->error ) ) {
+			echo '<p class="error">';
+			foreach( $this->error as $error ) {
+				echo $this->error_messages[$error];
+			}
+			echo '</p>';
+		}
+
+		echo '
+		<ul class="sortable">';
+
+		foreach( $this->strips as $key => $strip ) {
+
+			echo '
+			<li>
+				<input class="button alignright" type="submit" name="' . htmlspecialchars( 'remove-page[' . $key . ']', ENT_QUOTES ) . '" value="' . __( 'Remove', 'comic-glot' ) . '" />
+				<h3>' . sprintf( __( 'Page %s' ), $key + 1 ) . '</h3>';
+
+			foreach( $this->languages as $lang => $language ) {
+
+				// Bail out if language is not used
+				if ( false == $language['used'] ) {
+					break;
 				}
+
+				echo '
+
+				<h4>' . $this->languages[$lang]['name'] . '</h4>
+				<input class="button alignright" type="submit" name="' . htmlspecialchars( 'view-page[' . $key . '][' . $lang . ']', ENT_QUOTES ) . '" value="' . __( 'View', 'comic-glot' ) . '" />
+				<p>
+					<input type="file" name="' . htmlspecialchars( 'file-upload[' . $key . '][' . $lang . ']', ENT_QUOTES ) . '" value="" />
+				</p>';
+
+				// Set image URL
+				if ( isset( $strip[$lang] ) ) {
+					$url = COMIC_ASSETS_URL . 'strips/' . $strip[$lang];
+				} else {
+					$url = '';
+				}
+
+				echo '
+				<input type="hidden" name="' . htmlspecialchars( 'strip_image[' . $key . ']['. $lang . ']', ENT_QUOTES ) . '" value="' . htmlspecialchars( $url, ENT_QUOTES ) . '" />';
+
 			}
 
-			// Add a new row by default
-			echo comic_get_row();
-		?>
+			echo '
+			</li>';
+		}
 
-	</ul>
+		echo '
+		</ul>
 
-	<input type="button" id="add-new-row" value="<?php _e( 'Add new row', 'plugin-slug' ); ?>" />
+		<p>
+			<input type="submit" name="add-new-page" id="add-new-page" class="button" value="' . __( 'Add new page', 'comic-glot' ) . '" />
+		</p>
 
-	<?php //settings_fields( COMIC_GROUP ); ?>
-	<p class="submit">
-		<input type="submit" class="button-primary" value="<?php _e( 'Save Changes', 'plugin-slug' ); ?>" />
-	</p>
+		<h3>' . __( 'Select languages to use', 'comic-glot' ) . '</h3>';
+
+		foreach( $this->languages as $lang => $language ) {
+
+			// Set whether selected ornot
+			if ( true == $language['used'] ) {
+				$checked = 'checked="checked" ';
+			} else {
+				$checked = '';
+			}
+
+			echo '
+		<p>
+			<label>' . $language['name'] . '</label>
+			<input ' . $checked . 'type="checkbox" name="' . htmlspecialchars( 'language[' . $lang . ']', ENT_QUOTES ) . '" value="1" />
+		</p>';
+		}
+
+		echo '
+		<p class="submit">
+			<input type="submit" name="save" class="button" value="' . __( 'Save Changes', 'comic-glot' ) . '" />
+		</p>
+
+	</div>
+
+	' . wp_nonce_field( COMIC_NONCE, COMIC_NONCE ) . '
 </form>
 
-<style>
-.button {
-	display: inline-block;
-	border-radius: 10px;
-	border: 1px solid #999;
-	padding: 4px 8px;
-	background: #f4f4f4;
-}
-.read-more-text {
-	display: none;
-}
-.sortable li .toggle {
-	display: inline !important;
-}
-</style>
-
-<script type='text/javascript'>
-/* <![CDATA[ */
-var test_url_submit = "<?php echo str_replace( '/', "\/", home_url( '/' ) ); ?>?ajax_file_upload=true";
-/* ]]> */
-</script>
-
 <script>
-
 jQuery(function($){ 
 
-	// Adding some buttons
-	function add_buttons() {
-
-		// Loop through each row
-		$( ".sortable li" ).each(function() {
-
-			// If no input field found with class .remove-setting, then add buttons to the row
-			if(!$(this).find('input').hasClass('remove-setting')) {
-
-				// Add a remove button
-				$(this).append('<td><input type="button" class="remove-setting" value="X" /></td>');
-
-				// Add read more button
-				$(this).append('<td><input type="button" class="read-more" value="More" /></td>');
-
-				// Remove button functionality
-				$('.remove-setting').click(function () {
-					$(this).parent().parent().remove();
-				});
-
-				// Read more button functionality
-				$('.read-more-text').css('display','none');
-				$(this).find(".read-more").click(function(){
-					$(this).parent().parent().find('.read-more-text').toggleClass('toggle');
-				});
-
-			}
-
-		});
-
-	}
-
-	// Create the required HTML (this should be added inline via wp_localize_script() once JS is abstracted into external file)
-	var row_html = '<?php echo comic_get_row( '' ); ?>';
-
-	// Add the buttons
-	add_buttons();
-
-	// Add a fresh row on clicking the add row button
-	$( "#add-new-row" ).click(function() {
-		$( ".sortable" ).append( row_html ); // Add the new row
-		add_buttons(); // Add buttons tot he new row
-	});
-
 	// Allow for resorting rows
-	$('.sortable').sortable({
+	$(".sortable").sortable({
 		axis: "y", // Limit to only moving on the Y-axis
 	});
 
-
-
-	// ***** SPEECH BUBBLE FUNCTIONALITY _ ADD NEW ONE HERE ****
-	var bubble_html = '<?php echo comic_get_bubble_field( '' ); ?>';
-
-	$( ".add-new-bubble" ).before( bubble_html ); // Add the new row
-
-	// Add a fresh speech bubble on clicking the add speech bubble button
-	$( ".add-new-bubble" ).click(function() {
-		$(this).before( bubble_html ); // Add the new row
-	});
-
-	$( ".slider" ).slider(
-		{
-			slide: function( event, ui ) {
-				$(this).next('.slider-input').val( ui.value );
-			}
-		}
-	);
-
 });
+
 
 </script>
 
-<style>
-.demo {
-	width: 150px;
-	height: 150px;
-	padding: 10px 0 0 0;
-	background-color: rgba(0,0,0,0.1);
-	position: absolute;
-	top: 150px;
-	left: 300px;
-}
-.demo textarea {
-	min-width: 5px;
-	min-height: 5px;
-}
-.container {
-	background: #fafafa;
-	border:1px solid #eee;
-	width: 800px;
-	height: 300px;
-}
-</style>
-
-<script>
-jQuery(document).ready(function($) {
-	$('.new').click(function() {
-		$(this).next('.container').append( '<div contenteditable class="demo">'+Math.floor((Math.random() * 10) + 1)+'</div>' );
-
-		$('.demo').draggable({
-//			cancel: '',
-			containment: '.container',
-			scroll: false
-		}).resizable();
-	});
-
-
-});
-</script>
 
 </body>
-</html>
+</html>';
