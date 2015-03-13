@@ -1,33 +1,6 @@
 <?php
-/*
-Plugin Name: Comic Glot
-Plugin URI: http://geek.ryanhellyer.net/products/comic-glot/
-Description: Comic Glot
-Author: Ryan Hellyer
-Version: 1.0
-Author URI: http://geek.ryanhellyer.net/
 
-Copyright (c) 2014 Ryan Hellyer
-
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 2 as
-published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-license.txt file included with this plugin for more information.
-
-*/
-
-
-define( 'COMIC_VIEWS_URL', content_url() . '/plugins/comic-glot/views/' );
-define( 'COMIC_ASSETS_URL', COMIC_VIEWS_URL . 'assets/' );
-define( 'COMIC_NONCE', 'comic-edit' );
-
-
-class Comic_Setup {
+class ComicJet_Setup {
 
 	/**
 	 * Error message.
@@ -44,12 +17,12 @@ class Comic_Setup {
 	public function __construct() {
 
 		$this->error_messages = array(
-			'file-type-not-supported' => __( 'Sorry, but that file type is not supported', 'comic-glot' ),
-			'file-too-large'          => __( 'Sorry, that file was too large.', 'comic-glot' ),
+			'file-type-not-supported' => __( 'Sorry, but that file type is not supported' ),
+			'file-too-large'          => __( 'Sorry, that file was too large.' ),
 		);
 
-		add_action( 'init', array( $this, 'save_data' ) );
-		add_action( 'template_redirect', array( $this, 'display_editor' ) );
+		$this->save_data();
+		$this->display_editor();
 
 	}
 
@@ -80,12 +53,19 @@ class Comic_Setup {
 			),
 		);
 
+		// Set images from form input
+		foreach( $_POST['strip_image'] as $page => $strip ) {
+			foreach( $strip as $lang => $file_name ) {
+				$this->strips[$page][$lang] = $file_name;
+			}
+		}
+
 		// Get default image to show (from first page)
 		foreach( $this->languages as $lang => $name ) {
 
 			// Get file name of first language
 			$file_name = $this->strips[0][$lang];
-			$this->current_image = COMIC_ASSETS_URL . 'strips/' . $file_name;
+			$this->current_image = COMIC_GLOT_URL . 'strips/' . $file_name;
 			break; // Break free from foreach now, as only wanted first item
 
 		}
@@ -97,6 +77,7 @@ class Comic_Setup {
 				! isset( $_POST[COMIC_NONCE] ) 
 				|| ! wp_verify_nonce( $_POST[COMIC_NONCE], COMIC_NONCE ) 
 			) {
+				return;
 			}
 
 			// Handle image uploads
@@ -153,14 +134,12 @@ class Comic_Setup {
 
 			}
 
-			// Remove a page
+			// View a page
 			if ( isset( $_POST['view-page'] ) ) {
-				foreach( $_POST['view-page'] as $key => $language ) {
+				foreach( $_POST['view-page'] as $page => $language ) {
 					foreach( $language as $lang => $x ) {
-						$this->current_image = COMIC_ASSETS_URL . 'strips/' . $this->strips[$key][$lang];
+						$this->current_image = COMIC_GLOT_URL . 'strips/' . $this->strips[$page][$lang];
 					}
-//					echo $this->current_image;
-//
 				}
 			}
 
@@ -200,7 +179,7 @@ class Comic_Setup {
 				}
 			}
 
-			echo '<textarea style="position:absolute;left:0;bottom:0;width:900px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
+			echo '<textarea style="position:absolute;left:0;bottom:0;width:600px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
 			echo "Errors:\n";
 			print_r( $this->error );
 			echo "\nPOST:\n";
@@ -225,4 +204,4 @@ class Comic_Setup {
 	}
 
 }
-new Comic_Setup();
+new ComicJet_Setup();

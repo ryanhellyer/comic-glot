@@ -10,7 +10,7 @@ echo '<!DOCTYPE html>
 	<title>Comic Glot</title>
 
 	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
+	<link rel="stylesheet" type="text/css" href=""/>
 
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
@@ -21,7 +21,7 @@ echo '<!DOCTYPE html>
 
 <form method="post" action="" enctype="multipart/form-data">
 
-	<img src="' . htmlspecialchars( $this->current_image, ENT_QUOTES ) . '" />
+	<img src="' . esc_attr( $this->current_image ) . '" />
 
 	<div class="controls">';
 
@@ -41,7 +41,7 @@ echo '<!DOCTYPE html>
 
 			echo '
 			<li>
-				<input class="button alignright" type="submit" name="' . htmlspecialchars( 'remove-page[' . $key . ']', ENT_QUOTES ) . '" value="' . __( 'Remove', 'comic-glot' ) . '" />
+				<input class="button alignright" type="submit" name="' . esc_attr( 'remove-page[' . $key . ']' ) . '" value="' . __( 'Remove' ) . '" />
 				<h3>' . sprintf( __( 'Page %s' ), $key + 1 ) . '</h3>';
 
 			foreach( $this->languages as $lang => $language ) {
@@ -54,20 +54,20 @@ echo '<!DOCTYPE html>
 				echo '
 
 				<h4>' . $this->languages[$lang]['name'] . '</h4>
-				<input class="button alignright" type="submit" name="' . htmlspecialchars( 'view-page[' . $key . '][' . $lang . ']', ENT_QUOTES ) . '" value="' . __( 'View', 'comic-glot' ) . '" />
+				<input class="button alignright" type="submit" name="' . esc_attr( 'view-page[' . $key . '][' . $lang . ']' ) . '" value="' . __( 'View' ) . '" />
 				<p>
-					<input type="file" name="' . htmlspecialchars( 'file-upload[' . $key . '][' . $lang . ']', ENT_QUOTES ) . '" value="" />
+					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][' . $lang . ']' ) . '" value="" />
 				</p>';
 
 				// Set image URL
 				if ( isset( $strip[$lang] ) ) {
-					$url = COMIC_ASSETS_URL . 'strips/' . $strip[$lang];
+					$file_name = $strip[$lang];
 				} else {
-					$url = '';
+					$file_name = '';
 				}
 
 				echo '
-				<input type="hidden" name="' . htmlspecialchars( 'strip_image[' . $key . ']['. $lang . ']', ENT_QUOTES ) . '" value="' . htmlspecialchars( $url, ENT_QUOTES ) . '" />';
+				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
 
 			}
 
@@ -79,10 +79,10 @@ echo '<!DOCTYPE html>
 		</ul>
 
 		<p>
-			<input type="submit" name="add-new-page" id="add-new-page" class="button" value="' . __( 'Add new page', 'comic-glot' ) . '" />
+			<input type="submit" name="add-new-page" id="add-new-page" class="button" value="' . __( 'Add new page' ) . '" />
 		</p>
 
-		<h3>' . __( 'Select languages to use', 'comic-glot' ) . '</h3>';
+		<h3>' . __( 'Select languages to use' ) . '</h3>';
 
 		foreach( $this->languages as $lang => $language ) {
 
@@ -96,13 +96,13 @@ echo '<!DOCTYPE html>
 			echo '
 		<p>
 			<label>' . $language['name'] . '</label>
-			<input ' . $checked . 'type="checkbox" name="' . htmlspecialchars( 'language[' . $lang . ']', ENT_QUOTES ) . '" value="1" />
+			<input ' . $checked . 'type="checkbox" name="' . esc_attr( 'language[' . $lang . ']' ) . '" value="1" />
 		</p>';
 		}
 
 		echo '
 		<p class="submit">
-			<input type="submit" name="save" class="button" value="' . __( 'Save Changes', 'comic-glot' ) . '" />
+			<input type="submit" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
 		</p>
 
 	</div>
