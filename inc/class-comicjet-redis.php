@@ -728,28 +728,30 @@ class Redis_DB {
 
 redis_cache_init();
 
-$seconds = 10000;
-$count = 0;
-$time = microtime(true);
-while($count < (1*$seconds)) {
-//	echo microtime(true)."\n";
-	redis_cache_set( 'my_result', rand() );
-	$count++;
-}
-$result = redis_cache_get( 'my_result' );
 
-echo 'Time: ' . ( microtime(true) - $time );
-echo '<br>';
-echo $result;
+return;
+					$seconds = 10000;
+					$count = 0;
+					$time = microtime(true);
+					while($count < (1*$seconds)) {
+					//	echo microtime(true)."\n";
+						redis_cache_set( 'my_result', rand() );
+						$count++;
+					}
+					$result = redis_cache_get( 'my_result' );
 
-die;
+					echo 'Time: ' . ( microtime(true) - $time );
+					echo '<br>';
+					echo $result;
 
-//print_r( $GLOBALS['redis_cache'] );
+					die;
 
-$result = redis_cache_get( 'my_result' );
-if ( false === $result ) {
-	$result = rand();
-	redis_cache_set( 'my_result', $result );
-}
-echo $result;
-die;
+					//print_r( $GLOBALS['redis_cache'] );
+
+					$result = redis_cache_get( 'my_result' );
+					if ( false === $result ) {
+						$result = rand();
+						redis_cache_set( 'my_result', $result );
+					}
+					echo $result;
+					die;

@@ -54,28 +54,30 @@ class ComicJet_Setup {
 		);
 
 		// Set images from form input
-		foreach( $_POST['strip_image'] as $page => $strip ) {
-			foreach( $strip as $lang => $file_name ) {
-				$this->strips[$page][$lang] = $file_name;
+		if ( isset( $_POST['strip_image'] ) ) {
+			foreach( $_POST['strip_image'] as $page => $strip ) {
+				foreach( $strip as $lang => $file_name ) {
+					$this->strips[$page][$lang] = $file_name;
+				}
 			}
-		}
 
-		// Get default image to show (from first page)
-		foreach( $this->languages as $lang => $name ) {
+			// Get default image to show (from first page)
+			foreach( $this->languages as $lang => $name ) {
 
-			// Get file name of first language
-			$file_name = $this->strips[0][$lang];
-			$this->current_image = COMIC_GLOT_URL . 'strips/' . $file_name;
-			break; // Break free from foreach now, as only wanted first item
+				// Get file name of first language
+				$file_name = $this->strips[0][$lang];
+				$this->current_image = COMIC_GLOT_URL . 'strips/' . $file_name;
+				break; // Break free from foreach now, as only wanted first item
 
+			}
 		}
 
 		if ( ! empty( $_POST ) ) {
 
 			// Bail out if nonce not set
 			if (
-				! isset( $_POST[COMIC_NONCE] ) 
-				|| ! wp_verify_nonce( $_POST[COMIC_NONCE], COMIC_NONCE ) 
+				! isset( $_POST['nonce'] ) 
+				|| ! verify_nonce( $_POST['nonce'] ) 
 			) {
 				return;
 			}

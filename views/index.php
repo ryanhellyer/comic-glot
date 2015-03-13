@@ -107,7 +107,7 @@ echo '<!DOCTYPE html>
 
 	</div>
 
-	' . wp_nonce_field( COMIC_NONCE, COMIC_NONCE ) . '
+	' . get_nonce_field() . '
 </form>
 
 <script>
