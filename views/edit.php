@@ -1,23 +1,6 @@
 <?php
 
-
-echo '<!DOCTYPE html>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
-	<link rel="profile" href="http://gmpg.org/xfn/11">
-	<title>Comic Glot</title>
-
-	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-	<link rel="stylesheet" type="text/css" href=""/>
-
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'sortable.min.js"></script>
-
-</head>
-<body>
+echo '
 
 <form method="post" action="" enctype="multipart/form-data">
 

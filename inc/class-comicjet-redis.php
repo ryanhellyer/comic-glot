@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Instantiate Redis.
+ * We don't instantiate Redis directly so that we can make it easier to provide drop in DB replacements.
+ * 
+ * @return  object  Redis DB object
+ */
+function comicjet_db() {
+	return new Redis_DB();
+}
+
 /*
  * Based on "WP Redis" (http://github.com/alleyinteractive/wp-redis/) by Matthew Boynes, Alley Interactive (http://www.alleyinteractive.com/)
  * 
@@ -726,10 +736,12 @@ class Redis_DB {
 
 
 
-redis_cache_init();
+
 
 
 return;
+					redis_cache_init();
+
 					$seconds = 10000;
 					$count = 0;
 					$time = microtime(true);

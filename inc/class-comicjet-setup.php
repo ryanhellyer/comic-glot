@@ -2,56 +2,124 @@
 
 class ComicJet_Setup {
 
-	/**
-	 * Error message.
-	 * 
-	 * @var string
-	 */
-	public $error;
-
-	public $error_messages;
-
-
+	public $error; // Current error
+	public $error_messages; // Array of possible error messages
 	public $file_size = 10014158; // Max file size for uploads
+	public $comic; // The comic slug
+	public $page_type; // The current page type (view, edit or 404
+	public $page_number; // The current page number
 
+	/**
+	 * Class constructor.
+	 */
 	public function __construct() {
+
+		$this->current_page_info();
+
+		$this->db = comicjet_db();
 
 		$this->error_messages = array(
 			'file-type-not-supported' => __( 'Sorry, but that file type is not supported' ),
 			'file-too-large'          => __( 'Sorry, that file was too large.' ),
 		);
 
+		$this->set_vars();
 		$this->save_data();
-		$this->display_editor();
+
+		// Output page
+		$this->output_page();
 
 	}
 
-	public function save_data() {
-		$this->strips = array(
-			0 => array(
-				'en' => 'en1.jpg',
-				'de' => 'de1.jpg',
-			),
-			1 => array(
-				'en' => 'en2.jpg',
-				'de' => 'de2.jpg',
-			),
-		);
+	/**
+	 * Current page info.
+	 */
+	public function current_page_info() {
 
-		$this->languages = array(
-			'en' => array(
-				'name' => 'English',
-				'used' => true,
-			),
-			'de' => array(
-				'name' => 'Deutsch',
-				'used' => true,
-			),
-			'nb' => array(
-				'name' => 'Norsk Bokmål',
-				'used' => false,
-			),
-		);
+		// Parse which page we are on
+		$uri = $_SERVER['REQUEST_URI'];
+		$uri = trim( $uri, '/' ); // Strip preceding and trailing slashes
+		$uri_bits = explode( '/', $uri ); // Split
+
+		// Work out comic page information
+		if ( __( 'comic' ) == $uri_bits[0] ) {
+
+			if ( isset( $uri_bits[1] ) ) {
+				$this->comic = $uri_bits[1];
+				$this->comic = filter_var( $this->comic, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW );
+
+				// Calculate the current page number
+				if ( isset( $uri_bits[2] ) && 3 == count( $uri_bits ) ) {
+
+					// Set edit mode
+					if ( __( 'edit' ) == $uri_bits[2] ) {
+						$this->page_type = 'edit';
+					} else {
+						$this->page_type = 'view_comic';
+						$this->page_number = (int) $uri_bits[2]; // Grab current page number
+					}
+				} else {
+					$this->page_type = 'view_comic';
+					$this->page_number = 1; // No page number set, so we must be on page 1
+				}
+			} else {
+				$this->page_type = '404';
+			}
+		} elseif( '' == $uri_bits[0] ) {
+			$this->page_type = 'home';
+		} else {
+			$this->page_type = '404';
+		}
+
+	}
+
+	/**
+	 * Save submtited data.
+	 */
+	public function set_vars() {
+
+		// Get strips
+		$this->strips = $this->db->get( 'languages' );
+		if ( empty( $this->languages ) ) {
+			$this->languages = array(
+				'en' => array(
+					'name' => 'English',
+					'used' => true,
+				),
+				'de' => array(
+					'name' => 'Deutsch',
+					'used' => true,
+				),
+				'nb' => array(
+					'name' => 'Norsk Bokmål',
+					'used' => false,
+				),
+			);
+			$this->db->add( 'languages', $this->strips );
+		}
+
+		// Get languages
+		$this->strips = $this->db->get( 'strips' );
+		if ( empty( $this->strips ) ) {
+			$this->strips = array(
+				0 => array(
+					'en' => 'en1.jpg',
+					'de' => 'de1.jpg',
+				),
+				1 => array(
+					'en' => 'en2.jpg',
+					'de' => 'de2.jpg',
+				),
+			);
+			$this->db->add( 'strips', $this->strips );
+		}
+
+	}
+
+	/**
+	 * Save submtited data.
+	 */
+	public function save_data() {
 
 		// Set images from form input
 		if ( isset( $_POST['strip_image'] ) ) {
@@ -61,15 +129,16 @@ class ComicJet_Setup {
 				}
 			}
 
-			// Get default image to show (from first page)
-			foreach( $this->languages as $lang => $name ) {
+		}
 
-				// Get file name of first language
-				$file_name = $this->strips[0][$lang];
-				$this->current_image = COMIC_GLOT_URL . 'strips/' . $file_name;
-				break; // Break free from foreach now, as only wanted first item
+		// Get default image to show (from first page)
+		foreach( $this->languages as $lang => $name ) {
 
-			}
+			// Get file name of first language
+			$file_name = $this->strips[0][$lang];
+			$this->current_image = COMIC_JET_URL . 'strips/' . $file_name;
+			break; // Break free from foreach now, as only wanted first item
+
 		}
 
 		if ( ! empty( $_POST ) ) {
@@ -93,6 +162,7 @@ class ComicJet_Setup {
 
 							// Get path and extension
 							$tmp_path = $files['tmp_name'][$page][$lang];
+
 							if ( 'image/jpeg' == $files['type'][$page][$lang] ) {
 								$extension = 'jpg';
 							} elseif ( 'image/png' == $files['type'][$page][$lang] ) {
@@ -116,11 +186,11 @@ class ComicJet_Setup {
 
 								// Store in directory
 								$file_name = $name . '.' . $extension;
-								$new_path = dirname( __FILE__ ) . '/strips/' . $file_name;
+								$new_path = COMIC_JET_STRIPS_DIR . $file_name;
 								$count = 1;
 								while ( file_exists( $new_path ) ) {
 									$file_name = $name . '-' . $count . $extension;
-									$new_path = dirname( __FILE__ ) . '/strips/' . $file_name;
+									$new_path = COMIC_JET_STRIPS_DIR . $file_name;
 									$count++;
 								}
 								copy( $tmp_path, $new_path );
@@ -136,7 +206,7 @@ class ComicJet_Setup {
 
 			}
 
-			// View a page
+			// Get current image
 			if ( isset( $_POST['view-page'] ) ) {
 				foreach( $_POST['view-page'] as $page => $language ) {
 					foreach( $language as $lang => $x ) {
@@ -181,7 +251,16 @@ class ComicJet_Setup {
 				}
 			}
 
+
+			// Finally, save the data
+			$this->db->replace( 'languages', $this->strips );
+//			$this->db->delete( 'strips', $this->strips );
+			$this->db->replace( 'strips', $this->strips );
+
 			echo '<textarea style="position:absolute;left:0;bottom:0;width:600px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
+echo "STRIPS FROM REDIS:\n";
+print_r( $this->db->get( 'strips' ) );echo "\n";
+
 			echo "Errors:\n";
 			print_r( $this->error );
 			echo "\nPOST:\n";
@@ -193,14 +272,31 @@ class ComicJet_Setup {
 
 	}
 
-	public function display_editor() {
+	/**
+	 * Output the page.
+	 */
+	public function output_page() {
 
-		if ( ! isset( $_GET['comic'] ) ) {
-			return;
+		require( 'views/header.php' );
+
+		switch( $this->page_type ) {
+			case 'edit':
+				require( 'views/edit.php' );
+				break;
+			case '404':
+				require( 'views/404.php' );
+				break;
+			case 'view_comic':
+				require( 'views/comic.php' );
+				break;
+			case 'home':
+				require( 'views/home.php' );
+				break;
+			default:
+				require( 'views/404.php' );
 		}
 
 		// Load views
-		require( 'views/index.php' );
 		exit;
 
 	}

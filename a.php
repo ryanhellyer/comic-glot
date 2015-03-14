@@ -22,8 +22,8 @@ license.txt file included with this plugin for more information.
 */
 
 
-define( 'COMIC_JET_URL', 'http://dev.comicjet.com/' );
-define( 'COMIC_VIEWS_URL', COMIC_JET_URL . 'views/' );
+define( 'COMIC_GLOT_URL', 'http://local.wordpress-trunk.dev/wp-content/plugins/comic-glot/' );
+define( 'COMIC_VIEWS_URL', COMIC_GLOT_URL . 'views/' );
 define( 'COMIC_ASSETS_URL', COMIC_VIEWS_URL . 'assets/' );
 define( 'COMIC_JET_ROOT_DIR', dirname( __FILE__ ) .'/' );
 define( 'COMIC_JET_STRIPS_DIR', COMIC_JET_ROOT_DIR . 'strips/' );
