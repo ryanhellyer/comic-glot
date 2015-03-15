@@ -20,10 +20,17 @@ echo '<!DOCTYPE html>
 <body>
 
 <a href="' . COMIC_JET_URL . '">Home</a>
-|
-<a href="' . COMIC_JET_URL . 'comic/default/">View "default"</a>
-|
-<a href="' . COMIC_JET_URL . 'comic/default/edit/">Edit "default"</a>
+';
+
+foreach( $this->strip_list as $strip_slug => $x ) {
+	$title = $this->db->get( 'title', $strip_slug );
+	echo "\n|";
+	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/edit/">' . __( 'Edit' ) . ' ' . $title . '</a>';
+	echo "\n|";
+	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/">' . $title . '</a>';
+}
+
+echo '
 |
 <a href="' . COMIC_JET_URL . 'asfasf">404</a>
 <hr />

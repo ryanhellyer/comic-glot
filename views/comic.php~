@@ -1,4 +1,0 @@
-<?php
-
-echo 'This is ' . $this->comic . ' on page number ' . $this->page_number . '.';
-

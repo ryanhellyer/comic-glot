@@ -4,7 +4,10 @@ echo '
 
 <form method="post" action="" enctype="multipart/form-data">
 
-	<img src="' . esc_attr( $this->current_image ) . '" />
+	<!-- Hidden submit button - ensures that page is saved when enter hit -->
+	<input type="submit" style="display:none" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
+
+	<img src="' . esc_attr( $this->current_page['current_image'] ) . '" />
 
 	<div class="controls">';
 
@@ -18,48 +21,70 @@ echo '
 		}
 
 		echo '
+		<p>
+			<label>' . __( 'Title' ) . '</label>
+			<input type="text" name="title" value="' . esc_attr( $this->current_page['title'] ) . '" />
+		</p>';
+
+
+		if ( isset( $this->current_page['strips'] ) && is_array( $this->current_page['strips'] ) ) {
+			echo '
 		<ul class="sortable">';
 
-		foreach( $this->strips as $key => $strip ) {
+			foreach( $this->current_page['strips'] as $key => $strip ) {
 
-			echo '
+				echo '
 			<li>
 				<input class="button alignright" type="submit" name="' . esc_attr( 'remove-page[' . $key . ']' ) . '" value="' . __( 'Remove' ) . '" />
 				<h3>' . sprintf( __( 'Page %s' ), $key + 1 ) . '</h3>';
 
-			foreach( $this->languages as $lang => $language ) {
-
-				// Bail out if language is not used
-				if ( false == $language['used'] ) {
-					break;
+				echo '
+				<p>' . __( 'Add window coordinates' ) . '</p>
+				';
+				$strip['window'][] = ''; // Add new window
+				foreach( $strip['window'] as $window_id => $window_value ) {
+					echo '
+				<p>
+					<input type="text" name="' . esc_attr( 'strip_image[' . $key . '][window][]' ) . '" value="' . esc_attr( $window_value ) . '" />
+				</p>';
 				}
 
-				echo '
 
-				<h4>' . $this->languages[$lang]['name'] . '</h4>
+				foreach( $this->available_languages as $lang => $language ) {
+
+					// Bail out if language is not used
+					if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+
+						echo '
+
+				<h4>' . $language['name'] . '</h4>
 				<input class="button alignright" type="submit" name="' . esc_attr( 'view-page[' . $key . '][' . $lang . ']' ) . '" value="' . __( 'View' ) . '" />
 				<p>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][' . $lang . ']' ) . '" value="" />
 				</p>';
 
-				// Set image URL
-				if ( isset( $strip[$lang] ) ) {
-					$file_name = $strip[$lang];
-				} else {
-					$file_name = '';
+						// Set image URL
+						if ( isset( $strip[$lang] ) ) {
+							$file_name = $strip[$lang];
+						} else {
+							$file_name = '';
+						}
+
+						echo '
+				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
+					}
+
 				}
 
 				echo '
-				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
-
+			</li>';
 			}
 
 			echo '
-			</li>';
+		</ul>';
 		}
 
 		echo '
-		</ul>
 
 		<p>
 			<input type="submit" name="add-new-page" id="add-new-page" class="button" value="' . __( 'Add new page' ) . '" />
@@ -67,10 +92,10 @@ echo '
 
 		<h3>' . __( 'Select languages to use' ) . '</h3>';
 
-		foreach( $this->languages as $lang => $language ) {
+		foreach( $this->available_languages as $lang => $language ) {
 
 			// Set whether selected ornot
-			if ( true == $language['used'] ) {
+			if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
 				$checked = 'checked="checked" ';
 			} else {
 				$checked = '';

@@ -642,6 +642,21 @@ class Redis_DB {
 	}
 
 	/**
+	 * Replaces a key if it exists, otherwise adds it.
+	 * 
+	 * 
+	 * Written by Ryan.
+	 *
+	 */
+	public function write( $key, $data, $group = '' ) {
+		if ( $this->_exists( $this->_key( $key, $group ) ) ) {
+			$this->replace( $key, $data, $group );
+		} else {
+			$this->add( $key, $data, $group );
+		}
+	}
+
+	/**
 	 * Utility function to determine whether a key exists in the cache.
 	 *
 	 * @access protected
