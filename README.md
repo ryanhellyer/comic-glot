@@ -1,6 +1,10 @@
 comic-glot
 ==========
 
+
+Maybe use imagemap for comics.
+
+
 Comic GLot
 
 Suitable comic to port into it:
@@ -20,6 +24,7 @@ Ideas:
 Logo ideas:
 http://content.sportslogos.net/logos/17/300/full/1606.gif
 http://image.shutterstock.com/display_pic_with_logo/88446/88446,1200255590,10/stock-vector-jet-fighter-vector-illustration-8515000.jpg
+https://dribbble.com/shots/1695680-Jumbo-Jet-Sketch
 
 
 

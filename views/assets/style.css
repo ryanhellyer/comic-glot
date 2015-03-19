@@ -77,9 +77,20 @@ form {
 	width: 80%;
 }
 
-img {
+.image-display {
 	float: left;
+	position: relative;
 	width: 60%;
+	height: 800px;
+	overflow: hidden;
+}
+
+img {
+	position: absolute;
+	left: 0
+	top: 0;
+	display: block;
+	width: 100%
 }
 
 .controls {

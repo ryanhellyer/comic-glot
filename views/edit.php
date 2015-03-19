@@ -7,7 +7,10 @@ echo '
 	<!-- Hidden submit button - ensures that page is saved when enter hit -->
 	<input type="submit" style="display:none" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
 
-	<img src="' . esc_attr( $this->current_page['current_image'] ) . '" />
+	<div class="image-display">
+		<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />
+		<img src="' . esc_attr( $this->current_page['current_image'] ) . '" />
+	</div>
 
 	<div class="controls">';
 
@@ -38,9 +41,33 @@ echo '
 				<input class="button alignright" type="submit" name="' . esc_attr( 'remove-page[' . $key . ']' ) . '" value="' . __( 'Remove' ) . '" />
 				<h3>' . sprintf( __( 'Page %s' ), $key + 1 ) . '</h3>';
 
+				// Add current_background image
 				echo '
-				<p>' . __( 'Add window coordinates' ) . '</p>
-				';
+				<p>
+					<label>Background image</label>
+					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background]' ) . '" value="" />
+				</p>';
+				if ( isset( $this->current_page['strips'][$key]['current_background'] ) ) {
+					$file_name = $this->current_page['strips'][$key]['current_background'];
+					echo '
+				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
+				}
+
+				echo '
+				<p>
+					<label>Low resolution background image (used for offline mode)</label>
+					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background_lowres]' ) . '" value="" />
+				</p>';
+				if ( isset( $this->current_page['strips'][$key]['current_background_lowres'] ) ) {
+					$file_name = $this->current_page['strips'][$key]['current_background_lowres'];
+					echo '
+				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background_lowres]' ) . '" value="' . esc_attr( $file_name ) . '" />';
+				}
+
+
+				echo '
+				<p>' . __( 'Add window coordinates' ) . '</p>';
+
 				$strip['window'][] = ''; // Add new window
 				foreach( $strip['window'] as $window_id => $window_value ) {
 					echo '
