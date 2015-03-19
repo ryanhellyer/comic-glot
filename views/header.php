@@ -10,7 +10,6 @@ echo '<!DOCTYPE html>
 	<title>Comic Glot</title>
 
 	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-	<link rel="stylesheet" type="text/css" href=""/>
 
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
@@ -27,7 +26,7 @@ foreach( $this->strip_list as $strip_slug => $x ) {
 	echo "\n|";
 	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/edit/">' . __( 'Edit' ) . ' ' . $title . '</a>';
 	echo "\n|";
-	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/">' . $title . '</a>';
+	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/1/en/">' . $title . '</a>';
 }
 
 echo '

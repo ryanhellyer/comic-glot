@@ -7,8 +7,14 @@ echo '
 	<!-- Hidden submit button - ensures that page is saved when enter hit -->
 	<input type="submit" style="display:none" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
 
-	<div class="image-display">
-		<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />
+	<div class="image-display">';
+
+	if ( isset( $this->current_page['current_background'] ) ) {
+		echo '
+		<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />';
+	}
+
+		echo '
 		<img src="' . esc_attr( $this->current_page['current_image'] ) . '" />
 	</div>
 

@@ -84,9 +84,7 @@ class ComicJet_Setup {
 
 						} else {
 							// domain.com/comic/slug/lang/
-							$current_page['type'] = 'view_comic';
-							$current_page['page_number'] = 1;
-							$current_page['current_languages'][] = $uri_bits[2]; // Get language #1
+							$current_page['type'] = '404';
 
 						}
 
@@ -100,10 +98,7 @@ class ComicJet_Setup {
 
 						} else {
 							// domain.com/comic/slug/lang/lang/
-							$current_page['type'] = 'view_comic';
-							$current_page['page_number'] = 1;
-							$current_page['current_languages'][] = $uri_bits[2]; // Get language #1
-							$current_page['current_languages'][] = $uri_bits[3]; // Get language #2
+							$current_page['type'] = '404';
 
 						}
 
@@ -121,10 +116,7 @@ class ComicJet_Setup {
 				} else {
 					// No languages or page numbers set, so defaulting to site language
 					// domain.com/comic/slug/    - no language selected
-					$current_page['type'] = 'view_comic';
-					$current_page['page_number'] = 1;
-					$current_page['current_languages'][] = 'en'; // Get language #1
-
+					$current_page['type'] = '404';
 				}
 			} else {
 				// No comic slug set, so 404 it
@@ -202,10 +194,12 @@ class ComicJet_Setup {
 
 				foreach( $this->available_languages as $lang => $language ) {
 
-					// Set whether selected ornot
+					// Set whether selected or not
 					if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
 						if ( ! empty( $this->current_page['strips'][0][$lang] ) ) {
-							$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0]['current_background'];
+							if ( isset( $this->current_page['strips'][0]['current_background'] ) ) {
+								$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0]['current_background'];
+							}
 							$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0][$lang];
 						}
 						break;
@@ -375,7 +369,9 @@ class ComicJet_Setup {
 		if ( isset( $_POST['view-page'] ) ) {
 			foreach( $_POST['view-page'] as $page => $language ) {
 				foreach( $language as $lang => $x ) {
-					$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][$page]['current_background'];
+					if ( isset( $this->current_page['strips'][$page]['current_background'] ) ) {
+						$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][$page]['current_background'];
+					}
 					$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][$page][$lang];
 				}
 			}
@@ -400,7 +396,6 @@ class ComicJet_Setup {
 		$this->db->write( 'strips', $this->current_page['strips'], $this->current_page['slug'] );
 
 		/*
-		*/
 		echo '<textarea style="position:absolute;left:0;bottom:0;width:600px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
 		echo "STRIPS FROM REDIS:\n";
 		print_r( $this->db->get( 'strips', $this->current_page['slug'] ) );echo "\n";
@@ -409,6 +404,7 @@ class ComicJet_Setup {
 		echo "\nPOST:\n";
 		print_r( $_POST );
 		echo '</textarea>';
+		*/
 
 	}
 
