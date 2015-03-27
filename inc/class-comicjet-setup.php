@@ -413,6 +413,9 @@ class ComicJet_Setup {
 	 */
 	public function output_page() {
 
+		// Load login system
+		$comicjet_login = new ComicJet_Login();
+
 		require( 'views/header.php' );
 
 		switch( $this->current_page['type'] ) {

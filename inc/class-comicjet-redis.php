@@ -10,6 +10,7 @@ function comicjet_db() {
 	return new Redis_DB();
 }
 
+
 /**
  * Redis Database API class.
  *
@@ -58,14 +59,6 @@ class Redis_DB {
 	 * @access protected
 	 */
 	var $non_persistent_groups = array();
-
-	/**
-	 * The blog prefix to prepend to keys in non-global groups.
-	 *
-	 * @var int
-	 * @access private
-	 */
-	var $blog_prefix;
 
 	/**
 	 * Adds data to the cache if it doesn't already exist.
@@ -299,13 +292,7 @@ class Redis_DB {
 			$group = 'default';
 		}
 
-		if ( ! empty( $this->global_groups[ $group ] ) ) {
-			$prefix = $this->global_prefix;
-		} else {
-			$prefix = $this->blog_prefix;
-		}
-
-		return preg_replace( '/\s+/', '', "$prefix$group:$key" );
+		return preg_replace( '/\s+/', '', $group . ':' . $key );
 	}
 
 	/**
@@ -324,29 +311,15 @@ class Redis_DB {
 	 * @return null|Redis_DB If cache is disabled, returns null.
 	 */
 	public function __construct() {
-		global $blog_id, $redis_server, $table_prefix;
 
-		$this->blog_prefix =  '';
-
-		if ( empty( $redis_server ) ) {
-			# Attempt to automatically load Pantheon's Redis config from the env.
-			if ( isset( $_SERVER['CACHE_HOST'] ) ) {
-				$redis_server = array( 'host' => $_SERVER['CACHE_HOST'],
-				                       'port' => $_SERVER['CACHE_PORT'],
-				                       'auth' => $_SERVER['CACHE_PASSWORD'] );
-			}
-			else {
-				$redis_server = array( 'host' => '127.0.0.1', 'port' => 6379 );
-			}
-		}
+		// Server config
+		$redis_server = array( 'host' => '127.0.0.1', 'port' => 6379 );
 
 		$this->redis = new Redis();
 		$this->redis->connect( $redis_server['host'], $redis_server['port'], 1, NULL, 100 ); # 1s timeout, 100ms delay between reconnections
 		if ( ! empty( $redis_server['auth'] ) ) {
 			$this->redis->auth( $redis_server['auth'] );
 		}
-
-		$this->global_prefix = '';
 
 		/**
 		 * @todo This should be moved to the PHP4 style constructor, PHP5

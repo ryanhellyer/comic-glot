@@ -6,8 +6,12 @@ $page = $this->current_page['strips'][$this->current_page['page_number'] - 1]; /
 
 echo '
 
-<div class="image-display">
+<div class="image-display">';
+
+if ( isset( $this->current_page['current_background'] ) ) {
+	echo '
 	<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />';
+}
 
 // Loop through currently selected languages
 foreach( $this->current_page['current_languages'] as $current_lang ) {
@@ -68,7 +72,6 @@ echo '
 
 
 
-exit;
 if ( isset( $bubble_image[1] ) ) {
 	echo'
 
@@ -86,3 +89,12 @@ if ( isset( $bubble_image[1] ) ) {
 </script>';
 }
 
+
+echo '<h1>' . ( microtime( true ) - COMIC_JET_START_TIME ) . '</h1>';
+/*
+0,082 seconds via 15 queries
+0,071 seconds via 3 queries
+
+generated in 0.098 seconds
+	served from batcache in 0.002 seconds
+*/
