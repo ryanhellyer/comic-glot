@@ -435,6 +435,8 @@ class ComicJet_Setup {
 				require( 'views/404.php' );
 		}
 
+		require( 'views/footer.php' );
+
 		// Load views
 		exit;
 

@@ -2,6 +2,7 @@
 
 
 echo '<!DOCTYPE html>
+
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
@@ -18,19 +19,9 @@ echo '<!DOCTYPE html>
 </head>
 <body>
 
-<a href="' . COMIC_JET_URL . '">Home</a>
-';
+<header>
+	<h1><a href="' . COMIC_JET_URL . '">Comic Jet!</a></h1>
+	' . $comicjet_login->login_form() . '
+</header>
 
-foreach( $this->strip_list as $strip_slug => $x ) {
-	$title = $this->db->get( 'title', $strip_slug );
-	echo "\n|";
-	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/edit/">' . __( 'Edit' ) . ' ' . $title . '</a>';
-	echo "\n|";
-	echo '<a href="' . COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/1/en/">' . $title . '</a>';
-}
-
-echo '
-|
-<a href="' . COMIC_JET_URL . 'asfasf">404</a>
-<hr />
-';
+<div id="wrap">';

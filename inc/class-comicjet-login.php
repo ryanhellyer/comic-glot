@@ -125,22 +125,27 @@ class ComicJet_Login {
 
 	/**
 	 * Display login form.
+	 *
+	 * @param   string   The login form HTML
 	 */
 	public function login_form() {
 
 		if ( isset( $_COOKIE[$this->cookie_name] ) && $this->cookie_value == $_COOKIE[$this->cookie_name] ) {
-			echo '<a href="' . esc_attr( COMIC_JET_URL . '?logout=' . md5( $this->nonce ) ) . '">Log out</a>';
+			$html = '
+			<div id="login">
+				<a class="button" href="' . esc_attr( COMIC_JET_URL . '?logout=' . md5( $this->nonce ) ) . '">' . __( 'Log out' ) . '</a>
+			</div>';
 		} else {
-			echo 'Not logged in.';
+			$html = '
+			<form id="login" action="" method="post">
+				<input placeholder="' . __( 'Username' ) . '" type="text" name="username" />
+				<input placeholder="' . __( 'Password' ) . '" type="password" name="password" />
+				<input type="hidden" name="nonce" value="' . esc_attr( $this->nonce ) . '" />
+				<input class="button" type="submit" name="submit" value="' . __( 'Log in' ) . '" />
+			</form>';
 		}
 
-		echo '
-		<form action="" method="post">
-			<input type="text" name="username" />
-			<input type="password" name="password" />
-			<input type="hidden" name="nonce" value="' . esc_attr( $this->nonce ) . '" />
-			<input type="submit" name="submit" value="' . __( 'Submit' ) . '" />
-		</form>';
+		return $html;
 	}
 
 }
