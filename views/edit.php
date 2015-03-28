@@ -127,8 +127,8 @@ echo '
 
 		foreach( $this->available_languages as $lang => $language ) {
 
-			// Set whether selected ornot
-			if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+			// Set whether selected or not
+			if ( is_array( $this->current_page['used_languages'] ) && array_key_exists( $lang ,$this->current_page['used_languages'] ) ) {
 				$checked = 'checked="checked" ';
 			} else {
 				$checked = '';

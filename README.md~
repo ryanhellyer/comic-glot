@@ -1,6 +1,8 @@
 comic-glot
 ==========
 
+leveldb - useful for offline DB access ... https://github.com/google/leveldb. Suggested by Alexander.
+
 Logo idea - https://www.geeksquad.com/
 
 Potential design for admin panel:
@@ -10,6 +12,9 @@ Maybe use TwentyFifteen layout, with wp-admin menu in sidebar when editing.
 
 
 Instead of charging, give free comics to those who tweet or FB about the last comic they read. Each comic = 1 tweet/FB message.
+
+
+Encourage translators, but giving prominent credit and link back. Could show picture of them with info. before or after reading comic.
 
 
 Comic GLot

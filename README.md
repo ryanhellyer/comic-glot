@@ -14,6 +14,9 @@ Maybe use TwentyFifteen layout, with wp-admin menu in sidebar when editing.
 Instead of charging, give free comics to those who tweet or FB about the last comic they read. Each comic = 1 tweet/FB message.
 
 
+Encourage translators, but giving prominent credit and link back. Could show picture of them with info. before or after reading comic.
+
+
 Comic GLot
 
 Suitable comic to port into it:

@@ -195,16 +195,17 @@ class ComicJet_Setup {
 				foreach( $this->available_languages as $lang => $language ) {
 
 					// Set whether selected or not
-					if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
-						if ( ! empty( $this->current_page['strips'][0][$lang] ) ) {
-							if ( isset( $this->current_page['strips'][0]['current_background'] ) ) {
-								$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0]['current_background'];
+					if ( is_array( $this->current_page['used_languages'] ) ) {
+						if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+							if ( ! empty( $this->current_page['strips'][0][$lang] ) ) {
+								if ( isset( $this->current_page['strips'][0]['current_background'] ) ) {
+									$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0]['current_background'];
+								}
+								$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0][$lang];
 							}
-							$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0][$lang];
+							break;
 						}
-						break;
 					}
-
 				}
 
 				if ( empty( $this->current_page['current_image'] ) ) {
@@ -296,6 +297,9 @@ class ComicJet_Setup {
 		// Add a page
 		if ( isset( $_POST['add-new-page'] ) ) {
 
+			if ( ! isset( $this->current_page['strips'] ) ) {
+				$this->current_page['strips'] = '';
+			}
 			if ( '' == $this->current_page['strips'] ) {
 				$this->current_page['strips'] = array();
 			}
@@ -307,7 +311,7 @@ class ComicJet_Setup {
 		}
 
 		// Handle image uploads
-		if ( isset( $_FILES ) ) {
+		if ( isset( $_FILES ) && isset( $_FILES['file-upload'] ) ) {
 			$files = $_FILES['file-upload'];
 			foreach( $files['error'] as $page => $data ) {
 				foreach( $data as $lang => $error ) {
@@ -393,7 +397,9 @@ class ComicJet_Setup {
 
 		// Finally, save the data
 		// It's important to save everything last, as some items are modified multiple times (no point in saving the same thing multiple times)
-		$this->db->write( 'strips', $this->current_page['strips'], $this->current_page['slug'] );
+		if ( isset( $this->current_page['strips'] ) ) {
+			$this->db->write( 'strips', $this->current_page['strips'], $this->current_page['slug'] );
+		}
 
 		/*
 		echo '<textarea style="position:absolute;left:0;bottom:0;width:600px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
