@@ -36,6 +36,30 @@ echo '
 		</p>';
 
 
+		// Loop through langs
+		foreach( $this->available_languages as $lang => $language ) {
+
+			// Bail out if language is not used
+			if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+				// Thumbnail input
+				echo '
+				<p>
+					<label>Thumbnail image - ' . $lang . '</label>
+					<input type="file" name="' . esc_attr( 'file-upload[thumbnail][' . $lang . ']' ) . '" value="" />
+				</p>';
+
+				// Add existing thumbnail
+				$thumbnail = $this->db->get( 'thumbnail', $this->current_page['slug'] );
+				if ( isset( $thumbnail[$lang] ) ) {
+					$file_name = $thumbnail[$lang];
+					echo '
+				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'thumbnail[' . $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
+				}
+
+			}
+		}
+
+
 		if ( isset( $this->current_page['strips'] ) && is_array( $this->current_page['strips'] ) ) {
 			echo '
 		<ul class="sortable">';
@@ -59,6 +83,7 @@ echo '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
 
+				// Low resolution background image
 				echo '
 				<p>
 					<label>Low resolution background image (used for offline mode)</label>

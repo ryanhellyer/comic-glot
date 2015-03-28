@@ -124,13 +124,26 @@ class ComicJet_Login {
 	}
 
 	/**
+	 * Conditional to determine if current user is an admin or not.
+	 *
+	 * @return   bool   True if user is admin
+	 */
+	public function current_user_is_admin() {
+		if ( isset( $_COOKIE[$this->cookie_name] ) && $this->cookie_value == $_COOKIE[$this->cookie_name] ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Display login form.
 	 *
 	 * @param   string   The login form HTML
 	 */
 	public function login_form() {
 
-		if ( isset( $_COOKIE[$this->cookie_name] ) && $this->cookie_value == $_COOKIE[$this->cookie_name] ) {
+		if ( $this->current_user_is_admin() ) {
 			$html = '
 			<div id="login">
 				<a class="button" href="' . esc_attr( COMIC_JET_URL . '?logout=' . md5( $this->nonce ) ) . '">' . __( 'Log out' ) . '</a>

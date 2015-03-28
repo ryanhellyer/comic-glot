@@ -355,11 +355,19 @@ class ComicJet_Setup {
 								$new_path = COMIC_JET_STRIPS_DIR . $file_name;
 								$count++;
 							}
+
 							copy( $tmp_path, $new_path );
 
 							// Update data
 							$file_name = sanitize_file_name( $file_name ); // Sanitizing file name
-							$this->current_page['strips'][$page][$lang] = $file_name;
+
+							$file_name = sanitize_file_name( $file_name ); // Sanitizing file name
+							if ( 'thumbnail' == $page ) {
+								$thumbnail[$lang] = $file_name; // Thumbnail doesn't go in main strips list							
+								$this->db->write( 'thumbnail', $thumbnail, $this->current_page['slug'] );
+							} else {
+								$this->current_page['strips'][$page][$lang] = $file_name;
+							}
 
 						}
 					}

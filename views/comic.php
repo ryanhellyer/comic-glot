@@ -10,7 +10,7 @@ echo '
 
 if ( isset( $this->current_page['current_background'] ) ) {
 	echo '
-	<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />';
+	<img src="' . esc_attr( COMIC_STRIPS_URL . $this->current_page['strips'][$this->current_page['page_number'] - 1]['current_background'] ) . '" />';
 }
 
 // Loop through currently selected languages
