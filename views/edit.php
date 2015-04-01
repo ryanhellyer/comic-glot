@@ -9,13 +9,13 @@ echo '
 
 	<div class="image-display">';
 
-	if ( isset( $this->current_page['current_background'] ) ) {
+	if ( '' != $this->get_current_images( 'current-background' ) ) {
 		echo '
-		<img src="' . esc_attr( $this->current_page['current_background'] ) . '" />';
+		<img src="' . esc_attr( $this->get_current_images( 'current-background' ) ) . '" />';
 	}
 
 		echo '
-		<img src="' . esc_attr( $this->current_page['current_image'] ) . '" />
+		<img src="' . esc_attr( $this->get_current_images( 'current_image' ) ) . '" />
 	</div>
 
 	<div class="controls">';
@@ -32,7 +32,7 @@ echo '
 		echo '
 		<p>
 			<label>' . __( 'Title' ) . '</label>
-			<input type="text" name="title" value="' . esc_attr( $this->current_page['title'] ) . '" />
+			<input type="text" name="title" value="' . esc_attr( $this->get( 'title' ) ) . '" />
 		</p>';
 
 
@@ -40,7 +40,8 @@ echo '
 		foreach( $this->available_languages as $lang => $language ) {
 
 			// Bail out if language is not used
-			if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+			$used_languages = $this->get( 'languages' );
+			if ( '' != $used_languages && array_key_exists( $lang, $used_languages ) ) {
 				// Thumbnail input
 				echo '
 				<p>
@@ -49,7 +50,7 @@ echo '
 				</p>';
 
 				// Add existing thumbnail
-				$thumbnail = $this->db->get( 'thumbnail', $this->current_page['slug'] );
+				$thumbnail = $this->get( 'thumbnail' );
 				if ( isset( $thumbnail[$lang] ) ) {
 					$file_name = $thumbnail[$lang];
 					echo '
@@ -59,12 +60,12 @@ echo '
 			}
 		}
 
-
-		if ( isset( $this->current_page['strips'] ) && is_array( $this->current_page['strips'] ) ) {
+		$strips = $this->get( 'strips' );
+		if ( is_array( $strips ) ) {
 			echo '
 		<ul class="sortable">';
 
-			foreach( $this->current_page['strips'] as $key => $strip ) {
+			foreach( $strips as $key => $strip ) {
 
 				echo '
 			<li>
@@ -77,8 +78,8 @@ echo '
 					<label>Background image</label>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background]' ) . '" value="" />
 				</p>';
-				if ( isset( $this->current_page['strips'][$key]['current_background'] ) ) {
-					$file_name = $this->current_page['strips'][$key]['current_background'];
+				if ( isset( $strips[$key]['current_background'] ) ) {
+					$file_name = $strips[$key]['current_background'];
 					echo '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
@@ -89,8 +90,8 @@ echo '
 					<label>Low resolution background image (used for offline mode)</label>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background_lowres]' ) . '" value="" />
 				</p>';
-				if ( isset( $this->current_page['strips'][$key]['current_background_lowres'] ) ) {
-					$file_name = $this->current_page['strips'][$key]['current_background_lowres'];
+				if ( isset( $strips[$key]['current_background_lowres'] ) ) {
+					$file_name = $strips[$key]['current_background_lowres'];
 					echo '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background_lowres]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
@@ -111,7 +112,7 @@ echo '
 				foreach( $this->available_languages as $lang => $language ) {
 
 					// Bail out if language is not used
-					if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
+					if ( array_key_exists( $lang, $used_languages ) ) {
 
 						echo '
 
@@ -153,7 +154,7 @@ echo '
 		foreach( $this->available_languages as $lang => $language ) {
 
 			// Set whether selected or not
-			if ( is_array( $this->current_page['used_languages'] ) && array_key_exists( $lang ,$this->current_page['used_languages'] ) ) {
+			if ( is_array( $used_languages ) && array_key_exists( $lang, $used_languages ) ) {
 				$checked = 'checked="checked" ';
 			} else {
 				$checked = '';

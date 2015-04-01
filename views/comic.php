@@ -1,16 +1,18 @@
 <?php
 
-echo '<h3>This is comic "' . $this->current_page['title'] . '" on page number ' . $this->current_page['page_number'] . '</h3>';
+echo '<h3>This is comic "' . $this->get( 'title' ) . '" on page number ' . $this->current_page['page_number'] . '</h3>';
 
-$page = $this->current_page['strips'][$this->current_page['page_number'] - 1]; // Grab this page only
+$strips = $this->get( 'strips' );
+
+$page = $strips[$this->current_page['page_number'] - 1]; // Grab this page only
 
 echo '
 
 <div class="image-display">';
 
-if ( isset( $this->current_page['current_background'] ) ) {
+if ( '' != $this->get_current_images( 'current-background' ) ) {
 	echo '
-	<img src="' . esc_attr( COMIC_STRIPS_URL . $this->current_page['strips'][$this->current_page['page_number'] - 1]['current_background'] ) . '" />';
+	<img src="' . esc_attr( COMIC_STRIPS_URL . $strips[$this->current_page['page_number'] - 1]['current_background'] ) . '" />';
 }
 
 // Loop through currently selected languages
@@ -47,18 +49,18 @@ if ( isset( $this->current_page['current_languages'][1] ) ) {
 	$languages .= $this->current_page['current_languages'][1] . '/';
 }
 
-if ( isset( $this->current_page['strips'][$this->current_page['page_number']] ) ) {
+if ( isset( $strips[$this->current_page['page_number']] ) ) {
 	$next_page_number = $this->current_page['page_number'] + 1;
 
-	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->current_page['slug'] . '/' . $next_page_number . '/' . $languages;
+	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $next_page_number . '/' . $languages;
 	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
 }
 
 echo ' | ';
 
-if ( isset( $this->current_page['strips'][$this->current_page['page_number'] - 2] ) ) {
+if ( isset( $strips[$this->current_page['page_number'] - 2] ) ) {
 	$previous_page_number = $this->current_page['page_number'] - 1;
-	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->current_page['slug'] . '/' . $previous_page_number . '/' . $languages;
+	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $previous_page_number . '/' . $languages;
 
 	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
 }

@@ -14,7 +14,10 @@ class ComicJet_Setup {
 	 */
 	public function __construct() {
 
-		$this->current_page = $this->get_current_page_info();
+/***************************************************************************
+ * Instead of shoving in current_page, this should set the vars directly ***
+ * *************************************************************************/
+$this->current_page = $this->set_vars_based_on_url();
 
 		$this->db = comicjet_db();
 
@@ -50,9 +53,25 @@ class ComicJet_Setup {
 	}
 
 	/**
+	 * Get value from DB.
+	 * 
+	 * @param   string  $key  The key in DB
+	 * @return  mixed   The value from the DB
+	 */
+	public function get( $key, $group = '' ) {
+
+		// If no group set, then default to current slug
+		if ( '' == $group ) {
+			$group = $this->slug;
+		}
+
+		return $this->db->get( $key, $group );
+	}
+
+	/**
 	 * Get current page info from URL.
 	 */
-	public function get_current_page_info() {
+	public function set_vars_based_on_url() {
 
 		// Parse which page we are on
 		$uri = $_SERVER['REQUEST_URI'];
@@ -63,7 +82,7 @@ class ComicJet_Setup {
 		if ( __( 'comic' ) == $uri_bits[0] ) {
 
 			if ( isset( $uri_bits[1] ) ) {
-				$current_page['slug'] = filter_var( $uri_bits[1], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW );
+				$this->slug = filter_var( $uri_bits[1], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW );
 
 				// Calculate the current page number
 				if ( isset( $uri_bits[2] ) ) {
@@ -141,10 +160,7 @@ class ComicJet_Setup {
 	 */
 	public function set_vars() {
 
-		if ( isset( $this->current_page['slug'] ) ) {
-			$this->current_page['title'] = $this->db->get( 'title', $this->current_page['slug'] );
-		}
-		$this->strip_list = $this->db->get( 'strip_list' );
+		$this->strip_list = $this->db->get( 'strip_list', 'default' );
 
 		if (
 			'edit_comic' == $this->current_page['type']
@@ -152,36 +168,30 @@ class ComicJet_Setup {
 			'view_comic' == $this->current_page['type']
 		) {
 
-			// Get languages
-			$this->current_page['used_languages'] = $this->db->get( 'languages', $this->current_page['slug'] );
-
 			// Get strips
-			$this->current_page['strips'] = $this->db->get( 'strips', $this->current_page['slug'] );
-
-			// Get next and previous pages
-			$this->current_page['strips'] = $this->db->get( 'strips', $this->current_page['slug'] );
+			$strips = $this->get( 'strips' );
 
 			// If a comic is on a page which does not exist, then 404 it
 			if (
 				'view_comic' == $this->current_page['type'] 
 				&&
-				! isset( $this->current_page['strips'][$this->current_page['page_number'] - 1] )
+				! isset( $strips[$this->current_page['page_number'] - 1] )
 			) {
 				$this->current_page['type'] = '404';
 			}
 
 			// Set next and previous page numbers
 			if ( isset( $this->current_page['page_number'] ) ) {
-				if ( isset( $this->current_page['strips'][$this->current_page['page_number']] ) ) {
+				if ( isset( $strips[$this->current_page['page_number']] ) ) {
 					$this->current_page['next_page'] = $this->current_page['page_number'] + 1;
 				}
-				if ( isset( $this->current_page['strips'][$this->current_page['page_number'] - 2] ) ) {
+				if ( isset( $strips[$this->current_page['page_number'] - 2] ) ) {
 					$this->current_page['previous_page'] = $this->current_page['page_number'] - 1;
 				}
 			}
 
 			// If current page is invalid number,then switch to 404 error page
-			if ( isset( $this->current_page['page_number'] ) && count( $this->current_page['strips'] ) < $this->current_page['page_number'] ) {
+			if ( isset( $this->current_page['page_number'] ) && count( $strips ) < $this->current_page['page_number'] ) {
 				$this->current_page['type'] = '404';
 			}
 
@@ -189,34 +199,47 @@ class ComicJet_Setup {
  ** Check current languages /en/de/ and serve 404 error if they don't make sense **
  **********************************************************************************/
 
-			// Work out what the first image is, so that it can be displayed as current image
-			if ( ! isset( $this->current_page['current_image'] ) ) {
-
-				foreach( $this->available_languages as $lang => $language ) {
-
-					// Set whether selected or not
-					if ( is_array( $this->current_page['used_languages'] ) ) {
-						if ( array_key_exists( $lang, $this->current_page['used_languages'] ) ) {
-							if ( ! empty( $this->current_page['strips'][0][$lang] ) ) {
-								if ( isset( $this->current_page['strips'][0]['current_background'] ) ) {
-									$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0]['current_background'];
-								}
-								$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][0][$lang];
-							}
-							break;
-						}
-					}
-				}
-
-				if ( empty( $this->current_page['current_image'] ) ) {
-					$this->current_page['current_background'] = COMIC_ASSETS_URL . 'default-strip.jpg';
-					$this->current_page['current_image'] = COMIC_ASSETS_URL . 'default-strip.jpg';
-				}
-
-			}
 
 		}
 
+	}
+
+	public function get_current_images( $type ) {
+
+		// Get data from DB
+		$strips = $this->get( 'strips' );
+		$used_languages = $this->get( 'languages' );
+
+		// Work out what the first image is, so that it can be displayed as current image
+		if ( ! isset( $current_image ) ) {
+
+			foreach( $this->available_languages as $lang => $language ) {
+
+				// Set whether selected or not
+				if ( is_array( $used_languages ) ) {
+					if ( array_key_exists( $lang, $used_languages ) ) {
+						if ( ! empty( $strips[0][$lang] ) ) {
+							if ( isset( $strips[0]['current_background'] ) ) {
+								$current_background = COMIC_JET_URL . 'strips/' . $strips[0]['current_background'];
+							}
+							$current_image = COMIC_JET_URL . 'strips/' . $strips[0][$lang];
+						}
+						break;
+					}
+				}
+			}
+
+			if ( empty( $current_image ) ) {
+				$current_background = COMIC_ASSETS_URL . 'default-strip.jpg';
+				$current_image = COMIC_ASSETS_URL . 'default-strip.jpg';
+			}
+		}
+
+		if ( 'background' == $type ) {
+			return $current_background;
+		} else {
+			return $current_image;
+		}
 	}
 
 	/**
@@ -248,7 +271,7 @@ class ComicJet_Setup {
 		// Save the comic title
 		if ( isset( $_POST['title'] ) ) {
 			$title = filter_var( $_POST['title'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW );
-			$this->db->write( 'title', $title, $this->current_page['slug'] );
+			$this->db->write( 'title', $title, $this->slug );
 		}
 
 		// Save language selections
@@ -259,7 +282,7 @@ class ComicJet_Setup {
 					$this->current_page['languages'][$key] = true;
 				}
 			}
-			$this->db->write( 'languages', $this->current_page['languages'], $this->current_page['slug'] );
+			$this->db->write( 'languages', $this->current_page['languages'], $this->slug );
 		}
 
 
@@ -267,7 +290,7 @@ class ComicJet_Setup {
 		if ( isset( $_POST['strip_image'] ) ) {
 
 			$count = 0;
-			$this->current_page['strips'] = array();
+			$strips = array();
 			foreach( $_POST['strip_image'] as $page => $strip ) {
 
 				// Process pages
@@ -279,12 +302,12 @@ class ComicJet_Setup {
 							if ( '' != $window_dimensions ) {
 								$new_window_dimensions = sanitize_window_dimensions( $window_dimensions );
 								if ( false != $new_window_dimensions ) {
-									$this->current_page['strips'][$count]['window'][$window_id] = $new_window_dimensions;
+									$strips[$count]['window'][$window_id] = $new_window_dimensions;
 								}
 							}
 						}
 					} else {
-						$this->current_page['strips'][$count][$lang] = sanitize_file_name( $file_name );
+						$strips[$count][$lang] = sanitize_file_name( $file_name );
 					}
 
 				}
@@ -297,16 +320,16 @@ class ComicJet_Setup {
 		// Add a page
 		if ( isset( $_POST['add-new-page'] ) ) {
 
-			if ( ! isset( $this->current_page['strips'] ) ) {
-				$this->current_page['strips'] = '';
+			if ( ! isset( $strips ) ) {
+				$strips = '';
 			}
-			if ( '' == $this->current_page['strips'] ) {
-				$this->current_page['strips'] = array();
+			if ( '' == $strips ) {
+				$strips = array();
 			}
 
-			$count = count( $this->current_page['strips'] );
+			$count = count( $strips );
 			foreach( $this->current_page['languages'] as $lang => $name ) {
-				$this->current_page['strips'][$count][$lang] = '';
+				$strips[$count][$lang] = '';
 			}
 		}
 
@@ -364,9 +387,9 @@ class ComicJet_Setup {
 							$file_name = sanitize_file_name( $file_name ); // Sanitizing file name
 							if ( 'thumbnail' == $page ) {
 								$thumbnail[$lang] = $file_name; // Thumbnail doesn't go in main strips list							
-								$this->db->write( 'thumbnail', $thumbnail, $this->current_page['slug'] );
+								$this->db->write( 'thumbnail', $thumbnail, $this->slug );
 							} else {
-								$this->current_page['strips'][$page][$lang] = $file_name;
+								$strips[$page][$lang] = $file_name;
 							}
 
 						}
@@ -381,10 +404,10 @@ class ComicJet_Setup {
 		if ( isset( $_POST['view-page'] ) ) {
 			foreach( $_POST['view-page'] as $page => $language ) {
 				foreach( $language as $lang => $x ) {
-					if ( isset( $this->current_page['strips'][$page]['current_background'] ) ) {
-						$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][$page]['current_background'];
+					if ( isset( $strips[$page]['current_background'] ) ) {
+						$this->current_page['current_background'] = COMIC_JET_URL . 'strips/' . $strips[$page]['current_background'];
 					}
-					$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $this->current_page['strips'][$page][$lang];
+					$this->current_page['current_image'] = COMIC_JET_URL . 'strips/' . $strips[$page][$lang];
 				}
 			}
 		}
@@ -394,25 +417,25 @@ class ComicJet_Setup {
 
 			foreach( $_POST['remove-page'] as $page_to_remove => $x ) {}
 
-			unset( $this->current_page['strips'][$page_to_remove] );
-			$this->current_page['strips'] = array_values( $this->current_page['strips'] );
+			unset( $strips[$page_to_remove] );
+			$strips = array_values( $strips );
 		}
 
 		// Save this strip to the list of strips
-		$this->strip_list = $this->db->get( 'strip_list' );
-		$this->strip_list[$this->current_page['slug']] = true;
+		$this->strip_list = $this->db->get( 'strip_list', 'default' );
+		$this->strip_list[$this->slug] = true;
 		$this->db->write( 'strip_list', $this->strip_list );
 
 		// Finally, save the data
 		// It's important to save everything last, as some items are modified multiple times (no point in saving the same thing multiple times)
-		if ( isset( $this->current_page['strips'] ) ) {
-			$this->db->write( 'strips', $this->current_page['strips'], $this->current_page['slug'] );
+		if ( isset( $strips ) ) {
+			$this->db->write( 'strips', $strips, $this->slug );
 		}
 
 		/*
 		echo '<textarea style="position:absolute;left:0;bottom:0;width:600px;height:200px;border:1px solid #eee;background:#fafafa;padding:20px;margin:20px 0;">';
 		echo "STRIPS FROM REDIS:\n";
-		print_r( $this->db->get( 'strips', $this->current_page['slug'] ) );echo "\n";
+		print_r( $this->db->get( 'strips', $this->slug ) );echo "\n";
 //		echo "\nSTRIPS:\n";
 //		print_r( $this->strips );
 		echo "\nPOST:\n";
