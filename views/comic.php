@@ -1,10 +1,10 @@
 <?php
 
-echo '<h3>This is comic "' . $this->get( 'title' ) . '" on page number ' . $this->current_page['page_number'] . '</h3>';
+echo '<h3>This is comic "' . $this->get( 'title' ) . '" on page number ' . $this->page_number . '</h3>';
 
 $strips = $this->get( 'strips' );
 
-$page = $strips[$this->current_page['page_number'] - 1]; // Grab this page only
+$page = $strips[$this->page_number - 1]; // Grab this page only
 
 echo '
 
@@ -12,11 +12,11 @@ echo '
 
 if ( '' != $this->get_current_images( 'current-background' ) ) {
 	echo '
-	<img src="' . esc_attr( COMIC_STRIPS_URL . $strips[$this->current_page['page_number'] - 1]['current_background'] ) . '" />';
+	<img src="' . esc_attr( COMIC_STRIPS_URL . $strips[$this->page_number - 1]['current_background'] ) . '" />';
 }
 
 // Loop through currently selected languages
-foreach( $this->current_page['current_languages'] as $current_lang ) {
+foreach( $this->current_languages as $current_lang ) {
 
 	// Loop through languages used in this strip
 	foreach( $page as $lang => $file_name ) {
@@ -39,18 +39,18 @@ echo '
 
 
 // Add previous and current pages
-if ( isset( $this->current_page['current_languages'][0] ) ) {
-	$languages = $this->current_page['current_languages'][0] . '/';
+if ( isset( $this->current_languages[0] ) ) {
+	$languages = $this->current_languages[0] . '/';
 } else {
 	$languages = '';
 }
 
-if ( isset( $this->current_page['current_languages'][1] ) ) {
-	$languages .= $this->current_page['current_languages'][1] . '/';
+if ( isset( $this->current_languages[1] ) ) {
+	$languages .= $this->current_languages[1] . '/';
 }
 
-if ( isset( $strips[$this->current_page['page_number']] ) ) {
-	$next_page_number = $this->current_page['page_number'] + 1;
+if ( isset( $strips[$this->page_number] ) ) {
+	$next_page_number = $this->page_number + 1;
 
 	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $next_page_number . '/' . $languages;
 	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
@@ -58,8 +58,8 @@ if ( isset( $strips[$this->current_page['page_number']] ) ) {
 
 echo ' | ';
 
-if ( isset( $strips[$this->current_page['page_number'] - 2] ) ) {
-	$previous_page_number = $this->current_page['page_number'] - 1;
+if ( isset( $strips[$this->page_number - 2] ) ) {
+	$previous_page_number = $this->page_number - 1;
 	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $previous_page_number . '/' . $languages;
 
 	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
@@ -90,13 +90,3 @@ if ( isset( $bubble_image[1] ) ) {
     }
 </script>';
 }
-
-
-echo '<h1>' . ( microtime( true ) - COMIC_JET_START_TIME ) . '</h1>';
-/*
-0,082 seconds via 15 queries
-0,071 seconds via 3 queries
-
-generated in 0.098 seconds
-	served from batcache in 0.002 seconds
-*/

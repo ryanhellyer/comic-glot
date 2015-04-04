@@ -76,13 +76,12 @@ class ComicJet_Login {
 
 			// Bail out now if errors found
 			if ( ! empty( $this->error ) ) {
-				echo '<h1>You fail</h1>';
-				print_r( $this->error );
-				die;
+				header( 'Location: ' . COMIC_JET_URL . 'registration/', true, 302 );
+				exit;
 			}
 
 			// If password matches, then log them in by setting the cookie
-			$password_hash = password_hash( $_POST['password'], PASSWORD_DEFAULT );
+			$password_hash = password_hash( $_POST['password'], PASSWORD_DEFAULT, array( 'cost' => 4 ) );
 			if ( password_verify( $_POST['password'], $this->password_hash ) ) {
 
 				// Set cookie

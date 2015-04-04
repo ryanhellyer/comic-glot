@@ -14,10 +14,7 @@ class ComicJet_Setup {
 	 */
 	public function __construct() {
 
-/***************************************************************************
- * Instead of shoving in current_page, this should set the vars directly ***
- * *************************************************************************/
-$this->current_page = $this->set_vars_based_on_url();
+		$this->current_page = $this->set_vars_based_on_url();
 
 		$this->db = comicjet_db();
 
@@ -90,20 +87,20 @@ $this->current_page = $this->set_vars_based_on_url();
 					// Set different page types and page numbers where apppropriate
 					if ( __( 'edit' ) == $uri_bits[2] ) {
 						// Editing a comic
-						$current_page['type'] = 'edit_comic';
+						$this->page_type = 'edit_comic';
 
 					} elseif( 3 == count( $uri_bits ) ) {
 
 						// This is a page number without language specification. So default to site language.
 						if ( is_numeric( $uri_bits[2] ) ) {
 							// domain.com/comic/slug/2/
-							$current_page['type'] = 'view_comic';
-							$current_page['page_number'] = (int) $uri_bits[2]; // Grab current page number
-							$current_page['current_languages'][] = 'en'; // Get language #1
+							$this->page_type = 'view_comic';
+							$this->page_number = (int) $uri_bits[2]; // Grab current page number
+							$this->current_languages[] = 'en'; // Get language #1
 
 						} else {
 							// domain.com/comic/slug/lang/
-							$current_page['type'] = '404';
+							$this->page_type = '404';
 
 						}
 
@@ -111,48 +108,49 @@ $this->current_page = $this->set_vars_based_on_url();
 
 						if ( is_numeric( $uri_bits[2] ) ) {
 							// domain.com/comic/slug/2/en/
-							$current_page['type'] = 'view_comic';
-							$current_page['page_number'] = (int) $uri_bits[2]; // Grab current page number
-							$current_page['current_languages'][] = $uri_bits[3]; // Get language #1
+							$this->page_type = 'view_comic';
+							$this->page_number = (int) $uri_bits[2]; // Grab current page number
+							$this->current_languages[] = $uri_bits[3]; // Get language #1
 
 						} else {
 							// domain.com/comic/slug/lang/lang/
-							$current_page['type'] = '404';
+							$this->page_type = '404';
 
 						}
 
 					} elseif( 5 == count( $uri_bits ) ) {
 						// domain.com/comic/slug/page_number/lang/lang/
-						$current_page['type'] = 'view_comic';
-						$current_page['page_number'] = (int) $uri_bits[2]; // Grab current page number
-						$current_page['current_languages'][] = $uri_bits[3]; // Get language #1
-						$current_page['current_languages'][] = $uri_bits[4]; // Get language #2
+						$this->page_type = 'view_comic';
+						$this->page_number = (int) $uri_bits[2]; // Grab current page number
+						$this->current_languages[] = $uri_bits[3]; // Get language #1
+						$this->current_languages[] = $uri_bits[4]; // Get language #2
 
 					} else {
-						$current_page['type'] = '404';
+						$this->page_type = '404';
 
 					}
 				} else {
 					// No languages or page numbers set, so defaulting to site language
 					// domain.com/comic/slug/    - no language selected
-					$current_page['type'] = '404';
+					$this->page_type = '404';
 				}
 			} else {
 				// No comic slug set, so 404 it
-				$current_page['type'] = '404';
+				$this->page_type = '404';
 
 			}
+		} elseif( 'registration' == $uri_bits[0] ) {
+			$this->page_type = 'registration';
 		} elseif( '' == $uri_bits[0] ) {
 			// At the root, so set to home page
-			$current_page['type'] = 'home';
+			$this->page_type = 'home';
 
 		} else {
 			// Not home page or a comic, so 404 it (if we add static pages, then they'll be set here)
-			$current_page['type'] = '404';
+			$this->page_type = '404';
 
 		}
 
-		return $current_page;
 	}
 
 	/**
@@ -160,12 +158,10 @@ $this->current_page = $this->set_vars_based_on_url();
 	 */
 	public function set_vars() {
 
-		$this->strip_list = $this->db->get( 'strip_list', 'default' );
-
 		if (
-			'edit_comic' == $this->current_page['type']
+			'edit_comic' == $this->page_type
 			||
-			'view_comic' == $this->current_page['type']
+			'view_comic' == $this->page_type
 		) {
 
 			// Get strips
@@ -173,26 +169,16 @@ $this->current_page = $this->set_vars_based_on_url();
 
 			// If a comic is on a page which does not exist, then 404 it
 			if (
-				'view_comic' == $this->current_page['type'] 
+				'view_comic' == $this->page_type 
 				&&
-				! isset( $strips[$this->current_page['page_number'] - 1] )
+				! isset( $strips[$this->page_number - 1] )
 			) {
-				$this->current_page['type'] = '404';
-			}
-
-			// Set next and previous page numbers
-			if ( isset( $this->current_page['page_number'] ) ) {
-				if ( isset( $strips[$this->current_page['page_number']] ) ) {
-					$this->current_page['next_page'] = $this->current_page['page_number'] + 1;
-				}
-				if ( isset( $strips[$this->current_page['page_number'] - 2] ) ) {
-					$this->current_page['previous_page'] = $this->current_page['page_number'] - 1;
-				}
+				$this->page_type = '404';
 			}
 
 			// If current page is invalid number,then switch to 404 error page
-			if ( isset( $this->current_page['page_number'] ) && count( $strips ) < $this->current_page['page_number'] ) {
-				$this->current_page['type'] = '404';
+			if ( isset( $this->page_number ) && count( $strips ) < $this->page_number ) {
+				$this->page_type = '404';
 			}
 
 /**********************************************************************************
@@ -204,6 +190,12 @@ $this->current_page = $this->set_vars_based_on_url();
 
 	}
 
+	/**
+	 * Get the current required images.
+	 * 
+	 * @param   string  $type  the background or image
+	 * @return  string  The image URL
+	 */
 	public function get_current_images( $type ) {
 
 		// Get data from DB
@@ -229,12 +221,15 @@ $this->current_page = $this->set_vars_based_on_url();
 				}
 			}
 
+			// Provide fallbacks for when image is not set
 			if ( empty( $current_image ) ) {
 				$current_background = COMIC_ASSETS_URL . 'default-strip.jpg';
 				$current_image = COMIC_ASSETS_URL . 'default-strip.jpg';
 			}
+
 		}
 
+		// Return chosen image
 		if ( 'background' == $type ) {
 			return $current_background;
 		} else {
@@ -455,7 +450,10 @@ $this->current_page = $this->set_vars_based_on_url();
 
 		require( 'views/header.php' );
 
-		switch( $this->current_page['type'] ) {
+		switch( $this->page_type ) {
+			case 'registration':
+				require( 'views/registration.php' );
+				break;
 			case 'edit_comic':
 				require( 'views/edit.php' );
 				break;

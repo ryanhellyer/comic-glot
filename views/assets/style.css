@@ -22,6 +22,12 @@ body, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, a, img, dl, dt, dd, ol, ul,
 	list-style: none;
 }
 
+/* =Background
+-------------------------------------------------------------- */
+body {
+	background: #f1f1f1;
+}
+
 /* =Force HTML5 elements block
 -------------------------------------------------------------- */
 header,
@@ -45,40 +51,52 @@ a:hover {
 
 /* =Header
 -------------------------------------------------------------- */
-header {
+#site-header {
 	width: 100%;
 	float: left;
 	background: #f4f4f4;
-	border-bottom: 1px solid #d2d6d5;
+	height: auto;
+	background: #0085be;
+	border-bottom: 1px solid #007ab1;
 }
 
-h1 {
+#site-header h1 {
 	float: left;
-	width: 55%;
+	xwidth: 55%;
 	margin: 0 0 0 5%;
-	padding: 0.26em 0 0 0;
-	font-size: 3.2em;
+	padding: 0.4em 0 0 0;
+	font-size: 3.4em;
 }
 
-h1 a {
+#site-header h1 a {
 	display: block;
 	font-family: 'bangersregular';
 	line-height: 1em;
-	color: #ee0000;
+	color: #fff;
 	letter-spacing: 0.06em;
-	text-shadow: 0.010em 0.020em 0 #000;
-	-webkit-text-stroke-width: 0.02em;
-	-webkit-text-stroke-color: #000;
+	text-shadow: 0.010em 0.020em 0 #004e72;
+	-webkit-text-stroke-width: 0.03em;
+	-webkit-text-stroke-color: #004e72;
 	text-stroke-width: 0.02em;
 	text-stroke-color: #000;
 }
-h1 a:hover {
+
+#site-header h1 a:hover {
 	text-decoration: none;
 }
 
+nav#primary {
+	float: right;
+}
+
+nav#primary li {
+	list-style: none;
+	float: left;
+}
+
 #login {
-	width: 35%;
-	margin: 1.1% 5% 0 0;
+	width: 400px;
+	margin: 1.7em 5% 0 0;
 	float: right;
 }
 
@@ -96,7 +114,7 @@ h1 a:hover {
 	float: left;
 	color: #666;
 	font-size: 1em;
-	padding: 0.4em 0.6em;
+	padding: 0.2em 2%;
 	font-family: 'Open Sans', sans-serif;
 }
 
@@ -104,14 +122,17 @@ h1 a:hover {
 #login a {
 	float: right;
 	text-align: center;
-	width: 17%;
+	width: 16%;
 	border: 1px solid #bbb;
-	background: #ddd;
+	background: #fefefe;
 }
 #login input[type=submit]:hover,
 #login a:hover {
 	text-decoration: none;
-	background: #eee;
+	background: #fff;
+	border:1px solid #333;
+	color: #000;
+	cursor: pointer;
 }
 
 /* =Headings
@@ -139,20 +160,83 @@ h4 {
 /* =Content layout
 -------------------------------------------------------------- */
 #wrap {
-	margin: 0 5%;
+	float: left;
+	width: 100%;
+}
+
+.inner {
+	width: 100%;
+	max-width: 960px;
+	margin: 4rem auto;
+}
+
+.notice {
+	float: left;
+	width: 100%;
+	margin: 0 0 2em 0;
+	background: #f9f9f9;
+	border: 1px solid #dfdfdf;
+}
+
+.notice p {
+	font-size: 1.4em;
+	font-family: "Open Sans", "Helvetica Neue", sans-serif;
+	margin: 0;
+	padding: 0.5em 0;
+	text-align: center;
+}
+
+.content {
+	float: left;
+	width: 100%;
+	background: #fff;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
+}
+
+
+/* =Content
+-------------------------------------------------------------- */
+
+#site-title {
+	float: left;
+	color: #555;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 2.5em;
+	font-weight: 200;
+	padding: 0.5em 1em;
+}
+
+#site-description {
+	float: right;
+	color: #888;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.6em;
+	font-weight: 200;
+	margin: 1.2em 2em 0 0;
+	padding: 0;
+}
+
+#comic-display {
+	float: left;
+	margin: 1px;
+	padding-top: 4%;
+	background: #fafafa;
+	border-top: 1px solid #f1f1f1;
 }
 
 .block {
+	float: left;
 	position: relative;
-	width: 22.5%;
-	border: 1px solid #aaa;
-	margin: 5% 0 0 0;
+	width: 28%;
+	margin: 0 0 5% 4%;
 	background: #fff;
 }
 
 .comic-link,
 .comic-link:hover {
 	display: block;
+	border: 1px solid #aaa;
 	text-decoration: none;
 }
 
@@ -168,24 +252,20 @@ h4 {
 	padding: 0 15px;
 }
 
-#comic-1,
-#comic-3 {
-	float: left;
-}
-
-#comic-2,
-#comic-4 {
-	float: right;
+.block p {
+	font-weight: 200;
+	height: 1.1em;
+	text-align: center;
+	font-size: 1.0em;
+	line-height: 1em;
+	color: #333;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0;
+	padding: 0.7em 0.4em;
 }
 
 /* =Content
 -------------------------------------------------------------- */
-#wrap p {
-	font-family: sans-serif;
-	font-size: 1.4em;
-	padding: 0.2em 0.4em;
-	color: #333;
-}
 
 img {
 	display: block;
@@ -197,9 +277,12 @@ img {
 }
 
 p {
+	font-size: 1.4em;
+	color: #333;
 	font-family: 'Open Sans', sans-serif;
 	margin: 10px 0 10px 0;
 	margin: 1rem 0 1rem 0;
+	padding: 0.2em 0.4em;
 }
 
 .alignleft {
@@ -221,17 +304,13 @@ p {
 footer {
 	float: left;
 	width: 100%;
-	margin: 5% 0 0 0;
-	padding: 2% 0;
-	background: #f4f4f4;
-	border-top: 1px solid #d2d6d5;	
 }
 
 footer p {
-	margin: 0 5%;
-	color: #333;
-	font-family: sans-serif;
-	font-size: 1.1em;
+	text-align: center;
+	margin: 2em 0;
+	color: #aaa;
+	font-size: 0.9em;
 }
 
 /* =Form
@@ -278,4 +357,41 @@ form {
 /* =File input field
 -------------------------------------------------------------- */
 input[type=file] {
+}
+
+@media (max-width: 960px) {
+	.inner {
+		margin: 0;
+	}
+}
+
+@media (max-width: 780px) {
+	#login {
+		width: 90%;
+		margin: 0.7em 5% 0.7em 0;
+		float: right;
+	}
+}
+
+@media (max-width: 600px) {
+	#site-title {
+		display: none;
+	}
+	#site-description {
+		float: none;
+		width: 100%;
+		margin: 0.6em 2em 0.6em 0;
+		text-align: center;
+	}
+	.block {
+		width: 44%;
+		margin: 0 0 5% 4%;
+	}
+}
+
+@media (max-width: 420px) {
+	.block {
+		width: 92%;
+		margin: 0 0 5% 4%;
+	}
 }
