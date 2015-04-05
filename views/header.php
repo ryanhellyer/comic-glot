@@ -17,10 +17,27 @@ echo '<!DOCTYPE html>
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'sortable.min.js"></script>
 
 </head>
-<body>
+<body class="' . esc_attr( $this->page_type ) . '">
 
 <header id="site-header">
 	<h1><a href="' . COMIC_JET_URL . '">Comic Jet!</a></h1>
+<!--
+	<nav id="primary">
+		<ul>
+			<li><a href="#">' . __( 'Sign up' ) . '</a></li>
+			<li><a href="#">' . __( 'Login' ) . '</a></li>
+			<li>
+				<a href="#">' . __( 'English' ) . '</a>
+			</li>
+		</ul>
+	</nav>
+-->
+	<nav id="language-selector">
+		<ul>
+			<li><a href="#">' . __( 'English' ) . '</a></li>
+			<li><a href="#">' . __( 'Deutsch' ) . '</a></li>
+		</ul>
+	</nav>
 	' . $comicjet_login->login_form() . '
 </header>
 

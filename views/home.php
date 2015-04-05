@@ -4,10 +4,17 @@ echo '
 <div class="inner">
 	<div class="content">
 
-		<h1 id="site-title">' . __( 'Comics' ) . '</h1>
-		<h2 id="site-description">' . __( 'Choose a comic to read' ) . '</h2>
+		<h1 id="site-title">' . __( 'Learn from comics' ) . '</h1>
 
-		<div id="comic-display">';
+		<form id="comic-type">
+			<select onchange="javascript:location.href = this.value;">
+				<option value="' . COMIC_JET_URL . '">' . __( 'Read comics in English' ) . '</option>
+				<option value="' . COMIC_JET_URL . 'de/en/">' . sprintf( __( 'Learn %s via %s' ), 'Deutsch', 'English' ) . '</option>
+				<option value="' . COMIC_JET_URL . 'en/de/">' . sprintf( __( 'Learn %s via %s' ), 'English', 'Deutsch' ) . '</option>
+			</select>
+		</form>
+
+		<div id="comic-selection">';
 
 
 // Haven't sorted out language control on pages like this yet ...
@@ -31,10 +38,10 @@ foreach( $strip_list as $strip_slug => $x ) {
 
 		echo '
 		<div class="block" id="' . esc_attr( 'comic-' . $count ) . '">
-			<a class="comic-link" href="' . esc_attr( $comic_url ) . '">
+			<div class="block-inner">
 				<img src="' . esc_attr( COMIC_STRIPS_URL . $thumbnail_file ) . '" />
 				<p>' . $title . '</p>
-			</a>';
+			</div>';
 
 		// Show edit link for admins
 		if ( $comicjet_login->current_user_is_admin() ) {

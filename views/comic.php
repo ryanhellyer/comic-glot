@@ -1,6 +1,14 @@
 <?php
 
-echo '<h3>This is comic "' . $this->get( 'title' ) . '" on page number ' . $this->page_number . '</h3>';
+echo '
+<div class="inner">
+	<div class="content">
+
+		<h1 id="site-title">' . $this->get( 'title' ) . '</h1>
+		<h2 id="site-description">' . sprintf( __( 'page %s' ), $this->page_number ) . '</h2>
+
+		<div id="comic-display">';
+
 
 $strips = $this->get( 'strips' );
 
@@ -49,29 +57,25 @@ if ( isset( $this->current_languages[1] ) ) {
 	$languages .= $this->current_languages[1] . '/';
 }
 
-if ( isset( $strips[$this->page_number] ) ) {
-	$next_page_number = $this->page_number + 1;
-
-	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $next_page_number . '/' . $languages;
-	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
-}
-
-echo ' | ';
-
+/**
+ * Previous page button.
+ */
 if ( isset( $strips[$this->page_number - 2] ) ) {
 	$previous_page_number = $this->page_number - 1;
 	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $previous_page_number . '/' . $languages;
 
-	echo '<a href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
+	echo '<a id="previous-page" href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
 }
 
+/**
+ * Next page button.
+ */
+if ( isset( $strips[$this->page_number] ) ) {
+	$next_page_number = $this->page_number + 1;
 
-
-
-echo '
-
-<hr />';
-
+	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $next_page_number . '/' . $languages;
+	echo '<a id="next-page" href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
+}
 
 
 if ( isset( $bubble_image[1] ) ) {
@@ -90,3 +94,12 @@ if ( isset( $bubble_image[1] ) ) {
     }
 </script>';
 }
+
+
+
+echo '
+		</div>
+	</div>
+</div>
+';
+

@@ -62,7 +62,6 @@ a:hover {
 
 #site-header h1 {
 	float: left;
-	xwidth: 55%;
 	margin: 0 0 0 5%;
 	padding: 0.4em 0 0 0;
 	font-size: 3.4em;
@@ -85,19 +84,60 @@ a:hover {
 	text-decoration: none;
 }
 
+/* Language selector */
+#language-selector {
+	float: right;
+	margin: 0.2em 5% 0 0;
+}
+
+#language-selector li {
+	list-style: none;
+	float: left;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 0.9em;
+	margin: 0 0 0 1.5em;
+}
+
+#language-selector a {
+	color: #fff;
+	padding: 0.4em 0;
+}
+
+#language-selector a:hover {
+	background-color: #1196cf;
+	text-decoration: none;
+}
+
+
+/*
 nav#primary {
 	float: right;
+	margin: 1.6em 2em 0 0;
 }
 
 nav#primary li {
 	list-style: none;
 	float: left;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.1em;
 }
+
+nav#primary a {
+	color: #fff;
+	padding: 0.75em 1em;
+}
+
+nav#primary a:hover {
+	background-color: #1196cf;
+	text-decoration: none;
+}
+*/
 
 #login {
 	width: 400px;
-	margin: 1.7em 5% 0 0;
+	margin: 0.9em 5% 0 0;
 	float: right;
+	clear: right;
 }
 
 #login input {
@@ -113,7 +153,7 @@ nav#primary li {
 #login a {
 	float: left;
 	color: #666;
-	font-size: 1em;
+	font-size: 0.9em;
 	padding: 0.2em 2%;
 	font-family: 'Open Sans', sans-serif;
 }
@@ -217,12 +257,16 @@ h4 {
 	padding: 0;
 }
 
-#comic-display {
+#comic-display,
+#comic-selection {
 	float: left;
-	margin: 1px;
-	padding-top: 4%;
 	background: #fafafa;
 	border-top: 1px solid #f1f1f1;
+	width: 100%;
+}
+
+#comic-selection {
+	padding-top: 4%;
 }
 
 .block {
@@ -233,10 +277,55 @@ h4 {
 	background: #fff;
 }
 
+.block-inner {
+	border: 1px solid #ddd;
+}
+
+#comic-type {
+	width: auto;
+	margin: 1.7em 3em 0 0;
+}
+
+#comic-type select {
+	float: right;
+	font-size: 1.2em;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0 0 0 3em;
+	cursor: pointer;
+	color: #fff;
+	background-color: #0085be;
+	background-image: url(down-arrow.png);
+	background-repeat: no-repeat;
+	background-position: 95% 48%;
+	border: 1px solid #0085be;
+	padding: 0.4em 2%;
+	-webkit-appearance: button;
+	appearance: button;
+}
+#comic-type select:hover,
+#comic-type option {
+	background-color: #1196cf;
+}
+
+.block:hover img {
+	opacity: 0.9;
+}
+
+#next-page {
+	float: right;
+}
+
+#previous-page:hover,
+#next-page:hover {
+	background: #1196cf;
+	text-decoration: none;
+}
+
+}
+
 .comic-link,
 .comic-link:hover {
 	display: block;
-	border: 1px solid #aaa;
 	text-decoration: none;
 }
 
@@ -262,6 +351,26 @@ h4 {
 	font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0.7em 0.4em;
+}
+
+#previous-page,
+#next-page {
+	float: left;
+	font-family: 'Open Sans', sans-serif;
+	color: #fff;
+	margin: 2em 1em 1em 1em;
+	padding: 0.4em 2em;
+	background: #0085be;
+}
+
+#next-page {
+	float: right;
+}
+
+#previous-page:hover,
+#next-page:hover {
+	background: #1196cf;
+	text-decoration: none;
 }
 
 /* =Content
@@ -323,8 +432,8 @@ form {
 .image-display {
 	float: left;
 	position: relative;
-	width: 60%;
-	height: 800px;
+	width: 100%;
+	height: auto;
 	overflow: hidden;
 }
 
@@ -365,7 +474,18 @@ input[type=file] {
 	}
 }
 
-@media (max-width: 780px) {
+@media (max-width: 800px) {
+
+	#comic-type {
+		width: 100%;
+		margin-bottom: 2em;
+	}
+	#comic-type select {
+		float: none;
+		width: 90%;
+		margin: 0 auto;
+		display: block;
+	}
 	#login {
 		width: 90%;
 		margin: 0.7em 5% 0.7em 0;
@@ -374,14 +494,12 @@ input[type=file] {
 }
 
 @media (max-width: 600px) {
-	#site-title {
-		display: none;
+	.view_comic #site-title {
+		padding: 0.5em 1em 0 1em;
 	}
-	#site-description {
-		float: none;
-		width: 100%;
-		margin: 0.6em 2em 0.6em 0;
-		text-align: center;
+	.view_comic #site-description {
+		float: left;
+		margin: 0 0 1em 2em;
 	}
 	.block {
 		width: 44%;
