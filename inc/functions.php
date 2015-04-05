@@ -16,7 +16,33 @@ function current_user_is_admin() {
  * @return  string  The translated string
  */
 function __( $string ) {
-	return $string;
+
+	$strings = array(
+		'Learn languages from comics' => array(
+			'de' => 'Sprachen lernen aus Comics',
+		),
+		'I speak' => array(
+			'de' => 'Ich spreche',
+		),
+		'I want to learn' => array(
+			'de' => 'Ich will lernen',
+		),
+		'Start learning' => array(
+			'de' => 'Lernen Sie',
+		),
+	);
+
+	if (
+		'en' == COMICJET_CURRENT_LANGUAGE
+		||
+		! isset( $strings[$string][COMICJET_CURRENT_LANGUAGE] )
+	) {
+		return $string;
+	}
+
+	$translated_string = $strings[$string][COMICJET_CURRENT_LANGUAGE];
+
+	return $translated_string;
 }
 
 /**

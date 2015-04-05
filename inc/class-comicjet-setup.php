@@ -14,18 +14,6 @@ class ComicJet_Setup {
 	 */
 	public function __construct() {
 
-		$this->current_page = $this->set_vars_based_on_url();
-
-		$this->db = comicjet_db();
-
-		$this->error_messages = array(
-			'file-type-not-supported'  => __( 'Sorry, but that file type is not supported' ),
-			'file-too-large'           => __( 'Sorry, that file was too large.' ),
-			'invalid-window-dimension' => __( 'Sorry, but we detected an invalid window dimension.' ),
-			'invalid-nonce'            => __( 'Sorry, an error occured.' ),
-			'user-not-admin'           => __( 'Sorry, but you are need to be admin to do that.' ),
-		);
-
 		$this->available_languages = array(
 			'en' => array(
 				'name' => 'English',
@@ -39,14 +27,55 @@ class ComicJet_Setup {
 				'name' => 'Norsk Bokmål',
 				'iso'  => 'nb_NO',
 			),
+			'es' => array(
+				'name' => 'Espanol',
+				'iso'  => 'es_ES',
+			),
 		);
 
+		$this->current_page = $this->set_vars_based_on_url();
+		$this->db = comicjet_db();
 		$this->save_data();
 		$this->set_vars();
+		$this->language_selection();
+
+		$this->error_messages = array(
+			'file-type-not-supported'  => __( 'Sorry, but that file type is not supported' ),
+			'file-too-large'           => __( 'Sorry, that file was too large.' ),
+			'invalid-window-dimension' => __( 'Sorry, but we detected an invalid window dimension.' ),
+			'invalid-nonce'            => __( 'Sorry, an error occured.' ),
+			'user-not-admin'           => __( 'Sorry, but you are need to be admin to do that.' ),
+		);
 
 		// Output page
 		$this->output_page();
 
+	}
+
+	/**
+	 * Redirect when language set.
+	 * This is only a fallback for when JavaScript isn't available
+	 */
+	public function language_selection() {
+
+		// Bail out now if language not being set
+		if ( ! isset( $_POST['select-language'] ) ) {
+			return;
+		}
+
+		// Set the root of the URL
+		$url = COMIC_JET_URL;
+
+		// Add new languages to the URL
+		if ( array_key_exists( $_POST['language1'], $this->available_languages ) ) {
+			$url .= $_POST['language1'] . '/';
+		}
+		if ( array_key_exists( $_POST['language2'], $this->available_languages ) ) {
+			$url .= $_POST['language2'] . '/';
+		}
+
+		header( 'Location: ' . $url, 302 );
+		die;
 	}
 
 	/**
@@ -74,6 +103,23 @@ class ComicJet_Setup {
 		$uri = $_SERVER['REQUEST_URI'];
 		$uri = trim( $uri, '/' ); // Strip preceding and trailing slashes
 		$uri_bits = explode( '/', $uri ); // Split
+
+		// Set languages
+		if ( array_key_exists( $uri_bits[0], $this->available_languages ) ) {
+			// A home page, with language set
+			$this->language1 = $uri_bits[0];
+			if ( array_key_exists( $uri_bits[1], $this->available_languages ) ) {
+				$this->language2 = $uri_bits[1];
+
+			}
+
+			// Set current language as constant (needed for accessing within the translation function)
+			define( 'COMICJET_CURRENT_LANGUAGE', $this->language1 );
+		} else {
+			// Defaulting to English
+			$this->language1 = 'en';
+			define( 'COMICJET_CURRENT_LANGUAGE', 'en' );
+		}
 
 		// Work out comic page information
 		if ( __( 'comic' ) == $uri_bits[0] ) {
@@ -141,13 +187,18 @@ class ComicJet_Setup {
 			}
 		} elseif( 'registration' == $uri_bits[0] ) {
 			$this->page_type = 'registration';
+			$this->current_languages[] = 'en';
+		} elseif ( array_key_exists( $uri_bits[0], $this->available_languages ) ) {
+			// A home page, with language set
+			$this->page_type = 'home';
 		} elseif( '' == $uri_bits[0] ) {
 			// At the root, so set to home page
 			$this->page_type = 'home';
-
+			$this->current_languages[] = 'en';
 		} else {
 			// Not home page or a comic, so 404 it (if we add static pages, then they'll be set here)
 			$this->page_type = '404';
+			$this->current_languages[] = 'en';
 
 		}
 

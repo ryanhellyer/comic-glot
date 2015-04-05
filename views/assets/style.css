@@ -84,7 +84,7 @@ a:hover {
 	text-decoration: none;
 }
 
-/* Language selector */
+/* Language selector
 #language-selector {
 	float: right;
 	margin: 0.2em 5% 0 0;
@@ -107,9 +107,8 @@ a:hover {
 	background-color: #1196cf;
 	text-decoration: none;
 }
+ */
 
-
-/*
 nav#primary {
 	float: right;
 	margin: 1.6em 2em 0 0;
@@ -120,6 +119,11 @@ nav#primary li {
 	float: left;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 1.1em;
+	color: #fff;
+}
+
+nav#primary li.active span {
+	border-bottom: 1px dotted #fff;
 }
 
 nav#primary a {
@@ -131,6 +135,7 @@ nav#primary a:hover {
 	background-color: #1196cf;
 	text-decoration: none;
 }
+/*
 */
 
 #login {
@@ -282,26 +287,52 @@ h4 {
 }
 
 #comic-type {
-	width: auto;
-	margin: 1.7em 3em 0 0;
+	float: left;
+	width: 100%;
+	margin: 1em 0 2em 0;
+	text-align: center;
 }
 
+#comic-type span {
+	display: inline-block;
+	width: 2em;
+}
+
+#comic-type label {
+	display: inline-block;
+	line-height: 2em;
+	margin-right: 0.5em;
+	font-size: 1.1em;
+}
+
+#comic-type input,
 #comic-type select {
-	float: right;
+	display: inline-block;
 	font-size: 1.2em;
 	font-family: 'Open Sans', sans-serif;
-	margin: 0 0 0 3em;
+	margin: 0;
 	cursor: pointer;
 	color: #fff;
 	background-color: #0085be;
+	border: 1px solid #0085be;
+	outline: none;
+	padding: 0.4em 2%;
+}
+
+#comic-type input {
+	padding: 0.45em 2%;
+}
+
+#comic-type select {
+	padding: 0.4em 2%;
 	background-image: url(down-arrow.png);
 	background-repeat: no-repeat;
 	background-position: 95% 48%;
-	border: 1px solid #0085be;
-	padding: 0.4em 2%;
 	-webkit-appearance: button;
 	appearance: button;
 }
+
+#comic-type input:hover,
 #comic-type select:hover,
 #comic-type option {
 	background-color: #1196cf;
@@ -394,6 +425,20 @@ p {
 	padding: 0.2em 0.4em;
 }
 
+p.caption {
+	float: left;
+	width: 60%;
+	padding: 0;
+	margin: 5% 20%;
+	text-align: center;
+	font-size: 0.8em;
+}
+
+p.caption img {
+	margin: 0 0 2em 0;
+	padding: 0;
+}
+
 .alignleft {
 	float: left;
 }
@@ -405,6 +450,15 @@ p {
 
 .alignright {
 	float: right;
+}
+
+/* =Forms
+-------------------------------------------------------------- */
+label {
+	font-size: 1.4em;
+	color: #555;
+	font-weight: 200;
+	font-family: 'Open Sans', sans-serif;
 }
 
 
@@ -490,6 +544,12 @@ input[type=file] {
 		width: 90%;
 		margin: 0.7em 5% 0.7em 0;
 		float: right;
+	}
+	p.caption {
+		float: left;
+		width: 90%;
+		padding: 0;
+		margin: 5% 5%;
 	}
 }
 
