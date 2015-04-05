@@ -1,6 +1,6 @@
 <?php
 
-echo '
+$html .= '
 <div class="inner">
 	<div class="content">
 

@@ -1,7 +1,7 @@
 <?php
 
 
-echo '<!DOCTYPE html>
+$html = '<!DOCTYPE html>
 
 <html lang="en-US">
 <head>
@@ -15,7 +15,7 @@ echo '<!DOCTYPE html>
 
 ';
 if ( 'edit_comic' == $this->page_type ) {
-	echo '
+	$html .= '
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
 	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'sortable.min.js"></script>';
@@ -29,8 +29,8 @@ if ( isset( $this->language2 ) ) {
 	$home_url .= $this->language1 . '/';
 }
 
-echo '
-	<script>var comicjet_home_url = "' . esc_attr( $home_url ) . '";</script>
+$html .= '
+	<script>var comicjet_home_url = "' . COMIC_JET_URL . '";</script>
 </head>
 <body class="' . esc_attr( $this->page_type ) . '">
 
@@ -44,21 +44,21 @@ echo '
 		</ul>
 	</nav>';
 /*
-echo '
+$html .= '
 	<nav id="language-selector">
 		<ul>';
 
 foreach( $this->language_options() as $url => $language ) {
-	echo '
+	$html .= '
 			<li><a href="' . esc_attr( $url ) . '">' . $language . '</a></li>';
 }
 
-echo '
+$html .= '
 		</ul>
 	</nav>
 	' . $comicjet_login->login_form() . '
  */	
-echo '
+$html .= '
 </header>
 
 <div id="wrap">';

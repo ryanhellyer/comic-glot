@@ -108,7 +108,7 @@ class ComicJet_Setup {
 		if ( array_key_exists( $uri_bits[0], $this->available_languages ) ) {
 			// A home page, with language set
 			$this->language1 = $uri_bits[0];
-			if ( array_key_exists( $uri_bits[1], $this->available_languages ) ) {
+			if ( isset( $uri_bits[1] ) && array_key_exists( $uri_bits[1], $this->available_languages ) ) {
 				$this->language2 = $uri_bits[1];
 
 			}
@@ -522,6 +522,8 @@ class ComicJet_Setup {
 		}
 
 		require( 'views/footer.php' );
+
+		echo $html;
 
 		// Load views
 		exit;

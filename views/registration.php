@@ -1,6 +1,6 @@
 <?php
 
-echo '
+$html .= '
 <div class="inner">
 <!--
 	<h1>' . __( 'Register' ) . '</h1>

@@ -283,7 +283,12 @@ h4 {
 }
 
 .block-inner {
+	display: block;
 	border: 1px solid #ddd;
+}
+
+.block-inner:hover {
+	text-decoration: none;
 }
 
 #comic-type {
@@ -510,11 +515,13 @@ form {
 }
 
 .error {
+	width: 90%;
+	margin: 0 5% 4% 5%;
+	text-align: center;
 	border: 1px dotted #dc5e64;
 	color: #333;
 	background: #fde7e8;
-	padding: 5px 10px;
-	padding: 0.5rem 1rem;
+	padding: 0.5em 0;
 }
 
 /* =File input field

@@ -2,7 +2,7 @@
 
 $current_language = $this->language1;
 
-echo '
+$html .= '
 <div class="inner">
 	<div class="content">
 
@@ -21,11 +21,11 @@ foreach( $this->available_languages as $lang => $language ) {
 		$selected = '';
 	}
 
-	echo '
+	$html .= '
 			<option' . $selected . ' value="' . esc_attr( $lang ) . '">' . $language['name'] . '</option>';
 }
 
-echo '
+$html .= '
 			</select>
 
 			<span></span>
@@ -38,17 +38,17 @@ unset( $available_languages_two['en'] );
 $available_languages_two['en'] = $this->available_languages['en'];
 foreach( $available_languages_two as $lang => $language ) {
 
-	if ( $this->language2 == $lang ) {
+	if ( isset( $this->language2 ) && $this->language2 == $lang ) {
 		$selected = ' selected="selected"';
 	} else {
 		$selected = '';
 	}
 
-	echo '
+	$html .= '
 			<option' . $selected . ' value="' . esc_attr( $lang ) . '">' . $language['name'] . '</option>';
 }
 
-echo '
+$html .= '
 			</select>
 
 			<span></span>
@@ -59,13 +59,17 @@ echo '
 		<div id="comic-selection">';
 
 
-// Haven't sorted out language control on pages like this yet ...
-$lang = 'en';
-
-
 $count = 0;
 $strip_list = $this->db->get( 'strip_list', 'default' );
 foreach( $strip_list as $strip_slug => $x ) {
+	$thumbnail = $this->db->get( 'thumbnail', $strip_slug );
+	if ( ! isset( $thumbnail[$this->language1] ) ) {
+		continue;
+	}
+	if ( isset( $this->language2 ) && ! isset( $thumbnail[$this->language2] ) ) {
+		continue;
+	}
+
 	$title = $this->db->get( 'title', $strip_slug );
 	$edit_url = COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/edit/';
 	$comic_url = COMIC_JET_URL . __( 'comic' ) . '/' . $strip_slug . '/1/' . $this->language1 . '/';
@@ -75,33 +79,37 @@ foreach( $strip_list as $strip_slug => $x ) {
 
 	$strips = $this->db->get( 'strips', $strip_slug );
 
-	$thumbnail = $this->db->get( 'thumbnail', $strip_slug );
 
-	if ( isset( $thumbnail[$lang] ) ) {
-		$thumbnail_file = $thumbnail[$lang];
-		$count++;
+	$thumbnail_file = $thumbnail[$this->language1];
+	$count++;
 
-		echo '
+	$html .= '
 		<div class="block" id="' . esc_attr( 'comic-' . $count ) . '">
 			<a href="' . esc_attr( $comic_url ) . '" class="block-inner">
 				<img src="' . esc_attr( COMIC_STRIPS_URL . $thumbnail_file ) . '" />
 				<p>' . $title . '</p>
 			</a>';
 
-		// Show edit link for admins
-		if ( $comicjet_login->current_user_is_admin() ) {
-			echo '
+	// Show edit link for admins
+	if ( $comicjet_login->current_user_is_admin() ) {
+		$html .= '
 			<a class="edit-link" href="' . esc_attr( $edit_url ) . '">' . __( 'Edit' ) . '</a>';
-		}
-
-		echo '
-		</div>';
 	}
+
+	$html .= '
+		</div>';
 
 }
 
+if ( 0 == $count ) {
+	$html .= '
+		<p class="error">
+			' . __( 'Sorry, but no comics match your selection.' ) . '
+		</p>';
+}
 
-echo '
+
+$html .= '
 		</div>
 	</div>
 </div>

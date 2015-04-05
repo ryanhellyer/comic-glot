@@ -1,6 +1,6 @@
 <?php
 
-echo '
+$html .= '
 <div class="inner">
 	<div class="content">
 
@@ -14,12 +14,12 @@ $strips = $this->get( 'strips' );
 
 $page = $strips[$this->page_number - 1]; // Grab this page only
 
-echo '
+$html .= '
 
 <div class="image-display">';
 
 if ( '' != $this->get_current_images( 'current-background' ) ) {
-	echo '
+	$html .= '
 	<img src="' . esc_attr( COMIC_STRIPS_URL . $strips[$this->page_number - 1]['current_background'] ) . '" />';
 }
 
@@ -36,10 +36,10 @@ foreach( $this->current_languages as $current_lang ) {
 	}
 }
 
-echo '
+$html .= '
 	<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[0] ) . '" />';
 
-echo '
+$html .= '
 </div>
 
 ';
@@ -64,7 +64,7 @@ if ( isset( $strips[$this->page_number - 2] ) ) {
 	$previous_page_number = $this->page_number - 1;
 	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $previous_page_number . '/' . $languages;
 
-	echo '<a id="previous-page" href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
+	$html .= '<a id="previous-page" href="' . esc_attr( $url ) . '">' . __( 'Previous' ) . '</a>';
 }
 
 /**
@@ -74,7 +74,7 @@ if ( isset( $strips[$this->page_number] ) ) {
 	$next_page_number = $this->page_number + 1;
 
 	$url = COMIC_JET_URL . __( 'comic' ) . '/' . $this->slug . '/' . $next_page_number . '/' . $languages;
-	echo '<a id="next-page" href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
+	$html .= '<a id="next-page" href="' . esc_attr( $url ) . '">' . __( 'Next' ) . '</a>';
 }
 
 
@@ -97,7 +97,7 @@ if ( isset( $bubble_image[1] ) ) {
 
 
 
-echo '
+$html .= '
 		</div>
 	</div>
 </div>

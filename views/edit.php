@@ -1,6 +1,6 @@
 <?php
 
-echo '
+$html .= '
 
 <form method="post" action="" enctype="multipart/form-data">
 
@@ -10,11 +10,11 @@ echo '
 	<div class="image-display">';
 
 	if ( '' != $this->get_current_images( 'current-background' ) ) {
-		echo '
+		$html .= '
 		<img src="' . esc_attr( $this->get_current_images( 'current-background' ) ) . '" />';
 	}
 
-		echo '
+		$html .= '
 		<img src="' . esc_attr( $this->get_current_images( 'current_image' ) ) . '" />
 	</div>
 
@@ -22,14 +22,14 @@ echo '
 
 		// Error messages
 		if ( ! empty( $this->error ) ) {
-			echo '<p class="error">';
+			$html .= '<p class="error">';
 			foreach( $this->error as $error ) {
 				echo $this->error_messages[$error];
 			}
-			echo '</p>';
+			$html .= '</p>';
 		}
 
-		echo '
+		$html .= '
 		<p>
 			<label>' . __( 'Title' ) . '</label>
 			<input type="text" name="title" value="' . esc_attr( $this->get( 'title' ) ) . '" />
@@ -43,7 +43,7 @@ echo '
 			$used_languages = $this->get( 'languages' );
 			if ( '' != $used_languages && array_key_exists( $lang, $used_languages ) ) {
 				// Thumbnail input
-				echo '
+				$html .= '
 				<p>
 					<label>Thumbnail image - ' . $lang . '</label>
 					<input type="file" name="' . esc_attr( 'file-upload[thumbnail][' . $lang . ']' ) . '" value="" />
@@ -53,7 +53,7 @@ echo '
 				$thumbnail = $this->get( 'thumbnail' );
 				if ( isset( $thumbnail[$lang] ) ) {
 					$file_name = $thumbnail[$lang];
-					echo '
+					$html .= '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'thumbnail[' . $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
 
@@ -62,47 +62,47 @@ echo '
 
 		$strips = $this->get( 'strips' );
 		if ( is_array( $strips ) ) {
-			echo '
+			$html .= '
 		<ul class="sortable">';
 
 			foreach( $strips as $key => $strip ) {
 
-				echo '
+				$html .= '
 			<li>
 				<input class="button alignright" type="submit" name="' . esc_attr( 'remove-page[' . $key . ']' ) . '" value="' . __( 'Remove' ) . '" />
 				<h3>' . sprintf( __( 'Page %s' ), $key + 1 ) . '</h3>';
 
 				// Add current_background image
-				echo '
+				$html .= '
 				<p>
 					<label>Background image</label>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background]' ) . '" value="" />
 				</p>';
 				if ( isset( $strips[$key]['current_background'] ) ) {
 					$file_name = $strips[$key]['current_background'];
-					echo '
+					$html .= '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
 
 				// Low resolution background image
-				echo '
+				$html .= '
 				<p>
 					<label>Low resolution background image (used for offline mode)</label>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background_lowres]' ) . '" value="" />
 				</p>';
 				if ( isset( $strips[$key]['current_background_lowres'] ) ) {
 					$file_name = $strips[$key]['current_background_lowres'];
-					echo '
+					$html .= '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background_lowres]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
 
 
-				echo '
+				$html .= '
 				<p>' . __( 'Add window coordinates' ) . '</p>';
 
 				$strip['window'][] = ''; // Add new window
 				foreach( $strip['window'] as $window_id => $window_value ) {
-					echo '
+					$html .= '
 				<p>
 					<input type="text" name="' . esc_attr( 'strip_image[' . $key . '][window][]' ) . '" value="' . esc_attr( $window_value ) . '" />
 				</p>';
@@ -114,7 +114,7 @@ echo '
 					// Bail out if language is not used
 					if ( array_key_exists( $lang, $used_languages ) ) {
 
-						echo '
+						$html .= '
 
 				<h4>' . $language['name'] . '</h4>
 				<input class="button alignright" type="submit" name="' . esc_attr( 'view-page[' . $key . '][' . $lang . ']' ) . '" value="' . __( 'View' ) . '" />
@@ -129,21 +129,21 @@ echo '
 							$file_name = '';
 						}
 
-						echo '
+						$html .= '
 				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
 					}
 
 				}
 
-				echo '
+				$html .= '
 			</li>';
 			}
 
-			echo '
+			$html .= '
 		</ul>';
 		}
 
-		echo '
+		$html .= '
 
 		<p>
 			<input type="submit" name="add-new-page" id="add-new-page" class="button" value="' . __( 'Add new page' ) . '" />
@@ -160,14 +160,14 @@ echo '
 				$checked = '';
 			}
 
-			echo '
+			$html .= '
 		<p>
 			<label>' . $language['name'] . '</label>
 			<input ' . $checked . 'type="checkbox" name="' . esc_attr( 'language[' . $lang . ']' ) . '" value="1" />
 		</p>';
 		}
 
-		echo '
+		$html .= '
 		<p class="submit">
 			<input type="submit" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
 		</p>

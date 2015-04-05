@@ -1,6 +1,6 @@
 <?php
 
-echo '
+$html .= '
 </div>
 
 <footer>
@@ -12,7 +12,7 @@ echo '
 ';
 
 if ( 'home' == $this->page_type ) {
-	echo '
+	$html .= '
 <script>
 
 // Switching off form submission
@@ -29,7 +29,7 @@ document.getElementById("select-language").onclick = function(){
 </script>';
 }
 
-echo '
+$html .= '
 
 </body>
 </html>';
