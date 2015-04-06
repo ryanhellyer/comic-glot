@@ -6,7 +6,7 @@ class ComicJet_Setup {
 	public $error_messages; // Array of possible error messages
 	public $file_size = 10014158; // Max file size for uploads
 	public $comic; // The comic slug
-	public $page_type; // The current page type (view, edit or 404
+	public $page_type; // The current page type (view, home or 404
 	public $page_number; // The current page number
 
 	/**
@@ -33,8 +33,8 @@ class ComicJet_Setup {
 			),
 		);
 
-		$this->current_page = $this->set_vars_based_on_url();
 		$this->db = comicjet_db();
+		$this->current_page = $this->set_vars_based_on_url();
 		$this->language_selection();
 
 		$this->error_messages = array(
@@ -105,10 +105,19 @@ class ComicJet_Setup {
 		// Set languages
 		$total_bits = count( $uri_bits );
 
-		if ( array_key_exists( $uri_bits[$total_bits - 1], $this->available_languages ) ) {
+		// Process static pages first coz they goof up due to not having language slugs
+		if( 'registration' == $uri_bits[0] ) {
+			$this->page_type = 'registration';
+			$this->language1 = 'en';
+			define( 'COMICJET_CURRENT_LANGUAGE', 'en' );
+		} elseif( 'anmeldung' == $uri_bits[0] ) {
+			$this->page_type = 'registration';
+			$this->language1 = 'de';
+			define( 'COMICJET_CURRENT_LANGUAGE', 'de' );
+		} elseif ( array_key_exists( $uri_bits[$total_bits - 1], $this->available_languages ) ) {
 
 			// If two languages set
-			if ( array_key_exists( $uri_bits[$total_bits - 2], $this->available_languages ) ) {
+			if ( isset( $uri_bits[$total_bits - 2] ) && array_key_exists( $uri_bits[$total_bits - 2], $this->available_languages ) ) {
 				$this->language1 = $uri_bits[$total_bits - 2];
 				$this->language2 = $uri_bits[$total_bits - 1];
 			} else {
@@ -124,7 +133,9 @@ class ComicJet_Setup {
 		}
 
 		// Work out comic page information
-		if ( __( 'comic' ) == $uri_bits[0] ) {
+		if ( isset( $this->page_type ) ) {
+			// Must be a static page which has already been set, so just continue ... 
+		} elseif ( __( 'comic' ) == $uri_bits[0] ) {
 
 			if ( isset( $uri_bits[1] ) ) {
 				$this->slug = filter_var( $uri_bits[1], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW );
@@ -132,15 +143,20 @@ class ComicJet_Setup {
 				// Calculate the current page number
 				if ( isset( $uri_bits[2] ) ) {
 
-					// Set different page types and page numbers where apppropriate
-					if( 3 == count( $uri_bits ) ) {
+					if ( 'flush' == $uri_bits[2] && current_user_is_admin() ) {
+						echo 'Not currently used since not storing any comic stuff in Redis<br />';
+						//$this->db->delete( 'title', $uri_bits[1] );
+						echo '"' . $uri_bits[1] . '" flushed :)';
+						die;
+					} elseif( 3 == count( $uri_bits ) ) {
+						// Set different page types and page numbers where apppropriate
 
 						// This is a page number without language specification. So default to site language.
 						if ( is_numeric( $uri_bits[2] ) ) {
 							// domain.com/comic/slug/2/
 							$this->page_type = 'view_comic';
 							$this->page_number = (int) $uri_bits[2]; // Grab current page number
-							$this->current_languages[] = 'en'; // Get language #1
+							$this->language1 = 'en'; // Get language #1
 
 						} else {
 							// domain.com/comic/slug/lang/
@@ -154,7 +170,7 @@ class ComicJet_Setup {
 							// domain.com/comic/slug/2/en/
 							$this->page_type = 'view_comic';
 							$this->page_number = (int) $uri_bits[2]; // Grab current page number
-							$this->current_languages[] = $uri_bits[3]; // Get language #1
+							$this->language1 = $uri_bits[3]; // Get language #1
 
 						} else {
 							// domain.com/comic/slug/lang/lang/
@@ -166,8 +182,8 @@ class ComicJet_Setup {
 						// domain.com/comic/slug/page_number/lang/lang/
 						$this->page_type = 'view_comic';
 						$this->page_number = (int) $uri_bits[2]; // Grab current page number
-						$this->current_languages[] = $uri_bits[3]; // Get language #1
-						$this->current_languages[] = $uri_bits[4]; // Get language #2
+						$this->language1 = $uri_bits[3]; // Get language #1
+						$this->language2 = $uri_bits[4]; // Get language #2
 
 					} else {
 						$this->page_type = '404';
@@ -183,69 +199,23 @@ class ComicJet_Setup {
 				$this->page_type = '404';
 
 			}
-		} elseif( 'registration' == $uri_bits[0] ) {
-			$this->page_type = 'registration';
-			$this->current_languages[] = 'en';
 		} elseif ( array_key_exists( $uri_bits[0], $this->available_languages ) ) {
 			// A home page, with language set
 			$this->page_type = 'home';
 		} elseif( '' == $uri_bits[0] ) {
 			// At the root, so set to home page
 			$this->page_type = 'home';
-			$this->current_languages[] = 'en';
+			$this->language1 = 'en';
 		} else {
 			// Not home page or a comic, so 404 it (if we add static pages, then they'll be set here)
 			$this->page_type = '404';
-			$this->current_languages[] = 'en';
+			$this->language1 = 'en';
 
 		}
 
-	}
-
-	/**
-	 * Get the current required images.
-	 * 
-	 * @param   string  $type  the background or image
-	 * @return  string  The image URL
-	 */
-	public function get_current_images( $type ) {
-
-		// Get data from DB
-		$strips = $this->get( 'strips' );
-		$used_languages = $this->get( 'languages' );
-
-		// Work out what the first image is, so that it can be displayed as current image
-		if ( ! isset( $current_image ) ) {
-
-			foreach( $this->available_languages as $lang => $language ) {
-
-				// Set whether selected or not
-				if ( is_array( $used_languages ) ) {
-					if ( array_key_exists( $lang, $used_languages ) ) {
-						if ( ! empty( $strips[0][$lang] ) ) {
-							if ( isset( $strips[0]['current_background'] ) ) {
-								$current_background = COMIC_JET_URL . 'strips/' . $strips[0]['current_background'];
-							}
-							$current_image = COMIC_JET_URL . 'strips/' . $strips[0][$lang];
-						}
-						break;
-					}
-				}
-			}
-
-			// Provide fallbacks for when image is not set
-			if ( empty( $current_image ) ) {
-				$current_background = COMIC_ASSETS_URL . 'default-strip.jpg';
-				$current_image = COMIC_ASSETS_URL . 'default-strip.jpg';
-			}
-
-		}
-
-		// Return chosen image
-		if ( 'background' == $type ) {
-			return $current_background;
-		} else {
-			return $current_image;
+		// Set current language as constant (needed for accessing within the translation function)
+		if ( ! defined( 'COMICJET_CURRENT_LANGUAGE' ) ) {
+			define( 'COMICJET_CURRENT_LANGUAGE', $this->language1 );
 		}
 	}
 
@@ -288,9 +258,6 @@ class ComicJet_Setup {
 			case 'registration':
 				require( 'views/registration.php' );
 				break;
-			case 'edit_comic':
-				require( 'views/edit.php' );
-				break;
 			case '404':
 				require( 'views/404.php' );
 				break;
@@ -306,9 +273,9 @@ class ComicJet_Setup {
 
 		require( 'views/footer.php' );
 
-		// Compress the HTML output (don't apply when editing comics as it seems to mess with the JavaScript)
-		if ( 'edit_comic' != $this->page_type ) {
-//			$html = $this->compressing_html( $html );
+		// Compress the HTML output
+		if ( defined( 'COMIC_JET_COMPRESS' ) ) {
+			$html = $this->compressing_html( $html );
 		}
 
 		// Load views

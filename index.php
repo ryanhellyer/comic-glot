@@ -20,6 +20,7 @@ license.txt file included with this plugin for more information.
 
 define( 'COMIC_JET_START_TIME', microtime( true ) );
 
+//define( 'COMIC_JET_COMPRESS', true );
 define( 'COMIC_JET_DOMAIN', 'dev.comicjet.com' );
 define( 'COMIC_JET_URL', 'http://' . COMIC_JET_DOMAIN . '/' );
 define( 'COMIC_VIEWS_URL', COMIC_JET_URL . 'views/' );

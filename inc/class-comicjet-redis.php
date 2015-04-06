@@ -257,13 +257,18 @@ class Redis_DB {
 	 * 
 	 * 
 	 * Written by Ryan.
-	 *
+	 * 
+	 * @param int|string  $key       What to call the contents in the cache
+	 * @param mixed       $data      The contents to store in the cache
+	 * @param string      $group     Where to group the cache contents
+	 * @param int         $expire    When to expire the cache contents
+	 * @return bool                  False if not exists, true if contents were replaced
 	 */
-	public function write( $key, $data, $group = '' ) {
+	public function write( $key, $data, $group = '', $expire = 0 ) {
 		if ( $this->_exists( $this->_key( $key, $group ) ) ) {
-			$this->replace( $key, $data, $group );
+			$this->replace( $key, $data, $group, $expire );
 		} else {
-			$this->add( $key, $data, $group );
+			$this->add( $key, $data, $group, $expire );
 		}
 	}
 

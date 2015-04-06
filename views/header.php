@@ -1,9 +1,8 @@
 <?php
 
-
 $html = '<!DOCTYPE html>
 
-<html lang="en-US">
+<html lang="' . esc_attr( $this->available_languages[$this->language1]['iso'] ) . '">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
@@ -11,16 +10,8 @@ $html = '<!DOCTYPE html>
 	<title>Comic Glot</title>
 
 	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-<xlink href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600" rel="stylesheet" type="text/css" />
 
 ';
-if ( 'edit_comic' == $this->page_type ) {
-	$html .= '
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery.js"></script>
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'jquery-ui.js"></script>
-	<script type="text/javascript" src="' . COMIC_ASSETS_URL . 'sortable.min.js"></script>';
-}
-
 
 $home_url = COMIC_JET_URL;
 if ( isset( $this->language2 ) ) {
@@ -39,25 +30,11 @@ $html .= '
 
 	<nav id="primary">
 		<ul>
-			<li><a href="#">' . __( 'Sign up' ) . '</a></li>
-			<li><a href="#">' . __( 'Login' ) . '</a></li>
+			<li><a href="#" onclick="alert(\'Coming once this reaches beta!\');">' . __( 'Sign up' ) . '</a></li>
+			<li><a href="#" onclick="alert(\'Coming once this reaches beta!\');">' . __( 'Login' ) . '</a></li>
 		</ul>
 	</nav>';
-/*
-$html .= '
-	<nav id="language-selector">
-		<ul>';
 
-foreach( $this->language_options() as $url => $language ) {
-	$html .= '
-			<li><a href="' . esc_attr( $url ) . '">' . $language . '</a></li>';
-}
-
-$html .= '
-		</ul>
-	</nav>
-	' . $comicjet_login->login_form() . '
- */	
 $html .= '
 </header>
 

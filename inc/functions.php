@@ -30,6 +30,9 @@ function __( $string ) {
 		'Start learning' => array(
 			'de' => 'Lernen Sie',
 		),
+		'Some random notice!' => array(
+			'de' => 'Das ist scheiße Deutsch ;)',
+		),
 	);
 
 	if (

@@ -7,8 +7,8 @@ $html .= '
 -->
 
 	<div class="notice">
-		<p>
-			Some random notice!
+		<p>' . COMICJET_CURRENT_LANGUAGE . '
+			' . __( 'Some random notice!' ) . '
 		</p>
 	</div>
 

@@ -96,7 +96,7 @@ foreach ( $folders as $name ) {
 		continue;
 	}
 
-	// Get information from meta file
+	// Get the title from the meta file data
 	$meta_file_path = $comic_dir . '/' . $name . '/' . $name . '.txt';
 	if ( file_exists( $meta_file_path ) ) {
 		$meta = file_get_contents( $meta_file_path );
@@ -111,8 +111,6 @@ foreach ( $folders as $name ) {
 			}
 		}
 
-	} else {
-		continue;
 	}
 
 	$url_bit = COMIC_JET_URL . __( 'comic' ) . '/' . $name . '/';
