@@ -206,6 +206,7 @@ class ComicJet_Setup {
 			// At the root, so set to home page
 			$this->page_type = 'home';
 			$this->language1 = 'en';
+			$this->language2 = 'de';
 		} else {
 			// Not home page or a comic, so 404 it (if we add static pages, then they'll be set here)
 			$this->page_type = '404';
