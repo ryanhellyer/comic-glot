@@ -34,6 +34,5 @@ require( 'inc/functions.php' );
 require( 'inc/class-comicjet-login.php' );
 require( 'inc/class-comicjet-redis.php' );
 
-
 require( 'inc/class-comicjet-setup.php' );
 new ComicJet_Login;
