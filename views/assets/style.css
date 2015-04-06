@@ -492,10 +492,6 @@ footer p {
 
 /* =Form
 -------------------------------------------------------------- */
-form {
-	margin: 0 auto;
-	width: 80%;
-}
 
 .image-display {
 	float: left;
@@ -513,16 +509,6 @@ form {
 	width: 100%;
 }
 
-.controls {
-	float: right;
-	width: 34%;
-	margin: 1rem 0;
-	padding: 0 2%;
-	border: 1px solid #ddd;
-	background: #fafafa;
-
-}
-
 .error {
 	width: 90%;
 	margin: 0 5% 4% 5%;
@@ -532,6 +518,28 @@ form {
 	background: #fde7e8;
 	padding: 0.5em 0;
 }
+
+
+/* =Comic editor
+-------------------------------------------------------------- */
+.controls {
+	float: left;
+	width: 90%;
+	margin: 1rem 0;
+	padding: 0 5%;
+}
+
+.sortable li {
+	margin: 3em 0;
+	padding: 1em 3%;
+	border: 1px solid #ddd;
+	background: #fafafa;
+}
+
+.sortable label {
+	font-size: 1em;
+}
+
 
 /* =File input field
 -------------------------------------------------------------- */

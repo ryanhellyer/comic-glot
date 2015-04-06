@@ -350,8 +350,10 @@ class ComicJet_Setup {
 
 		require( 'views/footer.php' );
 
-		// Compress the HTML output
-		$html = $this->compressing_html( $html );
+		// Compress the HTML output (don't apply when editing comics as it seems to mess with the JavaScript)
+		if ( 'edit_comic' != $this->page_type ) {
+			$html = $this->compressing_html( $html );
+		}
 
 		// Load views
 		echo $html;

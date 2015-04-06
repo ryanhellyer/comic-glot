@@ -1,22 +1,15 @@
 <?php
 
 $html .= '
+<div class="inner">
+	<div class="content">
 
-<form method="post" action="" enctype="multipart/form-data">
+		<h1 id="site-title">' . sprintf( __( 'Editing "%s"' ), $this->get( 'title' ) ) . '</h1>
+
+		<form method="post" action="" enctype="multipart/form-data">
 
 	<!-- Hidden submit button - ensures that page is saved when enter hit -->
 	<input type="submit" style="display:none" name="save" class="button" value="' . __( 'Save Changes' ) . '" />
-
-	<div class="image-display">';
-
-	if ( '' != $this->get_current_images( 'current-background' ) ) {
-		$html .= '
-		<img src="' . esc_attr( $this->get_current_images( 'current-background' ) ) . '" />';
-	}
-
-		$html .= '
-		<img src="' . esc_attr( $this->get_current_images( 'current_image' ) ) . '" />
-	</div>
 
 	<div class="controls">';
 
@@ -45,17 +38,19 @@ $html .= '
 				// Thumbnail input
 				$html .= '
 				<p>
-					<label>Thumbnail image - ' . $lang . '</label>
-					<input type="file" name="' . esc_attr( 'file-upload[thumbnail][' . $lang . ']' ) . '" value="" />
-				</p>';
+					<label>Thumbnail - ' . $lang . '</label>
+					<input type="file" name="' . esc_attr( 'file-upload[thumbnail][' . $lang . ']' ) . '" value="" />';
 
 				// Add existing thumbnail
 				$thumbnail = $this->get( 'thumbnail' );
 				if ( isset( $thumbnail[$lang] ) ) {
 					$file_name = $thumbnail[$lang];
 					$html .= '
-				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'thumbnail[' . $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
+					<input type="text" name="' . esc_attr( 'thumbnail[' . $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
+
+				$html .= '
+				</p>';
 
 			}
 		}
@@ -76,24 +71,27 @@ $html .= '
 				$html .= '
 				<p>
 					<label>Background image</label>
-					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background]' ) . '" value="" />
-				</p>';
+					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background]' ) . '" value="" />';
+
 				if ( isset( $strips[$key]['current_background'] ) ) {
 					$file_name = $strips[$key]['current_background'];
 					$html .= '
-				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
+					<input type="text" name="' . esc_attr( 'strip_image[' . $key . '][current_background]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
+
+				$html .= '
+				</p>';
 
 				// Low resolution background image
 				$html .= '
 				<p>
-					<label>Low resolution background image (used for offline mode)</label>
+					<label>Low res offline background image</label>
 					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][current_background_lowres]' ) . '" value="" />
 				</p>';
 				if ( isset( $strips[$key]['current_background_lowres'] ) ) {
 					$file_name = $strips[$key]['current_background_lowres'];
 					$html .= '
-				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . '][current_background_lowres]' ) . '" value="' . esc_attr( $file_name ) . '" />';
+				<input type="text" name="' . esc_attr( 'strip_image[' . $key . '][current_background_lowres]' ) . '" value="' . esc_attr( $file_name ) . '" />';
 				}
 
 
@@ -119,8 +117,8 @@ $html .= '
 				<h4>' . $language['name'] . '</h4>
 				<input class="button alignright" type="submit" name="' . esc_attr( 'view-page[' . $key . '][' . $lang . ']' ) . '" value="' . __( 'View' ) . '" />
 				<p>
-					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][' . $lang . ']' ) . '" value="" />
-				</p>';
+					<input type="file" name="' . esc_attr( 'file-upload[' . $key . '][' . $lang . ']' ) . '" value="" />';
+
 
 						// Set image URL
 						if ( isset( $strip[$lang] ) ) {
@@ -130,8 +128,11 @@ $html .= '
 						}
 
 						$html .= '
-				<input type="text" style="font-size:10px;color:#aaa;border:1px solid #ddd" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
+				<input type="text" name="' . esc_attr( 'strip_image[' . $key . ']['. $lang . ']' ) . '" value="' . esc_attr( $file_name ) . '" />';
 					}
+
+					$html .= '
+				</p>';
 
 				}
 
@@ -175,7 +176,9 @@ $html .= '
 	</div>
 
 	' . get_nonce_field() . '
-</form>
+		</form>
+	</div>
+</div>
 
 <script>
 jQuery(function($){ 
