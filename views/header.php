@@ -11,7 +11,7 @@ $html = '<!DOCTYPE html>
 	<title>Comic Glot</title>
 
 	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600" rel="stylesheet" type="text/css" />
+<xlink href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600" rel="stylesheet" type="text/css" />
 
 ';
 if ( 'edit_comic' == $this->page_type ) {
@@ -35,7 +35,7 @@ $html .= '
 <body class="' . esc_attr( $this->page_type ) . '">
 
 <header id="site-header">
-	<h1><a href="' . esc_attr( $home_url ) . '">Comic Jet!</a></h1>
+	<h1><a href="' . esc_attr( $home_url ) . '">COMIC JET!</a></h1>
 
 	<nav id="primary">
 		<ul>
