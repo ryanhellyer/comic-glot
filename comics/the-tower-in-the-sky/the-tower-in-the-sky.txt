@@ -1,0 +1,5 @@
+en:The Tower in the Sky
+de:Translate Tower in the Sky
+4x4-10x10
+39x29-29x10
+

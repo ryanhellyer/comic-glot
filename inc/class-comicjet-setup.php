@@ -35,7 +35,6 @@ class ComicJet_Setup {
 
 		$this->current_page = $this->set_vars_based_on_url();
 		$this->db = comicjet_db();
-		$this->set_vars();
 		$this->language_selection();
 
 		$this->error_messages = array(
@@ -45,12 +44,6 @@ class ComicJet_Setup {
 			'invalid-nonce'            => __( 'Sorry, an error occured.' ),
 			'user-not-admin'           => __( 'Sorry, but you are need to be admin to do that.' ),
 		);
-
-		// Only load editor functionality if on an edit page
-		if ( 'edit_comic' == $this->page_type ) {
-			require( 'inc/class-comicjet-edit.php' );
-			new ComicJet_Edit($this);
-		}
 
 		// Output page
 		$this->output_page();
@@ -110,12 +103,16 @@ class ComicJet_Setup {
 		$uri_bits = explode( '/', $uri ); // Split
 
 		// Set languages
-		if ( array_key_exists( $uri_bits[0], $this->available_languages ) ) {
-			// A home page, with language set
-			$this->language1 = $uri_bits[0];
-			if ( isset( $uri_bits[1] ) && array_key_exists( $uri_bits[1], $this->available_languages ) ) {
-				$this->language2 = $uri_bits[1];
+		$total_bits = count( $uri_bits );
 
+		if ( array_key_exists( $uri_bits[$total_bits - 1], $this->available_languages ) ) {
+
+			// If two languages set
+			if ( array_key_exists( $uri_bits[$total_bits - 2], $this->available_languages ) ) {
+				$this->language1 = $uri_bits[$total_bits - 2];
+				$this->language2 = $uri_bits[$total_bits - 1];
+			} else {
+				$this->language1 = $uri_bits[$total_bits - 1];
 			}
 
 			// Set current language as constant (needed for accessing within the translation function)
@@ -136,11 +133,7 @@ class ComicJet_Setup {
 				if ( isset( $uri_bits[2] ) ) {
 
 					// Set different page types and page numbers where apppropriate
-					if ( __( 'edit' ) == $uri_bits[2] ) {
-						// Editing a comic
-						$this->page_type = 'edit_comic';
-
-					} elseif( 3 == count( $uri_bits ) ) {
+					if( 3 == count( $uri_bits ) ) {
 
 						// This is a page number without language specification. So default to site language.
 						if ( is_numeric( $uri_bits[2] ) ) {
@@ -204,43 +197,6 @@ class ComicJet_Setup {
 			// Not home page or a comic, so 404 it (if we add static pages, then they'll be set here)
 			$this->page_type = '404';
 			$this->current_languages[] = 'en';
-
-		}
-
-	}
-
-	/**
-	 * Set page variables.
-	 */
-	public function set_vars() {
-
-		if (
-			'edit_comic' == $this->page_type
-			||
-			'view_comic' == $this->page_type
-		) {
-
-			// Get strips
-			$strips = $this->get( 'strips' );
-
-			// If a comic is on a page which does not exist, then 404 it
-			if (
-				'view_comic' == $this->page_type 
-				&&
-				! isset( $strips[$this->page_number - 1] )
-			) {
-				$this->page_type = '404';
-			}
-
-			// If current page is invalid number,then switch to 404 error page
-			if ( isset( $this->page_number ) && count( $strips ) < $this->page_number ) {
-				$this->page_type = '404';
-			}
-
-/**********************************************************************************
- ** Check current languages /en/de/ and serve 404 error if they don't make sense **
- **********************************************************************************/
-
 
 		}
 
@@ -352,7 +308,7 @@ class ComicJet_Setup {
 
 		// Compress the HTML output (don't apply when editing comics as it seems to mess with the JavaScript)
 		if ( 'edit_comic' != $this->page_type ) {
-			$html = $this->compressing_html( $html );
+//			$html = $this->compressing_html( $html );
 		}
 
 		// Load views

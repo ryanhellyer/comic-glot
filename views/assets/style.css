@@ -356,18 +356,6 @@ h4 {
 	opacity: 0.9;
 }
 
-#next-page {
-	float: right;
-}
-
-#previous-page:hover,
-#next-page:hover {
-	background: #1196cf;
-	text-decoration: none;
-}
-
-}
-
 .comic-link,
 .comic-link:hover {
 	display: block;
@@ -398,22 +386,37 @@ h4 {
 	padding: 0.7em 0.4em;
 }
 
-#previous-page,
-#next-page {
+#comic-display .next-prev-links {
+	margin-top: 2em;
+}
+
+.next-prev-links {
+	width: 100%;
 	float: left;
+}
+
+.next-prev-links a {
 	font-family: 'Open Sans', sans-serif;
 	color: #fff;
-	margin: 2em 1em 1em 1em;
+	margin: 0 1em 1em 1em;
 	padding: 0.4em 2em;
 	background: #0185bf;
 }
 
-#next-page {
+.next-prev-links a:hover {
+	background: #1196cf;
+	text-decoration: none;
+}
+
+.previous-page {
+	float: left;
+}
+
+.next-page {
 	float: right;
 }
 
-#previous-page:hover,
-#next-page:hover {
+.next-prev-links a:hover {
 	background: #1196cf;
 	text-decoration: none;
 }

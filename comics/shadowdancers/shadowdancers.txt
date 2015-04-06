@@ -1,0 +1,5 @@
+en:Shadow Dancers
+de:Translate Shadow Dancers
+4x4-10x10
+39x29-29x10
+
