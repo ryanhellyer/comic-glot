@@ -1,0 +1,64 @@
+Hi,
+I'm building a new service called Comic Jet, a language learning application which allows users to learn new languages via reading comics. There are a bunch of creative commons licensed comics I want to use in the system, but to save on image size, I need to extract out the text and over lay the various languages on top of a blank comic (without text).
+
+So I'm hoping you can assist with creating a text free version of each page, and extracting out the English and German language texts (I'm providing two versions of each page, one in German and one in English).
+
+If this is too much work for the US$5, feel free to do less images. But if you are happy at this rate, there will likely be at least another 30 jobs like this I need done soon.
+
+
+
+Task:
+1. Extracting text of each language
+	Remove everything except for the text (including the copyright text at the bottom).
+	If the same text is used in English and German versions, then the .
+	Remove compression errors from the white space (I used a magic wand tool for this).
+	Save as PNG.
+	Completed examples: http://comicjet.com/comics/the-red-hall/1-en.png (English version)
+	                    http://comicjet.com/comics/the-red-hall/1-de.png (German version)
+
+2. Remove the text.
+	Remove the text from the English language version.
+	Save as JPG.
+	Completed example: http://comicjet.com/comics/the-red-hall/1.jpg
+
+3.
+	Compress the PNG image to as small a size as possible (tinypng.com may be useful for this).
+
+
+Images:
+1
+	http://comicjet.com/comics/the-red-hall/3-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/3-de-original.jpg
+2
+	http://comicjet.com/comics/the-red-hall/4-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/4-de-original.jpg
+3
+	http://comicjet.com/comics/the-red-hall/5-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/5-de-original.jpg
+4
+	http://comicjet.com/comics/the-red-hall/6-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/6-de-original.jpg
+5
+	http://comicjet.com/comics/the-red-hall/7-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/7-de-original.jpg
+6
+	http://comicjet.com/comics/the-red-hall/8-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/8-de-original.jpg
+7
+	http://comicjet.com/comics/the-red-hall/9-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/9-de-original.jpg
+8
+	http://comicjet.com/comics/the-red-hall/10-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/10-de-original.jpg
+9
+	http://comicjet.com/comics/the-red-hall/11-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/11-de-original.jpg
+10
+	http://comicjet.com/comics/the-red-hall/12-en-original.jpg
+	http://comicjet.com/comics/the-red-hall/12-de-original.jpg
+
+
+
+If you would like to be credited as assisting with building the service, please let me know and I'm happy to add your name to the credits section (which hasn't been built yet).
+
+Thanks :)

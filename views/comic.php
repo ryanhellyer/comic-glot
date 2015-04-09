@@ -14,13 +14,14 @@ foreach( $meta as $key => $meta_bit ) {
 }
 
 /**
- * Create previous/next links
+ * Create pagination links
  */
-$prev_next_html = '<div class="next-prev-links">';
-
+$pagination = '';
 // Create previous button HTML
 $prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number - 1 );
 $prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 );
+
+$pagination .= '<div class="pagination" id="previous-link">';
 if (
 	file_exists( $prev_path_bit . '-' . $this->language1 . '.png' )
 	||
@@ -33,14 +34,27 @@ if (
 		$prev_url .= $this->language2 . '/';
 	}
 
-	$prev_next_html .= '<a class="previous-page" href="' . esc_attr( $prev_url ) . '">' . __( 'Previous' ) . '</a>';
+	$pagination .= '<a href="' . esc_attr( $prev_url ) . '">' . __( 'Previous' ) . '</a>';
 
 }
+$pagination .= '</div>';
+
+
+$current_language1 = '<div onclick="toggle_image()">' . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language1 ) . '</span>' ) . '</div>';
+$current_language2 = '<div onclick="toggle_image()">' . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language2 ) . '</span>' ) . '</div>';
+
+
+$pagination .= '
+<div class="pagination" id="current-language">
+	' . $current_language1 . '
+</div>';
 
 
 // Create next button HTML
 $next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number + 1 );
 $next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 );
+
+$pagination .= '<div class="pagination" id="next-link">';
 if (
 	file_exists( $next_path_bit . '-' . $this->language1 . '.png' )
 	||
@@ -53,10 +67,10 @@ if (
 		$next_url .= $this->language2 . '/';
 	}
 
-	$prev_next_html .= '<a class="next-page" href="' . esc_attr( $next_url ) . '">' . __( 'Next' ) . '</a>';
+	$pagination .= '<a href="' . esc_attr( $next_url ) . '">' . __( 'Next' ) . '</a>';
 }
-
-$prev_next_html .= '</div>';
+$pagination .= '</div>';
+$pagination .= '</div>';
 
 
 // Set page info. text
@@ -74,7 +88,9 @@ $html .= '
 		<h2 id="site-description">' . $page_info . '</h2>';
 
 // Next and previous pages
-$html .= $prev_next_html;
+$html .= '<div id="pagination-top">';
+$html .= $pagination;
+$html .= '</div>';
 
 
 $html .= '
@@ -107,27 +123,31 @@ $html .= '
 
 			<div class="image-display">
 				<img src="' . esc_attr( $url ) . '" />
-			<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[0] ) . '" />
+			<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[1] ) . '" />
 			</div>';
 
 // Next and previous pages
-$html .= $prev_next_html;
+$html .= '<div id="pagination-bottom">';
+$html .= $pagination;
+$html .= '</div>';
 
 // If second language set, then dynamically change speech bubble onclick
-if ( isset( $bubble_image[1] ) ) {
+if ( isset( $bubble_image[0] ) ) {
 	$html .= '
 
 <script>
-   function toggle_image() {
-        var img = document.getElementById("bubble").src;
-        if (img.indexOf(\'' . esc_attr( $bubble_image[0] ) . '\')!=-1) {
-            document.getElementById("bubble").src  = "' . esc_attr( $bubble_image[1] ) . '";
-        }
-         else {
-           document.getElementById("bubble").src = "' . esc_attr( $bubble_image[0] ) . '";
-       }
+function toggle_image() {
+	var img = document.getElementById("bubble").src;
+	if (img.indexOf(\'' . esc_attr( $bubble_image[1] ) . '\')!=-1) {
+		document.getElementById("bubble").src  = "' . esc_attr( $bubble_image[0] ) . '";
+		document.getElementById("current-language").innerHTML = \'' . $current_language2 . '\';
 
-    }
+	} else {
+		document.getElementById("bubble").src = "' . esc_attr( $bubble_image[1] ) . '";
+		document.getElementById("current-language").innerHTML = \'' . $current_language1 . '\';
+	}
+
+}
 </script>';
 }
 

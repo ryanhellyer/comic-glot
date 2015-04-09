@@ -386,40 +386,71 @@ h4 {
 	padding: 0.7em 0.4em;
 }
 
-#comic-display .next-prev-links {
-	margin-top: 2em;
-}
-
-.next-prev-links {
-	width: 100%;
+/* Pagination */
+#pagination-top {
 	float: left;
+	width: 100%;
+	margin: 0 0 1em 0;
 }
 
-.next-prev-links a {
+#pagination-bottom {
+	float: left;
+	width: 100%;
+	margin: 1em 0 0 0;
+}
+
+.pagination {
+	min-height: 1px;
+	float: left;
+	width: 33.33%;
+}
+
+.pagination a,
+.pagination div {
+	display: inline-block;
 	font-family: 'Open Sans', sans-serif;
 	color: #fff;
-	margin: 0 1em 1em 1em;
+	margin: 2em 0 1em 0;
 	padding: 0.4em 2em;
 	background: #0185bf;
 }
 
-.next-prev-links a:hover {
+.pagination div:hover,
+.pagination a:hover {
 	background: #1196cf;
 	text-decoration: none;
+	cursor: pointer;
 }
 
-.previous-page {
-	float: left;
+.pagination small {
+	font-size: 0.8em;
 }
 
-.next-page {
-	float: right;
+#previous-link {
+	text-align: left;
 }
 
-.next-prev-links a:hover {
-	background: #1196cf;
-	text-decoration: none;
+#current-language {
+	text-align: center;
 }
+
+#current-language div {
+	margin: 0 0 1em 0;
+	padding: 1.4em 2em;
+	border: 2px solid #fff;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+	box-shadow: 0 0 0 2px #1196cf;
+}
+
+#current-language span {
+	font-weight: bold;
+}
+
+#next-link {
+	text-align: right;
+}
+
 
 /* =Content
 -------------------------------------------------------------- */
@@ -591,6 +622,16 @@ input[type=file] {
 	.block {
 		width: 44%;
 		margin: 0 0 5% 4%;
+	}
+
+	.pagination a,
+	.pagination div {
+		padding: 0.4em 0.6em;
+	}
+
+	#current-language div {
+		margin: 0 0 0 0;
+		padding: 0.7em 0.8em;
 	}
 }
 

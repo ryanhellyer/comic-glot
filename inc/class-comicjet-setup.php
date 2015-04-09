@@ -51,6 +51,18 @@ class ComicJet_Setup {
 	}
 
 	/**
+	 * Gets the current language name in normal form via language code.
+	 * Useful converting URL lang code into normal human readable format.
+	 *     eg: 'de' becomes 'Deutsch'
+	 * 
+	 * @param   string  $lang_code  The language code
+	 * @return  string              The language name
+	 */
+	public function get_language_name( $lang_code ) {
+		return $this->available_languages[$lang_code]['name'];die;
+	}
+
+	/**
 	 * Redirect when language set.
 	 * This is only a fallback for when JavaScript isn't available
 	 */
