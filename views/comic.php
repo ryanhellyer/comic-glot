@@ -21,7 +21,7 @@ $pagination = '';
 $prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number - 1 );
 $prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 );
 
-$pagination .= '<div class="pagination" id="previous-link">';
+$pagination .= '<div class="pagination previous-link">';
 if (
 	file_exists( $prev_path_bit . '-' . $this->language1 . '.png' )
 	||
@@ -45,7 +45,7 @@ $current_language2 = '<div onclick="toggle_image()">' . sprintf( __( 'Switch to 
 
 
 $pagination .= '
-<div class="pagination" id="current-language">
+<div class="pagination current-language">
 	' . $current_language1 . '
 </div>';
 
@@ -54,7 +54,7 @@ $pagination .= '
 $next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number + 1 );
 $next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 );
 
-$pagination .= '<div class="pagination" id="next-link">';
+$pagination .= '<div class="pagination next-link">';
 if (
 	file_exists( $next_path_bit . '-' . $this->language1 . '.png' )
 	||
@@ -140,11 +140,12 @@ function toggle_image() {
 	var img = document.getElementById("bubble").src;
 	if (img.indexOf(\'' . esc_attr( $bubble_image[1] ) . '\')!=-1) {
 		document.getElementById("bubble").src  = "' . esc_attr( $bubble_image[0] ) . '";
-		document.getElementById("current-language").innerHTML = \'' . $current_language2 . '\';
-
+		document.getElementsByClassName("current-language")[0].innerHTML = \'' . $current_language2 . '\';
+		document.getElementsByClassName("current-language")[1].innerHTML = \'' . $current_language2 . '\';
 	} else {
 		document.getElementById("bubble").src = "' . esc_attr( $bubble_image[1] ) . '";
-		document.getElementById("current-language").innerHTML = \'' . $current_language1 . '\';
+		document.getElementsByClassName("current-language")[0].innerHTML = \'' . $current_language1 . '\';
+		document.getElementsByClassName("current-language")[1].innerHTML = \'' . $current_language1 . '\';
 	}
 
 }

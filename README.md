@@ -1,9 +1,15 @@
 Comic Jet
 =========
 
-Middle button (between previous and next) = "Currently reading in Deutsch. <a>Switch to English</a>"
-	can also make it glow when clicking the main image, to make it clear that something just happened. Or the screen could flash slightly during the switchover.
+Report bug button
+	Sends email
 
+Left/right arrow-key
+	should take to next/previous page.
+
+On mobile
+	Comic view should show tiny header - makes clicking to next page result in quicker reading of comic.
+	
 
 Login
 	hello.js

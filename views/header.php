@@ -62,20 +62,26 @@ $html .= '
 <body class="' . esc_attr( $this->page_type ) . '">
 
 <header id="site-header">
-	<h1><a href="' . esc_attr( $home_url ) . '">COMIC JET! <small style="
+	<h1>
+		<a href="' . esc_attr( $home_url ) . '">COMIC JET! 
+					<small style="
+						display: block;
 						text-shadow: none;
 						-webkit-text-stroke-width: 0.3px;
 						-webkit-text-stroke-color: #aa5500;
 						text-stroke-width: 0;
 						border:none;
 						position: relative;
-						top: -11px;
-						left: 10px;
 						font-weight: bold;
 						letter-spacing:0;
-						font-size:30px;
+						font-size:24px;
 						color: #ffcc00;
-						font-family:sans-serif;">(semi-private alpha)</small></a></h1>
+						font-family:sans-serif;
+					">
+							<span>private</span> alpha
+					</small>
+		</a>
+	</h1>
 
 	<nav id="primary">
 		<ul>
