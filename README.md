@@ -3,13 +3,13 @@ Comic Jet
 
 Report bug button
 	Sends email
+	Maybe stick at bottom of page
+	Can use query var to grab previous page
+		Link is to contact form
+
 
 Left/right arrow-key
 	should take to next/previous page.
-
-On mobile
-	Comic view should show tiny header - makes clicking to next page result in quicker reading of comic.
-	
 
 Login
 	hello.js

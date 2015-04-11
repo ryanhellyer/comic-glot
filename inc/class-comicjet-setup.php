@@ -126,7 +126,21 @@ class ComicJet_Setup {
 			$this->page_type = 'registration';
 			$this->language1 = 'de';
 			define( 'COMICJET_CURRENT_LANGUAGE', 'de' );
-		} elseif ( array_key_exists( $uri_bits[$total_bits - 1], $this->available_languages ) ) {
+		}
+
+		// Contact pages
+		elseif( 'contact' == $uri_bits[0] ) {
+			$this->page_type = 'contact';
+			$this->language1 = 'en';
+			define( 'COMICJET_CURRENT_LANGUAGE', 'de' );
+		} elseif( 'kontakt' == $uri_bits[0] ) {
+			$this->page_type = 'contact';
+			$this->language1 = 'de';
+			define( 'COMICJET_CURRENT_LANGUAGE', 'de' );
+		}
+
+		// 
+		elseif ( array_key_exists( $uri_bits[$total_bits - 1], $this->available_languages ) ) {
 
 			// If two languages set
 			if ( isset( $uri_bits[$total_bits - 2] ) && array_key_exists( $uri_bits[$total_bits - 2], $this->available_languages ) ) {
@@ -268,6 +282,9 @@ class ComicJet_Setup {
 		require( 'views/header.php' );
 
 		switch( $this->page_type ) {
+			case 'contact':
+				require( 'views/contact.php' );
+				break;
 			case 'registration':
 				require( 'views/registration.php' );
 				break;

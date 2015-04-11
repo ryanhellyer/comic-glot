@@ -8,6 +8,9 @@ $html .= '
 		Copyright &copy; 2015 Comic Jet.
 		Generated in ' . round( 1000 * ( microtime( true ) - COMIC_JET_START_TIME ), 1 ) . ' ms.
 	</p>
+	<p class="align-right">
+		<a href="' . esc_attr( COMIC_JET_URL . __( 'contact' ) . '/?report=' . $_SERVER['REQUEST_URI'] ) . '">Report bug</a>
+	</p>
 </footer>
 ';
 
