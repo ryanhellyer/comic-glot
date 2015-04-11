@@ -32,6 +32,48 @@ document.getElementById("select-language").onclick = function(){
 </script>';
 }
 
+
+if ( isset( $prev_url ) ) {
+	$html .= '
+	<script>var comicjet_prev_url = "' . filter_var( $prev_url, FILTER_SANITIZE_URL ) . '";</script>
+';
+}
+
+if ( isset( $next_url ) ) {
+	$html .= '
+	<script>var comicjet_next_url = "' . filter_var( $next_url, FILTER_SANITIZE_URL ) . '";</script>
+';
+}
+
+
+/**
+ * Left and right arrow key support
+ */
+$html .= '
+<script>
+
+document.onkeydown = comicjet_keypress;
+
+function comicjet_keypress(e) {
+
+	e = e || window.event;
+
+
+	if (typeof comicjet_prev_url != "undefined") {
+		if (e.keyCode == "37") {
+			window.location.assign(comicjet_prev_url);
+		}
+	}
+
+	if (typeof comicjet_next_url != "undefined") {
+		if (e.keyCode == "39") {
+			window.location.assign(comicjet_next_url);
+		}
+	}
+
+}
+</script>';
+
 $html .= '
 
 </body>

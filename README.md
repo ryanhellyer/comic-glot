@@ -1,15 +1,9 @@
 Comic Jet
 =========
 
-Report bug button
-	Sends email
-	Maybe stick at bottom of page
-	Can use query var to grab previous page
-		Link is to contact form
-
-
-Left/right arrow-key
-	should take to next/previous page.
+Top Menu
+	Log in
+	Signup
 
 Login
 	hello.js

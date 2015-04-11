@@ -23,6 +23,7 @@ if ( isset( $this->language2 ) ) {
 $html .= '
 	<script>var comicjet_home_url = "' . COMIC_JET_URL . '";</script>
 ';
+
 /*
 	<script src="' . COMIC_ASSETS_URL . 'hello.min.js"></script>
 
