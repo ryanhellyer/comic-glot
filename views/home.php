@@ -121,7 +121,7 @@ foreach ( $folders as $name ) {
 	$edit_url = $url_bit . 'edit/';
 
 	$html .= '
-		<div class="block" id="' . esc_attr( 'comic-' . $count ) . '">
+		<div class="block" id="' . esc_attr( 'comic-' . $name ) . '">
 			<a href="' . esc_attr( $comic_url ) . '" class="block-inner">
 				<img src="' . esc_attr( $thumbnail ) . '" />
 				<p>' . $title . '</p>
@@ -152,4 +152,42 @@ $html .= '
 		</div>
 	</div>
 </div>
+';
+
+
+
+
+$html .= '
+<script>
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(";");
+	for(var i=0; i<ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0)==" ") c = c.substring(1);
+		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	}
+	return "";
+}
+
+
+/*
+ * Loop through all comics read and set CSS of their box.
+ */
+comics_read_json = getCookie("comics_read");
+if ("" != comics_read_json) {
+	var comics_read = JSON.parse(comics_read_json);
+
+	for(var comic_slug in comics_read) {
+		var page_number = comics_read[comic_slug];
+		console.log(comic_slug);
+		console.log(page_number);
+		document.getElementById("comic-"+comic_slug).style.opacity = "0.5";
+	}
+
+}
+
+console.log(comics_read);
+
+</script>
 ';

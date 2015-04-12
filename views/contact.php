@@ -1,4 +1,7 @@
 <?php
+/**
+ * The contact page template.
+ */
 
 $html .= '
 	<div class="inner">

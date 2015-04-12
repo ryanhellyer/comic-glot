@@ -149,7 +149,56 @@ function toggle_image() {
 	}
 
 }
+
+
+
+
+
+function setCookie(cname,cvalue) {
+	var d = new Date();
+	d.setTime(d.getTime() + (10*365*24*60*60*1000));
+	var expires = "expires="+d.toUTCString();
+
+	document.cookie = cname + "=" + cvalue + "; " + expires + ";path=/;domain=' . COMIC_JET_DOMAIN . '";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(";");
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==" ") c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+/* Setting cookies */
+var comics_read_json = getCookie("comics_read");
+
+if ("" == comics_read_json) {
+	var comics_read = {};
+} else {
+	var comics_read = JSON.parse(comics_read_json);
+}
+
+
+comics_read["' . $this->slug . '"] = "' . $this->page_number . '";
+
+
+var comics_read_json = JSON.stringify(comics_read);
+
+//console.log(comics_read);
+console.log(comics_read_json);
+
+setCookie("comics_read", comics_read_json, 1)
+
 </script>';
+/*
+		var arr = ['foo', 'bar', 'baz'];
+		var json_str = JSON.stringify(arr);
+		createCookie('mycookie', json_str);
+*/
 }
 
 

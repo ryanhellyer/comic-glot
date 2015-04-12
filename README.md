@@ -5,6 +5,13 @@ Top Menu
 	Log in
 	Signup
 
+Tracking
+	Cookie - we have a ton of room to store all comics read
+
+Privacy page
+
+Clean up JS
+
 Login
 	hello.js
 	Get email, first name, last name, facebook profile
