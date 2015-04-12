@@ -21,7 +21,17 @@ if ( isset( $this->language2 ) ) {
 }
 
 $html .= '
-	<script>var comicjet_home_url = "' . COMIC_JET_URL . '";</script>
+	<script>
+	var comicjet_home_url = "' . COMIC_JET_URL . '";
+';
+
+if ( isset( $this->slug ) ) {
+	$html .= '
+	var comicjet_slug = "' . $this->slug . '";';
+}
+
+$html .= '
+	</script>
 
 
 

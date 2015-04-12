@@ -166,18 +166,17 @@ if ( "end" != comics_read["' . $this->slug . '"] ) {
 
 $next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number + 1 );
 if ( file_exists( $next_path_bit . '-' . $this->language1 . '.png' ) ) {
-	$html .= 'comics_read["' . $this->slug . '"] = "' . $this->page_number . '";';	
+	$html .= 'comics_read[comicjet_slug] = "' . $this->page_number . '";';	
 } else {
-	$html .= 'comics_read["' . $this->slug . '"] = "end";';	
+	$html .= 'comics_read[comicjet_slug] = "end";';	
 }
 
 $html .= '
+
+	var comics_read_newjson = JSON.stringify(comics_read);
+
+	setCookie("comics_read", comics_read_newjson, 1);
 }
-
-var comics_read_newjson = JSON.stringify(comics_read);
-console.log(comics_read_json);
-
-setCookie("comics_read", comics_read_newjson, 1);
 
 
 </script>';

@@ -171,12 +171,24 @@ if ("" != comics_read_json) {
 		var page_number = comics_read[comic_slug];
 
 		if ( "end" == page_number ) {
+
+			// Style already read comics
 			var comic_block = document.getElementById("comic-"+comic_slug).innerHTML;
 			document.getElementById("comic-"+comic_slug).innerHTML = comic_block + "<div class=\'read\'>' . __( 'Already read' ) . '</div>";
 			document.getElementById("comic-"+comic_slug).style.opacity = "0.8";
+
 		} else {
+
+			// Style comics which are bein read
 			var comic_block = document.getElementById("comic-"+comic_slug).innerHTML;
 			document.getElementById("comic-"+comic_slug).innerHTML = comic_block + "<div class=\'read\'>' . __( 'Reading' ) . '</div>";
+
+			// Change URL
+			var parent = document.getElementById("comic-"+comic_slug);
+			var child = parent.childNodes[1];
+			console.log(child);
+			child.setAttribute("href", comicjet_home_url + "' . __( 'comic' ) . '/" + comic_slug + "/" + page_number + "/' . $this->language1 . '" + "/' . $this->language2 . '/");
+
 		}
 
 	}
@@ -184,6 +196,7 @@ if ("" != comics_read_json) {
 }
 
 console.log(comics_read);
+
 
 </script>
 ';
