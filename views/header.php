@@ -22,41 +22,33 @@ if ( isset( $this->language2 ) ) {
 
 $html .= '
 	<script>var comicjet_home_url = "' . COMIC_JET_URL . '";</script>
+
+
+
+<script>
+
+function setCookie(cname,cvalue) {
+	var d = new Date();
+	d.setTime(d.getTime() + (10*365*24*60*60*1000));
+	var expires = "expires="+d.toUTCString();
+
+	document.cookie = cname + "=" + cvalue + "; " + expires + ";path=/;domain=' . COMIC_JET_DOMAIN . '";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(";");
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==" ") c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+</script>
 ';
 
-/*
-	<script src="' . COMIC_ASSETS_URL . 'hello.min.js"></script>
-
-	<script>
-		function comicjet_facebook_login() {
-
-			hello( "facebook" ).login().then( function(){
-				alert("You are signed in to Facebook");
-			}, function( e ){
-				alert("Signin error: " + e.error.message );
-			});
-
-		}
-
-hello.on("auth.login", function(auth){
-
-	// call user information, for the given network
-	hello( auth.network ).api( "/me" ).then( function(r){
-		console.log(r);
-		alert(r.email);
-	});
-
-});
-
-	</script>
-
-
-	<script>
-		hello.init({ 
-			facebook : "374453866080639"
-		},{	scope:"email",redirect_uri:"redirect.html"});
-	</script>
-*/
 $html .= '
 
 </head>
@@ -86,10 +78,8 @@ $html .= '
 
 	<nav id="primary">
 		<ul>
-<!--
-			<li><button onclick="comicjet_facebook_login();">Facebook</button></li>
--->
-			<li><a href="#" onclick="alert(\'Coming once this reaches beta!\');">' . __( 'Sign up' ) . '</a></li>
+
+			<li><a href="' . COMIC_JET_URL . __ ('signup' ) . '/">' . __( 'Sign up' ) . '</a></li>
 			<li><a href="#" onclick="alert(\'Coming once this reaches beta!\');">' . __( 'Login' ) . '</a></li>
 		</ul>
 	</nav>';

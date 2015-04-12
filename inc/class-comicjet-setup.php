@@ -118,12 +118,12 @@ class ComicJet_Setup {
 		$total_bits = count( $uri_bits );
 
 		// Process static pages first coz they goof up due to not having language slugs
-		if( 'registration' == $uri_bits[0] ) {
-			$this->page_type = 'registration';
+		if( 'signup' == $uri_bits[0] ) {
+			$this->page_type = 'signup';
 			$this->language1 = 'en';
 			define( 'COMICJET_CURRENT_LANGUAGE', 'en' );
 		} elseif( 'anmeldung' == $uri_bits[0] ) {
-			$this->page_type = 'registration';
+			$this->page_type = 'signup';
 			$this->language1 = 'de';
 			define( 'COMICJET_CURRENT_LANGUAGE', 'de' );
 		}
@@ -285,8 +285,8 @@ class ComicJet_Setup {
 			case 'contact':
 				require( 'views/contact.php' );
 				break;
-			case 'registration':
-				require( 'views/registration.php' );
+			case 'signup':
+				require( 'views/signup.php' );
 				break;
 			case '404':
 				require( 'views/404.php' );

@@ -2,11 +2,7 @@ Comic Jet
 =========
 
 Top Menu
-	Log in
 	Signup
-
-Tracking
-	Cookie - we have a ton of room to store all comics read
 
 Privacy page
 

@@ -1,5 +1,43 @@
 <?php
 
+
+
+$html .= '
+	<script src="' . COMIC_ASSETS_URL . 'hello.min.js"></script>
+
+	<script>
+	function comicjet_facebook_login() {
+
+		hello( "facebook" ).login().then( function(){
+			alert("You are signed in to Facebook");
+
+		}, function( e ){
+			alert("Signin error: " + e.error.message );
+		});
+
+	}
+
+
+	hello.on("auth.login", function(auth){
+		// call user information, for the given network
+		hello( auth.network ).api( "/me" ).then( function(r){
+			setCookie("comicjet_logged",r.email);
+		});
+	});
+
+	</script>
+
+
+	<script>
+		hello.init({ 
+			facebook : "374453866080639"
+		},{	scope:"email",redirect_uri:"redirect.html"});
+	</script>
+';
+
+
+
+
 $html .= '
 <div class="inner">
 <!--
@@ -12,27 +50,6 @@ $html .= '
 		</p>
 	</div>
 
-<!--
-	' . $comicjet_login->login_form() . '
--->
+	<button onclick="comicjet_facebook_login();">Facebook</button>
 
-	<form class="content" action="" method="post">
-
-		<p>
-			<label for="username">' . __( 'Username' ) . '</label>
-			<input type="text" id="username" name="username" value="" />
-		</p>
-		<p>
-			<label for="email">' . __( 'Email' ) . '</label>
-			<input type="email" id="email" name="email" value="" />
-		</p>
-		<p>
-			<label for="password">' . __( 'Password' ) . '</label>
-			<input type="password" id="password" name="password" value="" />
-		</p>
-		<p>
-			<input type="submit" value="Register" />
-		</p>
-
-	</form>
 </div>';

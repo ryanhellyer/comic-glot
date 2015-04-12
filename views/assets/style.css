@@ -271,6 +271,18 @@ h4 {
 	background: #fff;
 }
 
+.read {
+	position: absolute;
+	left: 1em;
+	top: 1em;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 0.8em;
+	text-transform: uppercase;
+	background: rgba(0,0,0,0.4);
+	color: #fff;
+	padding: 0.3em 0.7em;
+}
+
 .block-inner {
 	display: block;
 	border: 1px solid #ddd;

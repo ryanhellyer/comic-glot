@@ -31,7 +31,10 @@ function __( $string ) {
 			'de' => 'Lernen Sie',
 		),
 		'Some random notice!' => array(
-			'de' => 'Das ist scheiße Deutsch ;)',
+			'de' => 'Das ist Deutsch ;)',
+		),
+		'signup' => array(
+			'de' => 'anmeldung',
 		),
 	);
 
