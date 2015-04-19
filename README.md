@@ -6,7 +6,6 @@ Top Menu
 
 Privacy page
 
-Clean up JS(
 
 URLs
 	301 to pages with trailing slash (pages without trailing slashes still work)

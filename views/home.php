@@ -9,9 +9,12 @@ $scripts[] = COMIC_ASSETS_URL . 'language-selector.js';
 // Set read/reading information for each comic
 $scripts[] = COMIC_ASSETS_URL . 'read-reading.js';
 
-$script_vars['text_already_read'] = __( 'Already read' );
-$script_vars['text_reading'] = __( 'Reading' );
+$script_vars['text_comic_slug']     = __( 'comic' );
+$script_vars['text_already_read']   = __( 'Already read' );
+$script_vars['text_reading']        = __( 'Reading' );
 
+$script_vars['comicjet_language1']  = $this->language1;
+$script_vars['comicjet_language2']  = $this->language2;
 
 $html = '
 <div class="inner">

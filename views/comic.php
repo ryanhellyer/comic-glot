@@ -133,7 +133,9 @@ $html .= '</div>';
 
 
 $script_vars['bubble_image_0'] = esc_attr( $bubble_image[0] );
-$script_vars['bubble_image_1'] = esc_attr( $bubble_image[1] );
+if ( isset( $bubble_image[1] ) ) {
+	$script_vars['bubble_image_1'] = esc_attr( $bubble_image[1] );
+}
 $script_vars['current_language1'] = $current_language1;
 $script_vars['current_language2'] = $current_language2;
 $script_vars['page_slug'] = $this->slug;

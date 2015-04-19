@@ -1,17 +1,17 @@
 <?php
 
+$script_vars['facebook_app_id'] = FACEBOOK_APP_ID;
+$scripts[] = COMIC_ASSETS_URL . 'facebook.js';
+
+
 require( COMIC_JET_ROOT_DIR . 'inc/facebook-php-sdk/src/facebook.php' );
-//require( 'facebook-php-sdk/src/facebook.php' );
 
 
- 
 // new facebook object to interact with facebook
 $facebook = new Facebook(array(
  'appId' => FACEBOOK_APP_ID,
  'secret' => FACEBOOK_APP_SECRET,
 ));
-
-//print_r( $facebook );
 
 //
 // if user is logged in on facebook and already gave permissions
@@ -19,16 +19,18 @@ $facebook = new Facebook(array(
 $user_id = $facebook->getUser();
 
 
-
-
 $html = '
-	<div class="notice">
-		<p>' . COMICJET_CURRENT_LANGUAGE . '
-			' . __( 'Some random notice!' ) . '
-		</p>
-	</div>
+	<div class="inner">
+		<h1>' . __( 'Register' ) . '</h1>
+';
 
-</div>';
+$html .= '
+		<div class="notice">
+			<p>' . COMICJET_CURRENT_LANGUAGE . '
+				' . __( 'Some random notice!' ) . '
+			</p>
+		</div>
+';
 
 
 
@@ -76,14 +78,3 @@ if ( $user_id ) {
 	<div id="fb-root"></div>
 	<fb:login-button scope="email,user_birthday"></fb:login-button>';
 }
-
-$script_vars['facebook_app_id'] = FACEBOOK_APP_ID;
-$scripts[] = COMIC_ASSETS_URL . 'facebook.js';
-
-
-$html .= '
-<div class="inner">
-<!--
-	<h1>' . __( 'Register' ) . '</h1>
--->
-';

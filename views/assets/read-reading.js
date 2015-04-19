@@ -25,8 +25,21 @@ if ("" != comics_read_json) {
 			// Change URL
 			var parent = document.getElementById("comic-"+comic_slug);
 			var child = parent.childNodes[1];
-			child.setAttribute("href", comicjet_root_url + "' . __( 'comic' ) . '/" + comic_slug + "/" + page_number + "/' . $this->language1 . '" + "/' . $this->language2 . '/");
 
+			var new_url = (
+				comicjet_root_url +
+				text_comic_slug +
+				"/" +
+				comic_slug +
+				"/" +
+				page_number +
+				"/" +
+				comicjet_language1 +
+				"/" +
+				comicjet_language2 +
+				"/"
+			);
+			child.setAttribute("href", new_url);
 		}
 
 	}

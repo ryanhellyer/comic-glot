@@ -1,11 +1,11 @@
 function toggle_image() {
 	var img = document.getElementById("bubble").src;
 	if (img.indexOf(bubble_image_1)!=-1) {
-		document.getElementById("bubble").src  = "bubble_image_0";
+		document.getElementById("bubble").src  = bubble_image_0;
 		document.getElementsByClassName("current-language")[0].innerHTML = current_language2;
 		document.getElementsByClassName("current-language")[1].innerHTML = current_language2;
 	} else {
-		document.getElementById("bubble").src = "bubble_image_1";
+		document.getElementById("bubble").src = bubble_image_1;
 		document.getElementsByClassName("current-language")[0].innerHTML = current_language1;
 		document.getElementsByClassName("current-language")[1].innerHTML = current_language1;
 	}
