@@ -1,6 +1,17 @@
 <?php
 
-$html = '<!DOCTYPE html>
+$scripts[] = COMIC_ASSETS_URL . 'cookie-functions.js';
+
+// Grab home URL
+$home_url = COMIC_JET_URL;
+if ( isset( $this->language2 ) ) {
+	$home_url .= $this->language1 . '/' . $this->language2 . '/';
+} elseif ( 'en' != $this->language1 ) {
+	$home_url .= $this->language1 . '/';
+}
+
+
+$header = '<!DOCTYPE html>
 
 <html lang="' . esc_attr( $this->available_languages[$this->language1]['iso'] ) . '">
 <head>
@@ -10,57 +21,6 @@ $html = '<!DOCTYPE html>
 	<title>Comic Jet</title>
 
 	<link rel="stylesheet" href="' . COMIC_ASSETS_URL . 'style.css" type="text/css" media="all" />
-
-';
-
-$home_url = COMIC_JET_URL;
-if ( isset( $this->language2 ) ) {
-	$home_url .= $this->language1 . '/' . $this->language2 . '/';
-} elseif ( 'en' != $this->language1 ) {
-	$home_url .= $this->language1 . '/';
-}
-
-$html .= '
-	<script>
-	var comicjet_home_url = "' . COMIC_JET_URL . '";
-';
-
-if ( isset( $this->slug ) ) {
-	$html .= '
-	var comicjet_slug = "' . $this->slug . '";';
-}
-
-$html .= '
-	</script>
-
-
-
-<script>
-
-function setCookie(cname,cvalue) {
-	var d = new Date();
-	d.setTime(d.getTime() + (10*365*24*60*60*1000));
-	var expires = "expires="+d.toUTCString();
-
-	document.cookie = cname + "=" + cvalue + "; " + expires + ";path=/;domain=' . COMIC_JET_DOMAIN . '";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(";");
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==" ") c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-    }
-    return "";
-}
-
-</script>
-';
-
-$html .= '
-
 </head>
 <body class="' . esc_attr( $this->page_type ) . '">
 
@@ -94,7 +54,7 @@ $html .= '
 		</ul>
 	</nav>';
 
-$html .= '
+$header .= '
 </header>
 
 <div id="wrap">';

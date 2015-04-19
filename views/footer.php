@@ -4,7 +4,7 @@
 $request_uri = explode( '?', $_SERVER['REQUEST_URI'] );
 $request_uri = $request_uri[0];
 
-$html .= '
+$footer = '
 </div>
 
 <footer>
@@ -18,67 +18,48 @@ $html .= '
 </footer>
 ';
 
-if ( 'home' == $this->page_type ) {
-	$html .= '
-<script>
-
-// Switching off form submission
-document.getElementById("select-language").type = "button";
-
-// Redirecting after language selector clicked (required for offline use, when POST will not work)
-document.getElementById("select-language").onclick = function(){
-	var language1 = document.getElementById("language1").value;
-	var language2 = document.getElementById("language2").value;
-	var new_url = comicjet_home_url+language1+"/"+language2+"/";
-	window.location.assign(new_url);
-};
-
-</script>';
-}
-
-
-if ( isset( $prev_url ) ) {
-	$html .= '
-	<script>var comicjet_prev_url = "' . filter_var( $prev_url, FILTER_SANITIZE_URL ) . '";</script>
-';
-}
-
-if ( isset( $next_url ) ) {
-	$html .= '
-	<script>var comicjet_next_url = "' . filter_var( $next_url, FILTER_SANITIZE_URL ) . '";</script>
-';
-}
 
 
 /**
  * Left and right arrow key support
  */
-$html .= '
-<script>
+$scripts[] = COMIC_ASSETS_URL . 'arrow-key-support.js';
 
-document.onkeydown = comicjet_keypress;
-
-function comicjet_keypress(e) {
-
-	e = e || window.event;
-
-
-	if (typeof comicjet_prev_url != "undefined") {
-		if (e.keyCode == "37") {
-			window.location.assign(comicjet_prev_url);
-		}
-	}
-
-	if (typeof comicjet_next_url != "undefined") {
-		if (e.keyCode == "39") {
-			window.location.assign(comicjet_next_url);
-		}
-	}
-
+$script_vars['comicjet_root_url'] = COMIC_JET_URL;
+if ( isset( $this->slug ) ) {
+	$script_vars['comicjet_slug'] = $this->slug;
 }
-</script>';
+if ( isset( $prev_url ) ) {
+	$script_vars['comicjet_prev_url'] = filter_var( $prev_url, FILTER_SANITIZE_URL );
+}
+if ( isset( $next_url ) ) {
+	$script_vars['comicjet_next_url'] = filter_var( $next_url, FILTER_SANITIZE_URL );
+}
 
-$html .= '
+
+/**_
+ * Add script vars.
+ */
+if ( isset( $script_vars ) && is_array( $script_vars ) ) {
+	$footer .= "<script>\n";
+	foreach( $script_vars as $var => $value ) {
+		$footer .= '	var ' . $var . ' = "' . $value . "\";\n";
+	}
+	$footer .= '</script>';
+}
+
+/**
+ * Add scripts.
+ */
+if ( isset( $scripts ) && is_array( $scripts ) ) {
+	foreach( $scripts as $var => $value ) {
+		$footer .= "\n";
+		$footer .= '<script src="' . $value . '"></script>;';
+	}
+}
+
+
+$footer .= '
 
 </body>
 </html>';

@@ -303,6 +303,8 @@ class ComicJet_Setup {
 
 		require( 'views/footer.php' );
 
+		$html = $header . $html . $footer;
+
 		// Compress the HTML output
 		if ( defined( 'COMIC_JET_COMPRESS' ) ) {
 			$html = $this->compressing_html( $html );

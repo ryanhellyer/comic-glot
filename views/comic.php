@@ -40,8 +40,8 @@ if (
 $pagination .= '</div>';
 
 
-$current_language1 = '<div onclick="toggle_image()">' . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language1 ) . '</span>' ) . '</div>';
-$current_language2 = '<div onclick="toggle_image()">' . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language2 ) . '</span>' ) . '</div>';
+$current_language1 = "<div onclick='toggle_image()'>" . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language1 ) . '</span>' ) . '</div>';
+$current_language2 = "<div onclick='toggle_image()'>" . sprintf( __( 'Switch to %s' ), '<span>' . $this->get_language_name( $this->language2 ) . '</span>' ) . '</div>';
 
 
 $pagination .= '
@@ -80,7 +80,7 @@ if ( 0 == $this->page_number ) {
 	$page_info = sprintf( __( 'page %s' ), $this->page_number );
 }
 
-$html .= '
+$html = '
 <div class="inner">
 	<div class="content">
 
@@ -131,60 +131,25 @@ $html .= '<div id="pagination-bottom">';
 $html .= $pagination;
 $html .= '</div>';
 
-// If second language set, then dynamically change speech bubble onclick
-if ( isset( $bubble_image[0] ) ) {
-	$html .= '
 
-<script>
-function toggle_image() {
-	var img = document.getElementById("bubble").src;
-	if (img.indexOf(\'' . esc_attr( $bubble_image[1] ) . '\')!=-1) {
-		document.getElementById("bubble").src  = "' . esc_attr( $bubble_image[0] ) . '";
-		document.getElementsByClassName("current-language")[0].innerHTML = \'' . $current_language2 . '\';
-		document.getElementsByClassName("current-language")[1].innerHTML = \'' . $current_language2 . '\';
-	} else {
-		document.getElementById("bubble").src = "' . esc_attr( $bubble_image[1] ) . '";
-		document.getElementsByClassName("current-language")[0].innerHTML = \'' . $current_language1 . '\';
-		document.getElementsByClassName("current-language")[1].innerHTML = \'' . $current_language1 . '\';
-	}
-
-}
-
-
-/* Setting cookies */
-var comics_read_json = getCookie("comics_read");
-
-if ("" == comics_read_json) {
-	var comics_read = {};
-} else {
-	var comics_read = JSON.parse(comics_read_json);
-}
-
-
-if ( "end" != comics_read["' . $this->slug . '"] ) {
-	';
+$script_vars['bubble_image_0'] = esc_attr( $bubble_image[0] );
+$script_vars['bubble_image_1'] = esc_attr( $bubble_image[1] );
+$script_vars['current_language1'] = $current_language1;
+$script_vars['current_language2'] = $current_language2;
+$script_vars['page_slug'] = $this->slug;
 
 $next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number + 1 );
 if ( file_exists( $next_path_bit . '-' . $this->language1 . '.png' ) ) {
-	$html .= 'comics_read[comicjet_slug] = "' . $this->page_number . '";';	
+	$script_vars['next_comic_read'] = $this->page_number;
 } else {
-	$html .= 'comics_read[comicjet_slug] = "end";';	
-}
-
-$html .= '
-
-	var comics_read_newjson = JSON.stringify(comics_read);
-
-	setCookie("comics_read", comics_read_newjson, 1);
+	$script_vars['next_comic_read'] = 'end';
 }
 
 
-</script>';
-/*
-		var arr = ['foo', 'bar', 'baz'];
-		var json_str = JSON.stringify(arr);
-		createCookie('mycookie', json_str);
-*/
+
+// If second language set, then dynamically change speech bubble onclick
+if ( isset( $bubble_image[0] ) ) {
+	$scripts[] = COMIC_ASSETS_URL . 'toggle-image.js';
 }
 
 
