@@ -6,20 +6,22 @@ Top Menu
 
 Privacy page
 
-Clean up JS
+Clean up JS(
+
+URLs
+	301 to pages with trailing slash (pages without trailing slashes still work)
+
 
 Login
-	hello.js
-	Get email, first name, last name, facebook profile
-	Set cookie with email address
+	login cookie
+		store email, first name, last name
 	Redis
-		group = email
-			username = email
-			key = email
-			key.first_name
-			key.last_name
-			key.facebook_id
-		key.comic_slug = pagenumber
+		login cookie
+		comics_read cookie
+
+	Redis
+		store login cookie
+6		store comics_read cookie
 
 
 Things to store in DB

@@ -1,5 +1,9 @@
 <?php
 
+// Prevent compounding query vars in request URI
+$request_uri = explode( '?', $_SERVER['REQUEST_URI'] );
+$request_uri = $request_uri[0];
+
 $html .= '
 </div>
 
@@ -9,7 +13,7 @@ $html .= '
 		Generated in ' . round( 1000 * ( microtime( true ) - COMIC_JET_START_TIME ), 1 ) . ' ms.
 	</p>
 	<p class="align-right">
-		<a href="' . esc_attr( COMIC_JET_URL . __( 'contact' ) . '/?report=' . $_SERVER['REQUEST_URI'] ) . '">Report bug</a>
+		<a href="' . esc_attr( COMIC_JET_URL . __( 'contact' ) . '/?report=' . $request_uri ) . '">Report bug</a>
 	</p>
 </footer>
 ';
