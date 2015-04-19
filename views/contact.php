@@ -3,7 +3,7 @@
  * The contact page template.
  */
 
-$html .= '
+$html = '
 	<div class="inner">
 		<div id="contact" class="content">';
 

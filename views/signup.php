@@ -16,12 +16,12 @@ $facebook = new Facebook(array(
 //
 // if user is logged in on facebook and already gave permissions
 // to your app, get his data:
-$userId = $facebook->getUser();
+$user_id = $facebook->getUser();
 
 
 
 
-$html .= '
+$html = '
 	<div class="notice">
 		<p>' . COMICJET_CURRENT_LANGUAGE . '
 			' . __( 'Some random notice!' ) . '
@@ -31,23 +31,42 @@ $html .= '
 </div>';
 
 
-if ($userId) {
+
+if ( $user_id ) {
 	//
 	// already logged? show some data
-	$userInfo = $facebook->api('/' + $userId);
+	$user_info = $facebook->api( '/' + $user_id );
+
+	// Log user details to file
+	$log_array = array(
+		'time'        => time(),
+		'email'       => $user_info['email'],
+		'first_name'  => $user_info['first_name'],
+		'facebook_id' => $user_info['id'],
+		'birthday'    => $$user_info['birthday'],
+		'gender'      => $user_info['gender'],
+		'last_name'   => $user_info['last_name'],
+		'locale'      => $user_info['locale'],
+		'timezone'    => $user_info['timezone'],
+		'verified'    => $user_info['verified'],
+	);
+	$log_json = json_encode( $log_array ) . "\n";
+	file_put_contents( COMIC_JET_ROOT_DIR . 'users.log', $log_json, FILE_APPEND | LOCK_EX );
+
+
 
 	$html .= '<h3>Storing in Redis</h3>';
-	$html .= 'Email: ' . $userInfo['email'] . '<br />';
-	$html .= 'First_name: ' . $userInfo['first_name'] . '<br />';
+	$html .= 'Email: ' . $user_info['email'] . '<br />';
+	$html .= 'First_name: ' . $user_info['first_name'] . '<br />';
 
 	$html .= '<h3>Storing in flat file</h3>';
-	$html .= 'ID: ' . $userInfo['id'] . '<br />';
-	$html .= 'Birthday: ' . $userInfo['birthday'] . '<br />';
-	$html .= 'Gender: ' . $userInfo['gender'] . '<br />';
-	$html .= 'Last_name: ' . $userInfo['last_name'] . '<br />';
-	$html .= 'Locale: ' . $userInfo['locale'] . '<br />';
-	$html .= 'Timezone: ' . $userInfo['timezone'] . '<br />';
-	$html .= 'Verified: ' . $userInfo['verified'] . '<br />';
+	$html .= 'ID: ' . $user_info['id'] . '<br />';
+	$html .= 'Birthday: ' . $user_info['birthday'] . '<br />';
+	$html .= 'Gender: ' . $user_info['gender'] . '<br />';
+	$html .= 'Last_name: ' . $user_info['last_name'] . '<br />';
+	$html .= 'Locale: ' . $user_info['locale'] . '<br />';
+	$html .= 'Timezone: ' . $user_info['timezone'] . '<br />';
+	$html .= 'Verified: ' . $user_info['verified'] . '<br />';
 } else {
  //
  // use javaascript api to open dialogue and perform
@@ -58,11 +77,8 @@ if ($userId) {
 	<fb:login-button scope="email,user_birthday"></fb:login-button>';
 }
 
-$html .= '
-	<script>
-	var facebook_app_id = ' . FACEBOOK_APP_ID . ';
-	</script>
-	<script src="' . COMIC_ASSETS_URL . 'facebook.js"></script>';
+$script_vars['facebook_app_id'] = FACEBOOK_APP_ID;
+$scripts[] = COMIC_ASSETS_URL . 'facebook.js';
 
 
 $html .= '
