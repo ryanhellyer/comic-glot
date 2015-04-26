@@ -257,6 +257,24 @@ class ComicJet_Setup {
 	}
 
 	/**
+	 * Obtain comic's meta data.
+	 * 
+	 * @param   string   $slug  The comic's slug
+	 * @return  object          The comic's meta data
+	 */
+	public function get_meta( $slug ) {
+		$meta_file_path = COMIC_JET_ROOT_DIR . 'comics/' . $slug . '/' . $slug . '.txt';
+
+		if ( file_exists( $meta_file_path ) ) {
+			$meta_json = file_get_contents( $meta_file_path );
+			$meta = json_decode( $meta_json );
+			return $meta;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Stripping whitespace from the HTML.
 	 * 
 	 * @param   string  $html  The uncompressed HTML

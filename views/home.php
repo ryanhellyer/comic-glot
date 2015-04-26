@@ -111,20 +111,12 @@ foreach ( $folders as $name ) {
 	}
 
 	// Get the title from the meta file data
-	$meta_file_path = $comic_dir . '/' . $name . '/' . $name . '.txt';
-	if ( file_exists( $meta_file_path ) ) {
-		$meta = file_get_contents( $meta_file_path );
-		$meta = explode( "\n", $meta );
-
-		foreach( $meta as $key => $meta_bit ) {
-			$title_info = $meta_bit;
-			$title_exploded = explode( ':', $title_info );
-
-			if ( $this->language1 == $title_exploded[0] ) {
-				$title = $title_exploded[1];
-			}
-		}
-
+	$meta = $this->get_meta( $name );
+	if ( false != $meta ) {
+		$lang1 = $this->language1;
+		$title = $meta->title->language_strings->$lang1;
+	} else {
+		$title = 'UNTITLED';
 	}
 
 	$url_bit = COMIC_JET_URL . __( 'comic' ) . '/' . $name . '/';

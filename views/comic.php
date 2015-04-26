@@ -1,9 +1,7 @@
 <?php
 
 // Obtain meta data
-$meta_file_path = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->slug . '.txt';
-$meta_json = file_get_contents( $meta_file_path );
-$meta = json_decode( $meta_json );
+$meta = $this->get_meta( $this->slug );
 $lang1 = $this->language1;
 $title = $meta->title->language_strings->$lang1;
 
@@ -104,38 +102,36 @@ if ( file_exists( $file_path_bit . '.png' ) ) {
 	trigger_error( 'ComicJet: No file found', E_USER_ERROR );
 }
 
-
-// Work out bubble image URLs
-if ( isset( $this->language1 ) ) {
-	$bubble_image[] = $file_url_bit . '-' . $this->language1 . '.png';
-}
-if ( isset( $this->language2 ) ) {
-	$bubble_image[] = $file_url_bit . '-' . $this->language2 . '.png';
-}
-
-// Add image(s)
+// Add image
 $html .= '
 
 			<div class="image-display">
 				<img src="' . esc_attr( $url ) . '" />
-				<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[1] ) . '" />
-
 ';
+
+// Add image text (separate from main image to allow for high resolution text, with low resolution background)
+if ( file_exists( $file_path_bit . '-' . $this->language2 . '.png' ) ) {
+	$url_text = $file_url_bit . '-' . $this->language2 . '.png';
+	$html .= '
+				<img id="bubble" src="' . esc_attr( $url_text ) . '" />
+';
+}
 
 // Adding speech bubbles
 $page_number = $this->page_number;
+$lang1 = $this->language1;
 $lang2 = $this->language2;
 if ( isset( $meta->$page_number ) ) {
 	$scripts[] = COMIC_ASSETS_URL . 'bubbles.js';
 
 	foreach( $meta->$page_number as $key => $value ) {
 		$html .= '
-				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble">' . esc_html( $value->language_strings->$lang2 ) . '</div>';	
+				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble"><div class="bubble-inner"><div class="bubble-inner-inner"><p>' . esc_html( $value->language_strings->$lang2 ) . '</p><p>' . esc_html( $value->language_strings->$lang1 ) . '</p></div></div></div>';	
 	}
 }
 
 $html .= '
-
+				<div id="bubble-popover-background"></div>
 			</div>';
 
 
@@ -145,10 +141,6 @@ $html .= $pagination;
 $html .= '</div>';
 
 
-$script_vars['bubble_image_0'] = esc_attr( $bubble_image[0] );
-if ( isset( $bubble_image[1] ) ) {
-	$script_vars['bubble_image_1'] = esc_attr( $bubble_image[1] );
-}
 $script_vars['current_language1'] = $current_language1;
 $script_vars['current_language2'] = $current_language2;
 $script_vars['page_slug'] = $this->slug;
@@ -159,14 +151,6 @@ if ( file_exists( $next_path_bit . '-' . $this->language1 . '.png' ) ) {
 } else {
 	$script_vars['next_comic_read'] = 'end';
 }
-
-
-
-// If second language set, then dynamically change speech bubble onclick
-if ( isset( $bubble_image[0] ) ) {
-	$scripts[] = COMIC_ASSETS_URL . 'toggle-image.js';
-}
-
 
 
 $html .= '
