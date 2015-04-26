@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en_US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<title>Comic Jet</title>
+
+	<link rel="stylesheet" href="http://dev.comicjet.com/views/assets/style.css" type="text/css" media="all" />
+</head>
+<body class="view_comic">
+
+<header id="site-header">
+	<h1>
+		<a href="http://dev.comicjet.com/en/de/">COMIC JET! 
+					<small style="
+						display: block;
+						text-shadow: none;
+						-webkit-text-stroke-width: 0.3px;
+						-webkit-text-stroke-color: #aa5500;
+						text-stroke-width: 0;
+						border:none;
+						position: relative;
+						font-weight: bold;
+						letter-spacing:0;
+						font-size:24px;
+						color: #ffcc00;
+						font-family:sans-serif;
+					">
+							<span>private</span> alpha
+					</small>
+		</a>
+	</h1>
+
+	<nav id="primary">
+		<ul>
+
+			<li><a href="http://dev.comicjet.com/signup/">Sign up</a></li>
+			<li><a href="#" onclick="alert('Coming once this reaches beta!');">Login</a></li>
+		</ul>
+	</nav>
+</header>
+
+<div id="wrap">
+<div class="inner">
+	<div class="content">
+
+		<h1 id="site-title">Shadow Dancers</h1>
+		<h2 id="site-description">page 1</h2><div id="pagination-top"><div class="pagination previous-link"><a href="http://dev.comicjet.com/comic/shadowdancers/0/en/de/">Previous</a></div>
+<div class="pagination current-language">
+	<div onclick='toggle_image()'>Switch to <span>English</span></div>
+</div><div class="pagination next-link"><a href="http://dev.comicjet.com/comic/shadowdancers/2/en/de/">Next</a></div></div></div>
+		<div id="comic-display">
+
+
+
+
+<div class="image-display">
+	<img src="http://dev.comicjet.com/comics/shadowdancers/1.jpg" />
+	<img id="bubble" onmouseover="this.style.cursor='pointer'" onclick="toggle_image()" src="http://dev.comicjet.com/comics/shadowdancers/1-de.png" />
+	<div style="top:0;left:0;width:40%;height:50%" class="bubble">This is bubble #1</div>
+	<div style="top:75%;left:75%;width:20%;height:20%" class="bubble">Oh, and over here, bubble #2 is present</div>
+</div>
+
+<style>
+.bubble {
+	position: absolute;
+	background: rgba(255,0,0,0.1);
+}
+.active-bubble {
+	background: rgba(255,0,0,0.7);
+}
+</style>
+
+
+
+<script>
+
+function toggleClass(element, className){
+    if (!element || !className){
+        return;
+    }
+
+    className = ' ' + className;
+
+    var classString = element.className, nameIndex = classString.indexOf(className);
+    if (nameIndex == -1) {
+        classString += '' + className;
+    }
+    else {
+        classString = classString.substr(0, nameIndex) + classString.substr(nameIndex+className.length);
+    }
+    element.className = classString;
+}
+
+
+var bubbles = document.querySelectorAll('.bubble');
+console.log(bubbles); 
+
+console.log( 'The following are tests');
+
+var index;
+for (index = 0; index < bubbles.length; ++index) {
+
+	// Add close buttons to each speech bubble
+	bubbles[index].innerHTML = bubbles[index].innerHTML + '<div class="close">Close button</div>';
+
+	// Toggle class on click
+	bubbles[index].onclick = function(){
+		toggleClass(this, 'active-bubble');
+		return false;
+	};
+
+}
+
+</script>
+
+
+
+<div id="pagination-bottom"><div class="pagination previous-link"><a href="http://dev.comicjet.com/comic/shadowdancers/0/en/de/">Previous</a></div>
+<div class="pagination current-language">
+	<div onclick='toggle_image()'>Switch to <span>English</span></div>
+</div><div class="pagination next-link"><a href="http://dev.comicjet.com/comic/shadowdancers/2/en/de/">Next</a></div></div></div>
+		</div>
+	</div>
+</div>
+
+</div>
+
+<footer>
+	<p>
+		Copyright &copy; 2015 Comic Jet.
+		Generated in 16.9 ms.
+	</p>
+	<p class="align-right">
+		<a href="http://dev.comicjet.com/contact/?report=/comic/shadowdancers/1/en/de/">Report bug</a>
+	</p>
+</footer>
+<script>
+	var bubble_image_0 = "http://dev.comicjet.com/comics/shadowdancers/1-en.png";
+	var bubble_image_1 = "http://dev.comicjet.com/comics/shadowdancers/1-de.png";
+	var current_language1 = "<div onclick='toggle_image()'>Switch to <span>English</span></div>";
+	var current_language2 = "<div onclick='toggle_image()'>Switch to <span>Deutsch</span></div>";
+	var page_slug = "shadowdancers";
+	var next_comic_read = "1";
+	var comicjet_root_url = "http://dev.comicjet.com/";
+	var comicjet_slug = "shadowdancers";
+	var comicjet_prev_url = "http://dev.comicjet.com/comic/shadowdancers/0/en/de/";
+	var comicjet_next_url = "http://dev.comicjet.com/comic/shadowdancers/2/en/de/";
+</script>
+<script src="http://dev.comicjet.com/views/assets/cookie-functions.js"></script>
+<script src="http://dev.comicjet.com/views/assets/toggle-image.js"></script>
+<script src="http://dev.comicjet.com/views/assets/arrow-key-support.js"></script>
+
+</body>
+</html>

@@ -59,7 +59,17 @@ class ComicJet_Setup {
 	 * @return  string              The language name
 	 */
 	public function get_language_name( $lang_code ) {
-		return $this->available_languages[$lang_code]['name'];die;
+		return $this->available_languages[$lang_code]['name'];
+	}
+
+	/**
+	 * Gets the current language iso code from the regular language code.
+	 * 
+	 * @param   string  $lang_code  The language code
+	 * @return  string              The language iso code
+	 */
+	public function get_language_iso_code( $lang_code ) {
+		return $this->available_languages[$lang_code]['iso'];
 	}
 
 	/**

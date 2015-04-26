@@ -2,16 +2,11 @@
 
 // Obtain meta data
 $meta_file_path = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->slug . '.txt';
-$meta = file_get_contents( $meta_file_path );
-$meta = explode( "\n", $meta );
-foreach( $meta as $key => $meta_bit ) {
-	$title_info = $meta_bit;
-	$title_exploded = explode( ':', $title_info );
+$meta_json = file_get_contents( $meta_file_path );
+$meta = json_decode( $meta_json );
+$lang1 = $this->language1;
+$title = $meta->title->language_strings->$lang1;
 
-	if ( $this->language1 == $title_exploded[0] ) {
-		$title = $title_exploded[1];
-	}
-}
 
 /**
  * Create pagination links
@@ -123,11 +118,29 @@ $html .= '
 
 			<div class="image-display">
 				<img src="' . esc_attr( $url ) . '" />
-			<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[1] ) . '" />
+				<img id="bubble" onmouseover="this.style.cursor=\'pointer\'" onclick="toggle_image()" src="' . esc_attr( $bubble_image[1] ) . '" />
+
+';
+
+// Adding speech bubbles
+$page_number = $this->page_number;
+$lang2 = $this->language2;
+if ( isset( $meta->$page_number ) ) {
+	$scripts[] = COMIC_ASSETS_URL . 'bubbles.js';
+
+	foreach( $meta->$page_number as $key => $value ) {
+		$html .= '
+				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble">' . esc_html( $value->language_strings->$lang2 ) . '</div>';	
+	}
+}
+
+$html .= '
+
 			</div>';
 
+
 // Next and previous pages
-$html .= '<div id="pagination-bottom">';
+$html .= "\n\n" . '<div id="pagination-bottom">';
 $html .= $pagination;
 $html .= '</div>';
 

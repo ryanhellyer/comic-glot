@@ -1,5 +1,1 @@
-en:Shadow Dancers
-de:Translate Shadow Dancers
-4x4-10x10
-39x29-29x10
-
+{"title":{"language_strings":{"en":"Shadow Dancers","de":"Translate Shadow Dancers"}},"1":[{"top":0,"left":0,"width":52,"height":15,"language_strings":{"en":"Hospital of Aricona","de":"Krankenhaus von Aracona"}},{"top":33,"left":0,"width":26,"height":20,"language_strings":{"en":"XXXHospital of Aricona","de":"AAA Krankenhaus von Aracona"}}]}

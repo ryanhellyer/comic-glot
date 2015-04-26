@@ -54,7 +54,7 @@ if ( isset( $script_vars ) && is_array( $script_vars ) ) {
 if ( isset( $scripts ) && is_array( $scripts ) ) {
 	foreach( $scripts as $var => $value ) {
 		$footer .= "\n";
-		$footer .= '<script src="' . $value . '"></script>;';
+		$footer .= '<script src="' . $value . '"></script>';
 	}
 }
 

@@ -62,6 +62,17 @@ function esc_attr( $attribute ) {
 }
 
 /**
+ * Escape HTML.
+ *
+ * @param   string  $html   The HTML to be escaped
+ * @return  string          The escaped HTML
+ */
+function esc_html( $html ) {
+	$html = filter_var( $html, FILTER_SANITIZE_STRIPPED );
+	return $html;
+}
+
+/**
  * Get a nonce field.
  *
  * @return string  The nonce field

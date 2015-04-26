@@ -1,29 +1,6 @@
 Comic Jet
 =========
 
-Beta version:
-	Graphical interface
-	Facebook login
-	Initial tutorial popover on use
-	Toolbar
-		Next, Previous and Change Language buttons
-		Shrinks when unused
-
-Initial version:
-	Android app.
-	Manual login
-
-Second version:
-	Textual pop-over translations
-	Offline support
-	Mobile gestures
-	Gamification
-		can't continue unless answer questions
-		pay money just to read
-
-Use WHATWG spec for image sizes:
-	http://fusion.net/story/121962/performance-is-a-feature-speeding-up-fusion-net/?utm_source=twitter&utm_medium=social&utm_campaign=socialshare&utm_content=desktop+top
-
 From Isaac
 	If they stop scrolling for three seconds, pop a message asking if they need help and should click to switch.
 	Add fixed toolbar to switch.
@@ -37,6 +14,8 @@ From Isaac
 			then get next comic
 		Pay money to just read.
 
+Use WHATWG spec for image sizes:
+	http://fusion.net/story/121962/performance-is-a-feature-speeding-up-fusion-net/?utm_source=twitter&utm_medium=social&utm_campaign=socialshare&utm_content=desktop+top
 
 
 Maybe this will work instead of Facebook SDK? (from http://stackoverflow.com/questions/7124256/post-to-facebook-wall-without-using-php-sdk)
@@ -44,11 +23,8 @@ Maybe this will work instead of Facebook SDK? (from http://stackoverflow.com/que
 	https://www.facebook.com/dialog/oauth?client_id=xxx&scope=publish_stream,offline_access&redirect_uri=http://site.com
 	2) Get "forever" access token:
 	https://graph.facebook.com/oauth/access_token?client_id=xxx&client_secret=yyy&code=zzz&redirect_uri=http://site.com
-	3) Post to wall (MAYBE NEED TO SEND THIS AS POST REQUEST):
+	3) Post to wall:
 	https://graph.facebook.com/me/feed?access_token=aaa&message=msg
-
-	Can use this to confirm obtained access_token is legit:
-	https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/v2.3#checktoken
 
 
 Top Menu

@@ -444,6 +444,39 @@ h4 {
 }
 
 
+/* =Bubbles
+-------------------------------------------------------------- */
+.bubble {
+	position: absolute;
+	background: rgba(255,0,0,0.1);
+	text-indent: -999em;
+}
+
+.active-bubble {
+	position: fixed;
+	background: rgba(255,0,0,0.7);
+	text-indent: 0;
+	top: 10% !important;
+	left: 10% !important;
+	width: 80% !important;
+	height: 80% !important;
+}
+
+.bubble .close {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 2em;
+	height: 2em;
+	background: #ccc;
+}
+
+.active-bubble .close {
+	display: block;
+}
+
+
 /* =Content
 -------------------------------------------------------------- */
 
