@@ -89,12 +89,13 @@ foreach ( $folders as $name ) {
     }
 
     // Grab thumbnail URL
-	$url_bit = COMIC_JET_URL . 'comics/' . $name . '/thumb-';
-	$path_bit = $comic_dir . '/' . $name . '/thumb-';
-	if ( file_exists( $path_bit . $this->language1 . '.png' ) ) {
-		$thumbnail = $url_bit . $this->language1 . '.png';
-	} elseif ( file_exists( $path_bit . $this->language1 . '.jpg' ) ) {
-		$thumbnail = $url_bit . $this->language1 . '.jpg';
+	$url_bit = COMIC_JET_URL . 'comics/' . $name . '/';
+	$dir_bit = $comic_dir . '/' . $name . '/';
+
+	if ( file_exists( $dir_bit . $this->language1 . '/thumb.png' ) ) {
+		$thumbnail = $url_bit . $this->language1 . '/thumb.png';
+	} elseif ( file_exists( $dir_bit . $this->language1 . '/thumb.jpg' ) ) {
+		$thumbnail = $url_bit . $this->language1 . '/thumb.jpg';
 	} else {
 		continue; // Bail out if no thumbnail present - we use this to determine if the comic is meant to be available or not
 	}
@@ -103,9 +104,9 @@ foreach ( $folders as $name ) {
 	if (
 		isset( $this->language2 )
 		&&
-		! file_exists( $path_bit . $this->language2 . '.png' )
+		! file_exists( $dir_bit . $this->language2 . '/thumb.png' )
 		&&
-		! file_exists( $path_bit . $this->language2 . '.jpg' )
+		! file_exists( $dir_bit . $this->language2 . '/thumb.jpg' )
 	) {
 		continue;
 	}
@@ -124,22 +125,13 @@ foreach ( $folders as $name ) {
 	if ( isset( $this->language2 ) ) {
 		$comic_url .= $this->language2 . '/';
 	}
-	$edit_url = $url_bit . 'edit/';
 
 	$html .= '
 		<div class="block" id="' . esc_attr( 'comic-' . $name ) . '">
 			<a href="' . esc_attr( $comic_url ) . '" class="block-inner">
 				<img src="' . esc_attr( $thumbnail ) . '" />
 				<p>' . $title . '</p>
-			</a>';
-
-	// Show edit link for admins
-	if ( $comicjet_login->current_user_is_admin() ) {
-		$html .= '
-			<a class="edit-link" href="' . esc_attr( $edit_url ) . '">' . __( 'Edit' ) . '</a>';
-	}
-
-	$html .= '
+			</a>
 		</div>';
 
 	$count++;

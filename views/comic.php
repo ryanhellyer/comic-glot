@@ -11,16 +11,16 @@ $title = $meta->title->language_strings->$lang1;
  */
 $pagination = '';
 // Create previous button HTML
-$prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number - 1 );
-$prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 );
+$prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language2 . '/' . ( $this->page_number - 1 );
+$prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 ) . '/' . $this->language2;
 
 $pagination .= '<div class="pagination previous-link">';
 if (
-	file_exists( $prev_path_bit . '-' . $this->language1 . '.png' )
+	file_exists( $prev_path_bit . '.png' )
 	||
-	file_exists( $prev_path_bit . '-' . $this->language1 . '.jpg' )
+	file_exists( $prev_path_bit . '.jpg' )
 ) {
-	$prev_url = $prev_url_bit . '/' . $this->language1 . '/';
+	$prev_url = $prev_url_bit . '/';
 
 	// If second language too, then add that
 	if ( isset( $this->language2 ) ) {
@@ -44,16 +44,17 @@ $pagination .= '
 
 
 // Create next button HTML
-$next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . ( $this->page_number + 1 );
-$next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 );
+$next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language2 . '/' . ( $this->page_number + 1 );
+$next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 ) . '/' . $this->language2;
 
 $pagination .= '<div class="pagination next-link">';
+//			echo $next_path_bit . '.png';
 if (
-	file_exists( $next_path_bit . '-' . $this->language1 . '.png' )
+	file_exists( $next_path_bit . '.png' )
 	||
-	file_exists( $next_path_bit . '-' . $this->language1 . '.jpg' )
+	file_exists( $next_path_bit . '.jpg' )
 ) {
-	$next_url = $next_url_bit . '/' . $this->language1 . '/';
+	$next_url = $next_url_bit . '/';
 
 	// If second language too, then add that
 	if ( isset( $this->language2 ) ) {
@@ -90,8 +91,8 @@ $html .= '
 		<div id="comic-display">';
 
 // Hunt out current image URL
-$file_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->page_number;
-$file_url_bit = COMIC_JET_URL . 'comics/' . $this->slug . '/' . $this->page_number;
+$file_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language1 . '/' . $this->page_number;
+$file_url_bit = COMIC_JET_URL . 'comics/' . $this->slug . '/' . $this->language1 . '/' . $this->page_number;
 
 if ( file_exists( $file_path_bit . '.png' ) ) {
 	$url = $file_url_bit . '.png';
@@ -110,8 +111,8 @@ $html .= '
 ';
 
 // Add image text (separate from main image to allow for high resolution text, with low resolution background)
-if ( file_exists( $file_path_bit . '-' . $this->language2 . '.png' ) ) {
-	$url_text = $file_url_bit . '-' . $this->language2 . '.png';
+if ( file_exists( $file_path_bit . '.png' ) ) {
+	$url_text = $file_url_bit . '.png';
 	$html .= '
 				<img id="bubble" src="' . esc_attr( $url_text ) . '" />
 ';
@@ -126,7 +127,31 @@ if ( isset( $meta->$page_number ) ) {
 
 	foreach( $meta->$page_number as $key => $value ) {
 		$html .= '
-				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble"><div class="bubble-inner"><div class="bubble-inner-inner"><p>' . esc_html( $value->language_strings->$lang2 ) . '</p><p>' . esc_html( $value->language_strings->$lang1 ) . '</p></div></div></div>';	
+				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble">
+					<div class="bubble-inner">
+						<div class="bubble-inner-inner">';
+
+		if ( isset( $value->note ) ) {
+		$html .= '
+							<p>' . __( 'This is a name so does not need translated.' ) . '</p>
+';
+		}
+
+		if ( isset( $value->language_strings->$lang2 ) ) {
+			$html .= '
+
+							<p>' . esc_html( $value->language_strings->$lang2 ) . '</p>';
+		}
+
+		if ( isset( $value->language_strings->$lang2 ) ) {
+			$html .= '
+							<p>' . esc_html( $value->language_strings->$lang1 ) . '</p>';
+		}
+
+		$html .= '
+						</div>
+					</div>
+				</div>';	
 	}
 }
 

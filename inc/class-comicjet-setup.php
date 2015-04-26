@@ -263,7 +263,14 @@ class ComicJet_Setup {
 	 * @return  object          The comic's meta data
 	 */
 	public function get_meta( $slug ) {
-		$meta_file_path = COMIC_JET_ROOT_DIR . 'comics/' . $slug . '/' . $slug . '.txt';
+
+		$txt_file = COMIC_JET_ROOT_DIR . 'comics/' . $slug . '/' . $slug . '.txt';
+
+		if ( defined( 'COMIC_JET_REFRESH' ) && file_exists( COMIC_JET_ROOT_DIR . 'comics/' . $slug . '/' . $slug . '.php' ) ) {
+			require( COMIC_JET_ROOT_DIR . 'comics/' . $slug . '/' . $slug . '.php' );
+		}
+
+		$meta_file_path = $txt_file;
 
 		if ( file_exists( $meta_file_path ) ) {
 			$meta_json = file_get_contents( $meta_file_path );
