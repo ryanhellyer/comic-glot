@@ -11,8 +11,8 @@ $title = $meta->title->language_strings->$lang1;
  */
 $pagination = '';
 // Create previous button HTML
-$prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language2 . '/' . ( $this->page_number - 1 );
-$prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 ) . '/' . $this->language2;
+$prev_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language1 . '/' . ( $this->page_number - 1 );
+$prev_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number - 1 ) . '/' . $this->language1;
 
 $pagination .= '<div class="pagination previous-link">';
 if (
@@ -44,11 +44,10 @@ $pagination .= '
 
 
 // Create next button HTML
-$next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language2 . '/' . ( $this->page_number + 1 );
-$next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 ) . '/' . $this->language2;
+$next_path_bit = COMIC_JET_ROOT_DIR . 'comics/' . $this->slug . '/' . $this->language1 . '/' . ( $this->page_number + 1 );
+$next_url_bit = COMIC_JET_URL . 'comic/' . $this->slug . '/' . ( $this->page_number + 1 ) . '/' . $this->language1;
 
 $pagination .= '<div class="pagination next-link">';
-//			echo $next_path_bit . '.png';
 if (
 	file_exists( $next_path_bit . '.png' )
 	||
@@ -126,6 +125,12 @@ if ( isset( $meta->$page_number ) ) {
 	$scripts[] = COMIC_ASSETS_URL . 'bubbles.js';
 
 	foreach( $meta->$page_number as $key => $value ) {
+
+		// Bail out if object not set (could also check width, left and height here too)
+		if ( ! isset( $value->top ) ) {
+			continue;
+		}
+
 		$html .= '
 				<div style="' . esc_attr( 'top:' . $value->top . '%;left:' . $value->left . '%;width:' . $value->width . '%;height:' . $value->height . '%' ) . '" class="bubble">
 					<div class="bubble-inner">
