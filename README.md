@@ -1,6 +1,8 @@
 Comic Jet
 =========
 
+Interested comic authors: Dan Aldrin
+
 Beta version:
 	Graphical interface
 	Facebook login

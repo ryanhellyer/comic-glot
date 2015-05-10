@@ -377,14 +377,68 @@ $bubbles = array(
 			),
 		),
 	),
-
+	5 => array(
+		'dimensions' => array(
+			$w = 7.70,
+			$h = 11.51,
+		),
+		0 => array(
+			'top'  => 0,
+			'left' => 214 / $w,
+			'width' => 282 / $w,
+			'height' => 197 / $h,
+			'language_strings' => array(
+				'en' => 'Hmm, the essay on Gaia I wrote in fifth grade ...',
+				'de' => 'Hmm, der aufsatz über Gaia, den ich in der fünften klasse geschrieben habe ...',
+			),
+		),
+		1 => array(
+			'top'  => 0,
+			'left' => 496 / $w,
+			'width' => 263 / $w,
+			'height' => 240 / $h,
+			'language_strings' => array(
+				'en' => 'Am anfang war alles nichts.',
+				'de' => 'In the beginning, everything was nothing.',
+			),
+		),
+		2 => array(
+			'top'  => 327 / $h,
+			'left' => 0,
+			'width' => 70,
+			'height' => 186 / $h,
+			'language_strings' => array(
+				'en' => 'When the two things clashed, they started to fight against each other. We call the everything "Gaia" and the nothing "Bhaal".',
+				'de' => 'Alles die zwei dinge aufeinander-prallten, begannen {}sie miteinander zu kämpfen. Wir nennen das alles "Gaia" und das nichts "Bhaal".',
+			),
+		),
+		3 => array(
+			'top'  => 580 / $h,
+			'left' => 0,
+			'width' => 70,
+			'height' => 180 / $h,
+			'language_strings' => array(
+				'en' => 'Gaia won the fight. She took all matter, formed a sphere and trapped Bhaal in it. Bhaal tried to escape, but Gaia charged the planet with all her energy to prevent his escape.',
+				'de' => 'Gaia gewann den kampf. Sie nahm alle materie, formte eine kugel und schloss Bhaal darin ein Bhaal versuchte zu entkommen, aber Gaia lud den planaten mit Ihrer gesamten energie auf um seine flucht zu verhindern.',
+			),
+		),
+		4 => array(
+			'top'  => 846 / $h,
+			'left' => 0,
+			'width' => 70,
+			'height' => 180 / $h,
+			'language_strings' => array(
+				'en' => 'Back then, the planet was still deserted. Gaia used the planets energy to create the first creatures and plants.',
+				'de' => 'Damals war der planet noch wüst und leer. Gaia benutzte die energie des planeten um die ersten Kreaturen und Pflazen zu erschaffen.',
+			),
+		),
+	),
 /*
-
 		X => array(
-			'top'  => X,
-			'left' => X,
-			'width' => X,
-			'height' => X,
+			'top'  => X / $h,
+			'left' => X / $w,
+			'width' => X / $w,
+			'height' => X / $h,
 			'language_strings' => array(
 				'en' => 'X',
 				'de' => 'X',
